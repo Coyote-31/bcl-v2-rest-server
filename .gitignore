@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Big City Library ###
+application-prod.properties
