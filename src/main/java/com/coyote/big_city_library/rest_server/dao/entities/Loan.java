@@ -35,7 +35,7 @@ public class Loan {
 
     @NonNull
     @Column(name = "extend", columnDefinition = "BOOLEAN NOT NULL DEFAULT false")
-    private Boolean extend;
+    private Boolean extend = false;
 
     @Column(name = "return_date")
     private Date returnDate;
