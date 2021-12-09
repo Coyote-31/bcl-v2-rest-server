@@ -13,13 +13,17 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 
 @Entity
 @Table(name = "exemplary")
-@Getter @Setter @NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED) 
+@Getter 
+@Setter 
 public class Exemplary {
     
     @Id
@@ -27,15 +31,22 @@ public class Exemplary {
 	@Column(name = "id", updatable = false, nullable = false)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "library_id")
+    @NonNull
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "library_id", nullable = false)
     private Library library;
 
-    @ManyToOne
+    @NonNull
+    @ManyToOne(optional = false)
     @JoinColumn(name = "book_id")
     private Book book;
 
     @OneToMany(mappedBy = "exemplary")
     private Set<Loan> loans = new HashSet<>();
+
+    public Exemplary(Library library, Book book) {
+        this.library = library;
+        this.book = book;
+    }
 
 }

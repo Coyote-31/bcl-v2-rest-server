@@ -10,15 +10,21 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 
 
 @Entity
 @Table(name = "user")
-@Getter @Setter @NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter 
+@Setter 
 public class User {
     
     @Id
@@ -26,13 +32,20 @@ public class User {
 	@Column(name = "id", updatable = false, nullable = false)
     private Integer id;
 
-    @Column(name = "pseudo", unique=true, nullable=false)
+    @NonNull
+    @Column(name = "pseudo", unique=true, nullable=false, length = 45)
+    @Size(min= 3, max = 45)
     private String pseudo;
 
-    @Column(name = "email", unique=true, nullable=false)
+    @NonNull
+    @Column(name = "email", unique=true, nullable=false, length = 90)
+    @Size(max = 90)
+    @Email
     private String email;
 
-    @Column(name = "password", nullable=false)
+    @NonNull
+    @Column(name = "password", columnDefinition = "CHAR(64) NOT NULL")
+    @Size(min = 64, max = 64)
     private String password;
 
     @OneToMany(mappedBy = "user")

@@ -11,13 +11,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 
 @Entity
 @Table(name = "loan")
-@Getter @Setter @NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter 
+@Setter 
 public class Loan {
     
     @Id
@@ -25,27 +29,33 @@ public class Loan {
 	@Column(name = "id", updatable = false, nullable = false)
     private Integer id;
 
+    @NonNull
     @Column(name = "loan_date", nullable=false)
     private Date loanDate;
 
+    @NonNull
     @Column(name = "extend", nullable=false)
     private Boolean extend;
 
     @Column(name = "return_date")
     private Date returnDate;
 
+    @NonNull
     @ManyToOne
     @JoinColumn(name = "exemplary_id")
     private Exemplary exemplary;
 
+    @NonNull
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Loan (Date loanDate, Boolean extend, Date returnDate) {
+    public Loan (Date loanDate, Boolean extend, Date returnDate, Exemplary exemplary, User user) {
         this.loanDate = loanDate;
         this.extend = extend;
         this.returnDate = returnDate;
+        this.exemplary = exemplary;
+        this.user = user;
     }
 
 }

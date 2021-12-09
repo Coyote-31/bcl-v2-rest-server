@@ -11,13 +11,17 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 
 @Entity
 @Table(name = "author")
-@Getter @Setter @NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter 
+@Setter 
 public class Author {
     
     @Id
@@ -25,6 +29,7 @@ public class Author {
 	@Column(name = "id", updatable = false, nullable = false)
     private Integer id;
 
+    @NonNull
     @Column(name = "name", nullable=false)
     private String name;
 

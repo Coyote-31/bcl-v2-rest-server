@@ -16,13 +16,17 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 
 @Entity
 @Table(name = "book")
-@Getter @Setter @NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter 
+@Setter 
 public class Book {
     
     @Id
@@ -30,28 +34,34 @@ public class Book {
 	@Column(name = "id", updatable = false, nullable = false)
     private Integer id;
 
+    @NonNull
     @Column(name = "title", nullable=false)
     private String title;
 
+    @NonNull
     @Column(name = "publication_date", nullable=false)
     private Date publicationDate;
 
-    @ManyToOne
-    @JoinColumn(name = "publisher_id")
+    @NonNull
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "publisher_id", nullable = false)
     private Publisher publisher;
 
+    @NonNull
     @ManyToMany
     @JoinTable(name = "book_author", 
-        joinColumns = @JoinColumn(name = "book_id"), 
-        inverseJoinColumns = @JoinColumn(name = "author_id"))
+        joinColumns = @JoinColumn(name = "book_id", nullable = false), 
+        inverseJoinColumns = @JoinColumn(name = "author_id", nullable = false))
     private Set<Author> authors = new HashSet<>();
 
     @OneToMany(mappedBy = "book")
     private Set<Exemplary> examplaries = new HashSet<>();
 
-    public Book (String title, Date publicationDate) {
+    public Book (String title, Date publicationDate, Publisher publisher, Set<Author> authors) {
         this.title = title;
         this.publicationDate = publicationDate;
+        this.publisher = publisher;
+        this.authors = authors;
     }
 
 }

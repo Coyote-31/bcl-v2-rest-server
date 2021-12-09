@@ -10,14 +10,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 
 @Entity
 @Table(name = "library")
-@Getter @Setter @NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+@Setter 
 public class Library {
     
     @Id
@@ -25,13 +30,17 @@ public class Library {
 	@Column(name = "id", updatable = false, nullable = false)
     private Integer id;
 
+    @NonNull
     @Column(name = "name", nullable=false)
     private String name;
 
+    @NonNull
     @Column(name = "address", nullable=false)
     private String address;
 
-    @Column(name = "phone", nullable=false)
+    @NonNull
+    @Column(name = "phone", columnDefinition = "CHAR(10) NOT NULL")
+    @Size(min = 10, max = 10)
     private String phone;
 
     @OneToMany(mappedBy = "library")
