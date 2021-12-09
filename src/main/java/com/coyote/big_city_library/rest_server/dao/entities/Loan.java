@@ -34,7 +34,7 @@ public class Loan {
     private Date loanDate;
 
     @NonNull
-    @Column(name = "extend", nullable=false)
+    @Column(name = "extend", columnDefinition = "BOOLEAN NOT NULL DEFAULT false")
     private Boolean extend;
 
     @Column(name = "return_date")
@@ -42,12 +42,12 @@ public class Loan {
 
     @NonNull
     @ManyToOne
-    @JoinColumn(name = "exemplary_id")
+    @JoinColumn(name = "exemplary_id", nullable = false)
     private Exemplary exemplary;
 
     @NonNull
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Loan (Date loanDate, Boolean extend, Date returnDate, Exemplary exemplary, User user) {
