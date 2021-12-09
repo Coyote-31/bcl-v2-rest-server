@@ -35,7 +35,7 @@ public class User {
     @Column(name = "password", nullable=false)
     private String password;
 
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     private Set<Loan> loans = new HashSet<>();
 
     public User (String pseudo, String email, String password) {

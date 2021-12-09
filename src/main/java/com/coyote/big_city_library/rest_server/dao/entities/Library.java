@@ -34,7 +34,7 @@ public class Library {
     @Column(name = "phone", nullable=false)
     private String phone;
 
-    @OneToMany
+    @OneToMany(mappedBy = "library")
     private Set<Exemplary> examplaries = new HashSet<>();
 
     public Library (String name, String address, String phone) {

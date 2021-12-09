@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -27,12 +28,14 @@ public class Exemplary {
     private Integer id;
 
     @ManyToOne
+    @JoinColumn(name = "library_id")
     private Library library;
 
     @ManyToOne
+    @JoinColumn(name = "book_id")
     private Book book;
 
-    @OneToMany
+    @OneToMany(mappedBy = "exemplary")
     private Set<Loan> loans = new HashSet<>();
 
 }

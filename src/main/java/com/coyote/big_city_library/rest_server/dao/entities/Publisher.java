@@ -28,7 +28,7 @@ public class Publisher {
     @Column(name = "name", nullable=false)
     private String name;
 
-    @OneToMany
+    @OneToMany(mappedBy = "publisher")
     private Set<Book> books = new HashSet<>();
 
     public Publisher (String name) {
