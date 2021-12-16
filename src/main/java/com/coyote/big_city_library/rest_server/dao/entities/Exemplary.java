@@ -49,4 +49,16 @@ public class Exemplary {
         this.book = book;
     }
 
+    // Bi-directional sync
+
+    public void addLoan(Loan loan) {
+        loans.add(loan);
+        loan.setExemplary(this);
+    }
+
+    public void removeLoan(Loan loan) {
+        loans.remove(loan);
+        loan.setExemplary(null);
+    }
+
 }

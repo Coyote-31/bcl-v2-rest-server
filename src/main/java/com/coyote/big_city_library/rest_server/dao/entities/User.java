@@ -57,4 +57,16 @@ public class User {
         this.password = password;
     }
 
+    // Bi-directional sync
+
+    public void addLoan(Loan loan) {
+        loans.add(loan);
+        loan.setUser(this);
+    }
+
+    public void removeLoan(Loan loan) {
+        loans.remove(loan);
+        loan.setUser(null);
+    }
+
 }

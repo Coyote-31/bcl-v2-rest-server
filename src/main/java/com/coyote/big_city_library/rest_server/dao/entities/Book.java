@@ -55,13 +55,35 @@ public class Book {
     private Set<Author> authors = new HashSet<>();
 
     @OneToMany(mappedBy = "book")
-    private Set<Exemplary> examplaries = new HashSet<>();
+    private Set<Exemplary> exemplaries = new HashSet<>();
 
     public Book (String title, LocalDate publicationDate, Publisher publisher, Set<Author> authors) {
         this.title = title;
         this.publicationDate = publicationDate;
         this.publisher = publisher;
         this.authors = authors;
+    }
+
+    // Bi-directional sync
+
+    public void addExemplary(Exemplary exemplary) {
+        exemplaries.add(exemplary);
+        exemplary.setBook(this);
+    }
+
+    public void removeExemplary(Exemplary exemplary) {
+        exemplaries.remove(exemplary);
+        exemplary.setBook(null);
+    }
+
+    public void addAuthor(Author author) {
+        authors.add(author);
+        author.getBooks().add(this);
+    }
+ 
+    public void removeAuthor(Author author) {
+        authors.remove(author);
+        author.getBooks().remove(this);
     }
 
 }

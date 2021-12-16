@@ -40,4 +40,16 @@ public class Publisher {
         this.name = name;
     }
 
+    // Bi-directional sync
+
+    public void addBook(Book book) {
+        books.add(book);
+        book.setPublisher(this);
+    }
+
+    public void removeBook(Book book) {
+        books.remove(book);
+        book.setPublisher(null);
+    }
+
 }
