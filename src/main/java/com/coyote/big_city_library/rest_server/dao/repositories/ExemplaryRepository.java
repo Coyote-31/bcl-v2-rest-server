@@ -2,8 +2,8 @@ package com.coyote.big_city_library.rest_server.dao.repositories;
 
 import com.coyote.big_city_library.rest_server.dao.entities.Exemplary;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ExemplaryRepository extends CrudRepository<Exemplary, Integer> {
+public interface ExemplaryRepository extends JpaRepository<Exemplary, Integer> {
     
 }
