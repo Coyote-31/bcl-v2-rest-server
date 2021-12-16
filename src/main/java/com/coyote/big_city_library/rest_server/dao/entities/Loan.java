@@ -1,6 +1,6 @@
 package com.coyote.big_city_library.rest_server.dao.entities;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,14 +31,14 @@ public class Loan {
 
     @NonNull
     @Column(name = "loan_date", nullable=false)
-    private Date loanDate;
+    private LocalDate loanDate;
 
     @NonNull
     @Column(name = "extend", columnDefinition = "BOOLEAN NOT NULL DEFAULT false")
     private Boolean extend = false;
 
     @Column(name = "return_date")
-    private Date returnDate;
+    private LocalDate returnDate;
 
     @NonNull
     @ManyToOne
@@ -50,7 +50,7 @@ public class Loan {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Loan (Date loanDate, Boolean extend, Date returnDate, Exemplary exemplary, User user) {
+    public Loan (LocalDate loanDate, Boolean extend, LocalDate returnDate, Exemplary exemplary, User user) {
         this.loanDate = loanDate;
         this.extend = extend;
         this.returnDate = returnDate;

@@ -1,6 +1,6 @@
 package com.coyote.big_city_library.rest_server.dao.entities;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -40,7 +40,7 @@ public class Book {
 
     @NonNull
     @Column(name = "publication_date", nullable=false)
-    private Date publicationDate;
+    private LocalDate publicationDate;
 
     @NonNull
     @ManyToOne(optional = false)
@@ -57,7 +57,7 @@ public class Book {
     @OneToMany(mappedBy = "book")
     private Set<Exemplary> examplaries = new HashSet<>();
 
-    public Book (String title, Date publicationDate, Publisher publisher, Set<Author> authors) {
+    public Book (String title, LocalDate publicationDate, Publisher publisher, Set<Author> authors) {
         this.title = title;
         this.publicationDate = publicationDate;
         this.publisher = publisher;
