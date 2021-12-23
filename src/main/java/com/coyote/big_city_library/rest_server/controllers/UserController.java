@@ -6,6 +6,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import com.coyote.big_city_library.rest_server.dao.entities.User;
+import com.coyote.big_city_library.rest_server.dto.UserDto;
 import com.coyote.big_city_library.rest_server.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,8 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/add")
-    public User addUser(@Valid @RequestBody User user) {
-        User userSaved = userService.addUser(user);
+    public UserDto addUser(@Valid @RequestBody UserDto userDto) {
+        UserDto userSaved = userService.addUser(userDto);
         log.debug("addUser() => user with pseudo '{}' added", userSaved.getPseudo());
         return userSaved;
     }

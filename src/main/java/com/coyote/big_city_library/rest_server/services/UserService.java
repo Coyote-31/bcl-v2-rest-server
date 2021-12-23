@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import com.coyote.big_city_library.rest_server.dao.entities.User;
 import com.coyote.big_city_library.rest_server.dao.repositories.UserRepository;
+import com.coyote.big_city_library.rest_server.dto.UserDto;
+import com.coyote.big_city_library.rest_server.dto.UserMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,15 +22,22 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    protected UserMapper userMapper;
+
     /**
      * Adds a new given user.
      * 
-     * @param user to add.
+     * @param userDto to add.
      * @return The added user; will never be null.
      * @see User
+     * @see UserDto
      */
-    public User addUser(User user) {
-        return userRepository.save(user);
+    public UserDto addUser(UserDto userDto) {
+
+        User user = userMapper.toModel(userDto);
+
+        return userMapper.toDto(userRepository.save(user));
     }
 
     /**
