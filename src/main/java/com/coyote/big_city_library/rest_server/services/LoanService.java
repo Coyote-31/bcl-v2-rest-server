@@ -21,13 +21,13 @@ public class LoanService {
     private LoanRepository loanRepository;
 
     /**
-     * Saves the given loan. 
-     * Update or Create if the loan doesn't exist.
+     * Adds a new given loan.
      * 
-     * @param loan
+     * @param loan to add.
+     * @return The added loan; will never be null.
      * @see Loan
      */
-    public Loan saveLoan(Loan loan) {
+    public Loan addLoan(Loan loan) {
         return loanRepository.save(loan);
     }
 
@@ -49,6 +49,17 @@ public class LoanService {
      */
     public Optional<Loan> findLoanById(Integer id) {
         return loanRepository.findById(id);
+    }
+
+    /**
+     * Updates a given loan.
+     * 
+     * @param loan to update.
+     * @return The updated loan; will never be null.
+     * @see Loan
+     */
+    public Loan updateLoan(Loan loan) {
+        return loanRepository.save(loan);
     }
 
     /**

@@ -21,14 +21,13 @@ public class UserService {
     private UserRepository userRepository;
 
     /**
-     * Saves a given user. 
-     * Updates or Creates if the user doesn't exist.
+     * Adds a new given user.
      * 
-     * @param user to save.
-     * @return The saved user; will never be null.
+     * @param user to add.
+     * @return The added user; will never be null.
      * @see User
      */
-    public User saveUser(User user) {
+    public User addUser(User user) {
         return userRepository.save(user);
     }
 
@@ -50,6 +49,17 @@ public class UserService {
      */
     public Optional<User> findUserById(Integer id) {
         return userRepository.findById(id);
+    }
+
+     /**
+     * Updates a given user.
+     * 
+     * @param user to update.
+     * @return The updated user; will never be null.
+     * @see User
+     */
+    public User updateUser(User user) {
+        return userRepository.save(user);
     }
 
     /**

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,10 +28,10 @@ public class AuthorController {
     @Autowired
     AuthorService authorService;
 
-    @PutMapping("/save")
-    public Author saveAuthor(@Valid @RequestBody Author author) {
-        Author authorSaved = authorService.saveAuthor(author);
-        log.debug("saveAuthor() => author with name '{}' saved", authorSaved.getName());
+    @PostMapping("/add")
+    public Author addAuthor(@Valid @RequestBody Author author) {
+        Author authorSaved = authorService.addAuthor(author);
+        log.debug("addAuthor() => author with name '{}' added", authorSaved.getName());
         return authorSaved;
     }
 
@@ -53,6 +54,13 @@ public class AuthorController {
             log.debug("findAuthorById() => No author found with id '{}'", id);
         }
         return author;
+    }
+
+    @PutMapping("/update")
+    public Author updateAuthor(@Valid @RequestBody Author author) {
+        Author authorUpdated = authorService.updateAuthor(author);
+        log.debug("updateAuthor() => author with name '{}' updated", authorUpdated.getName());
+        return authorUpdated;
     }
 
     @DeleteMapping("/delete")

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,10 +28,10 @@ public class ExemplaryController {
     @Autowired
     ExemplaryService exemplaryService;
 
-    @PutMapping("/save")
-    public Exemplary saveExemplary(@Valid @RequestBody Exemplary exemplary) {
-        Exemplary exemplarySaved = exemplaryService.saveExemplary(exemplary);
-        log.debug("saveExemplary() => exemplary with id '{}' saved", exemplarySaved.getId());
+    @PostMapping("/add")
+    public Exemplary addExemplary(@Valid @RequestBody Exemplary exemplary) {
+        Exemplary exemplarySaved = exemplaryService.addExemplary(exemplary);
+        log.debug("addExemplary() => exemplary with id '{}' added", exemplarySaved.getId());
         return exemplarySaved;
     }
 
@@ -53,6 +54,13 @@ public class ExemplaryController {
             log.debug("findExemplaryById() => No exemplary found with id '{}'", id);
         }
         return exemplary;
+    }
+
+    @PutMapping("/update")
+    public Exemplary updateExemplary(@Valid @RequestBody Exemplary exemplary) {
+        Exemplary exemplaryUpdated = exemplaryService.updateExemplary(exemplary);
+        log.debug("updateExemplary() => exemplary with id '{}' updated", exemplaryUpdated.getId());
+        return exemplaryUpdated;
     }
 
     @DeleteMapping("/delete")

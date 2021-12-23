@@ -21,13 +21,13 @@ public class AuthorService {
     private AuthorRepository authorRepository;
 
     /**
-     * Saves the given author. 
-     * Update or Create if the author doesn't exist.
+     * Adds a new given author.
      * 
-     * @param author
+     * @param author to add.
+     * @return The added author; will never be null.
      * @see Author
      */
-    public Author saveAuthor(Author author) {
+    public Author addAuthor(Author author) {
         return authorRepository.save(author);
     }
 
@@ -49,6 +49,17 @@ public class AuthorService {
      */
     public Optional<Author> findAuthorById(Integer id) {
         return authorRepository.findById(id);
+    }
+
+    /**
+     * Updates a given author.
+     * 
+     * @param author to update.
+     * @return The updated author; will never be null.
+     * @see Author
+     */
+    public Author updateAuthor(Author author) {
+        return authorRepository.save(author);
     }
 
     /**

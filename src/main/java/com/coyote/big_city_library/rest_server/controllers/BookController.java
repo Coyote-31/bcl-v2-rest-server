@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,10 +28,10 @@ public class BookController {
     @Autowired
     BookService bookService;
 
-    @PutMapping("/save")
-    public Book saveBook(@Valid @RequestBody Book book) {
-        Book bookSaved = bookService.saveBook(book);
-        log.debug("saveBook() => book with title '{}' saved", bookSaved.getTitle());
+    @PostMapping("/add")
+    public Book addBook(@Valid @RequestBody Book book) {
+        Book bookSaved = bookService.addBook(book);
+        log.debug("addBook() => book with title '{}' added", bookSaved.getTitle());
         return bookSaved;
     }
 
@@ -53,6 +54,13 @@ public class BookController {
             log.debug("findBookById() => No book found with id '{}'", id);
         }
         return book;
+    }
+
+    @PutMapping("/update")
+    public Book updateBook(@Valid @RequestBody Book book) {
+        Book bookUpdated = bookService.updateBook(book);
+        log.debug("updateBook() => book with title '{}' updated", bookUpdated.getTitle());
+        return bookUpdated;
     }
 
     @DeleteMapping("/delete")

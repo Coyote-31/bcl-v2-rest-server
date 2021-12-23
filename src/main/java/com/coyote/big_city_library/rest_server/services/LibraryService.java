@@ -21,13 +21,13 @@ public class LibraryService {
     private LibraryRepository libraryRepository;
 
     /**
-     * Saves the given library. 
-     * Update or Create if the library doesn't exist.
+     * Adds a new given library.
      * 
-     * @param library
+     * @param library to add.
+     * @return The added library; will never be null.
      * @see Library
      */
-    public Library saveLibrary(Library library) {
+    public Library addLibrary(Library library) {
         return libraryRepository.save(library);
     }
 
@@ -49,6 +49,17 @@ public class LibraryService {
      */
     public Optional<Library> findLibraryById(Integer id) {
         return libraryRepository.findById(id);
+    }
+
+    /**
+     * Updates a given library.
+     * 
+     * @param library to update.
+     * @return The updated library; will never be null.
+     * @see Library
+     */
+    public Library updateLibrary(Library library) {
+        return libraryRepository.save(library);
     }
 
     /**

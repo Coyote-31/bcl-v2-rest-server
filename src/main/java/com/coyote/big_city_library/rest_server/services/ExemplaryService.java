@@ -21,13 +21,13 @@ public class ExemplaryService {
     private ExemplaryRepository exemplaryRepository;
 
     /**
-     * Saves the given exemplary. 
-     * Update or Create if the exemplary doesn't exist.
+     * Adds a new given exemplary.
      * 
-     * @param exemplary
+     * @param exemplary to add.
+     * @return The added exemplary; will never be null.
      * @see Exemplary
      */
-    public Exemplary saveExemplary(Exemplary exemplary) {
+    public Exemplary addExemplary(Exemplary exemplary) {
         return exemplaryRepository.save(exemplary);
     }
 
@@ -49,6 +49,17 @@ public class ExemplaryService {
      */
     public Optional<Exemplary> findExemplaryById(Integer id) {
         return exemplaryRepository.findById(id);
+    }
+
+    /**
+     * Updates a given exemplary.
+     * 
+     * @param exemplary to update.
+     * @return The updated exemplary; will never be null.
+     * @see Exemplary
+     */
+    public Exemplary updateExemplary(Exemplary exemplary) {
+        return exemplaryRepository.save(exemplary);
     }
 
     /**

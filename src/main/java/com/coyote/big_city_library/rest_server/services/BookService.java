@@ -21,13 +21,13 @@ public class BookService {
     private BookRepository bookRepository;
 
     /**
-     * Saves the given book. 
-     * Update or Create if the book doesn't exist.
+     * Adds a new given book.
      * 
-     * @param book
+     * @param book to add.
+     * @return The added book; will never be null.
      * @see Book
      */
-    public Book saveBook(Book book) {
+    public Book addBook(Book book) {
         return bookRepository.save(book);
     }
 
@@ -49,6 +49,17 @@ public class BookService {
      */
     public Optional<Book> findBookById(Integer id) {
         return bookRepository.findById(id);
+    }
+
+    /**
+     * Updates a given book.
+     * 
+     * @param book to update.
+     * @return The updated book; will never be null.
+     * @see Book
+     */
+    public Book updateBook(Book book) {
+        return bookRepository.save(book);
     }
 
     /**

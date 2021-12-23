@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,10 +28,10 @@ public class LoanController {
     @Autowired
     LoanService loanService;
 
-    @PutMapping("/save")
-    public Loan saveLoan(@Valid @RequestBody Loan loan) {
-        Loan loanSaved = loanService.saveLoan(loan);
-        log.debug("saveLoan() => loan with id '{}' saved", loanSaved.getId());
+    @PostMapping("/add")
+    public Loan addLoan(@Valid @RequestBody Loan loan) {
+        Loan loanSaved = loanService.addLoan(loan);
+        log.debug("addLoan() => loan with id '{}' added", loanSaved.getId());
         return loanSaved;
     }
 
@@ -53,6 +54,13 @@ public class LoanController {
             log.debug("findLoanById() => No loan found with id '{}'", id);
         }
         return loan;
+    }
+
+    @PutMapping("/update")
+    public Loan updateLoan(@Valid @RequestBody Loan loan) {
+        Loan loanUpdated = loanService.updateLoan(loan);
+        log.debug("updateLoan() => loan with id '{}' updated", loanUpdated.getId());
+        return loanUpdated;
     }
 
     @DeleteMapping("/delete")

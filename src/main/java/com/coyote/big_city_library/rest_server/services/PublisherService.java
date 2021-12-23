@@ -21,13 +21,13 @@ public class PublisherService {
     private PublisherRepository publisherRepository;
 
     /**
-     * Saves the given publisher. 
-     * Update or Create if the publisher doesn't exist.
+     * Adds a new given publisher.
      * 
-     * @param publisher
+     * @param publisher to add.
+     * @return The added publisher; will never be null.
      * @see Publisher
      */
-    public Publisher savePublisher(Publisher publisher) {
+    public Publisher addPublisher(Publisher publisher) {
         return publisherRepository.save(publisher);
     }
 
@@ -49,6 +49,17 @@ public class PublisherService {
      */
     public Optional<Publisher> findPublisherById(Integer id) {
         return publisherRepository.findById(id);
+    }
+
+    /**
+     * Updates a given publisher.
+     * 
+     * @param publisher to update.
+     * @return The updated publisher; will never be null.
+     * @see Publisher
+     */
+    public Publisher updatePublisher(Publisher publisher) {
+        return publisherRepository.save(publisher);
     }
 
     /**

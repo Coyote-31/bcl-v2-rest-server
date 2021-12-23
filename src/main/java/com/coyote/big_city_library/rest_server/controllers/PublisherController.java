@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,10 +28,10 @@ public class PublisherController {
     @Autowired
     PublisherService publisherService;
 
-    @PutMapping("/save")
-    public Publisher savePublisher(@Valid @RequestBody Publisher publisher) {
-        Publisher publisherSaved = publisherService.savePublisher(publisher);
-        log.debug("savePublisher() => publisher with name '{}' saved", publisherSaved.getName());
+    @PostMapping("/add")
+    public Publisher addPublisher(@Valid @RequestBody Publisher publisher) {
+        Publisher publisherSaved = publisherService.addPublisher(publisher);
+        log.debug("addPublisher() => publisher with name '{}' added", publisherSaved.getName());
         return publisherSaved;
     }
 
@@ -53,6 +54,13 @@ public class PublisherController {
             log.debug("findPublisherById() => No publisher found with id '{}'", id);
         }
         return publisher;
+    }
+
+    @PutMapping("/update")
+    public Publisher updatePublisher(@Valid @RequestBody Publisher publisher) {
+        Publisher publisherUpdated = publisherService.updatePublisher(publisher);
+        log.debug("updatePublisher() => publisher with name '{}' updated", publisherUpdated.getName());
+        return publisherUpdated;
     }
 
     @DeleteMapping("/delete")
