@@ -17,6 +17,8 @@
 	<!--  PROPERTIES  -->
 	<!-- ============ -->
 	<properties>
+		<!-- The entry point class to start the app -->
+		<start-class>com.coyote.big_city_library.rest_server.RestServerApplication</start-class>
 		<!-- Encoding -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
