@@ -1,11 +1,10 @@
 package com.coyote.big_city_library.rest_server.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
-import com.coyote.big_city_library.rest_server.dao.entities.Exemplary;
+import com.coyote.big_city_library.rest_server.dto.ExemplaryDto;
 import com.coyote.big_city_library.rest_server.services.ExemplaryService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,44 +28,41 @@ public class ExemplaryController {
     ExemplaryService exemplaryService;
 
     @PostMapping("/add")
-    public Exemplary addExemplary(@Valid @RequestBody Exemplary exemplary) {
-        Exemplary exemplarySaved = exemplaryService.addExemplary(exemplary);
+    public ExemplaryDto addExemplary(@Valid @RequestBody ExemplaryDto exemplaryDto) {
+        ExemplaryDto exemplarySaved = exemplaryService.addExemplary(exemplaryDto);
         log.debug("addExemplary() => exemplary with id '{}' added", exemplarySaved.getId());
         return exemplarySaved;
     }
 
     @GetMapping("/all")
-    public List<Exemplary> findAllExemplaries() {
-        List<Exemplary> exemplaries = exemplaryService.findAllExemplaries();
+    public List<ExemplaryDto> findAllExemplaries() {
+        List<ExemplaryDto> exemplaries = exemplaryService.findAllExemplaries();
         log.debug("findAllExemplaries() => {} exemplary(s) found", exemplaries.size());
         return exemplaries;
     }
     
     @GetMapping("/{id}")
-    public Exemplary findExemplaryById(@PathVariable Integer id) {
-        Optional<Exemplary> optionalExemplary = exemplaryService.findExemplaryById(id);
-        Exemplary exemplary;
-        if (optionalExemplary.isPresent()) {
-            exemplary = optionalExemplary.get();
-            log.debug("findExemplaryById() => exemplary with id '{}' found", exemplary.getId());
+    public ExemplaryDto findExemplaryById(@PathVariable Integer id) {
+        ExemplaryDto exemplaryDto = exemplaryService.findExemplaryById(id);
+        if (exemplaryDto != null) {
+            log.debug("findExemplaryById() => exemplary with id '{}' found", exemplaryDto.getId());
         } else {
-            exemplary = null;
             log.debug("findExemplaryById() => No exemplary found with id '{}'", id);
         }
-        return exemplary;
+        return exemplaryDto;
     }
 
     @PutMapping("/update")
-    public Exemplary updateExemplary(@Valid @RequestBody Exemplary exemplary) {
-        Exemplary exemplaryUpdated = exemplaryService.updateExemplary(exemplary);
+    public ExemplaryDto updateExemplary(@Valid @RequestBody ExemplaryDto exemplaryDto) {
+        ExemplaryDto exemplaryUpdated = exemplaryService.updateExemplary(exemplaryDto);
         log.debug("updateExemplary() => exemplary with id '{}' updated", exemplaryUpdated.getId());
         return exemplaryUpdated;
     }
 
     @DeleteMapping("/delete")
-    public void deleteExemplary(@Valid @RequestBody Exemplary exemplary) {
-        exemplaryService.deleteExemplary(exemplary);
-        log.debug("deleteExemplary() => exemplary with id '{}' removed", exemplary.getId());
+    public void deleteExemplary(@Valid @RequestBody ExemplaryDto exemplaryDto) {
+        exemplaryService.deleteExemplary(exemplaryDto);
+        log.debug("deleteExemplary() => exemplary with id '{}' removed", exemplaryDto.getId());
     }
 
     @DeleteMapping("/delete/{id}")

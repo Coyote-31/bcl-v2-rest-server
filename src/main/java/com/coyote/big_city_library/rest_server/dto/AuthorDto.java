@@ -8,14 +8,10 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter 
 @Setter 
-public class UserDto {
+public class AuthorDto {
 
     private Integer id;
 
-    private String pseudo;
-
-    private String email;
-
-    private String password;
+    private String name;
 
 }

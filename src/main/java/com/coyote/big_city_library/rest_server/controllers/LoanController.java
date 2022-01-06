@@ -1,11 +1,10 @@
 package com.coyote.big_city_library.rest_server.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
-import com.coyote.big_city_library.rest_server.dao.entities.Loan;
+import com.coyote.big_city_library.rest_server.dto.LoanDto;
 import com.coyote.big_city_library.rest_server.services.LoanService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,44 +28,41 @@ public class LoanController {
     LoanService loanService;
 
     @PostMapping("/add")
-    public Loan addLoan(@Valid @RequestBody Loan loan) {
-        Loan loanSaved = loanService.addLoan(loan);
+    public LoanDto addLoan(@Valid @RequestBody LoanDto loanDto) {
+        LoanDto loanSaved = loanService.addLoan(loanDto);
         log.debug("addLoan() => loan with id '{}' added", loanSaved.getId());
         return loanSaved;
     }
 
     @GetMapping("/all")
-    public List<Loan> findAllLoans() {
-        List<Loan> loans = loanService.findAllLoans();
+    public List<LoanDto> findAllLoans() {
+        List<LoanDto> loans = loanService.findAllLoans();
         log.debug("findAllLoans() => {} loan(s) found", loans.size());
         return loans;
     }
     
     @GetMapping("/{id}")
-    public Loan findLoanById(@PathVariable Integer id) {
-        Optional<Loan> optionalLoan = loanService.findLoanById(id);
-        Loan loan;
-        if (optionalLoan.isPresent()) {
-            loan = optionalLoan.get();
-            log.debug("findLoanById() => loan with id '{}' found", loan.getId());
+    public LoanDto findLoanById(@PathVariable Integer id) {
+        LoanDto loanDto = loanService.findLoanById(id);
+        if (loanDto != null) {
+            log.debug("findLoanById() => loan with id '{}' found", loanDto.getId());
         } else {
-            loan = null;
             log.debug("findLoanById() => No loan found with id '{}'", id);
         }
-        return loan;
+        return loanDto;
     }
 
     @PutMapping("/update")
-    public Loan updateLoan(@Valid @RequestBody Loan loan) {
-        Loan loanUpdated = loanService.updateLoan(loan);
+    public LoanDto updateLoan(@Valid @RequestBody LoanDto loanDto) {
+        LoanDto loanUpdated = loanService.updateLoan(loanDto);
         log.debug("updateLoan() => loan with id '{}' updated", loanUpdated.getId());
         return loanUpdated;
     }
 
     @DeleteMapping("/delete")
-    public void deleteLoan(@Valid @RequestBody Loan loan) {
-        loanService.deleteLoan(loan);
-        log.debug("deleteLoan() => loan with id '{}' removed", loan.getId());
+    public void deleteLoan(@Valid @RequestBody LoanDto loanDto) {
+        loanService.deleteLoan(loanDto);
+        log.debug("deleteLoan() => loan with id '{}' removed", loanDto.getId());
     }
 
     @DeleteMapping("/delete/{id}")

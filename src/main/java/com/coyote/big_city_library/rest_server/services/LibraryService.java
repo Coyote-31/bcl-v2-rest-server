@@ -1,10 +1,10 @@
 package com.coyote.big_city_library.rest_server.services;
 
 import java.util.List;
-import java.util.Optional;
-
 import com.coyote.big_city_library.rest_server.dao.entities.Library;
 import com.coyote.big_city_library.rest_server.dao.repositories.LibraryRepository;
+import com.coyote.big_city_library.rest_server.dto.LibraryDto;
+import com.coyote.big_city_library.rest_server.dto.LibraryMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,15 +20,22 @@ public class LibraryService {
     @Autowired
     private LibraryRepository libraryRepository;
 
+    @Autowired
+    protected LibraryMapper libraryMapper;
+
     /**
      * Adds a new given library.
      * 
-     * @param library to add.
+     * @param libraryDto to add.
      * @return The added library; will never be null.
      * @see Library
+     * @see LibraryDto
      */
-    public Library addLibrary(Library library) {
-        return libraryRepository.save(library);
+    public LibraryDto addLibrary(LibraryDto libraryDto) {
+        Library library = libraryMapper.toModel(libraryDto);
+        library = libraryRepository.save(library);
+
+        return libraryMapper.toDto(library);
     }
 
     /**
@@ -36,46 +43,54 @@ public class LibraryService {
      * 
      * @return All the libraries.
      * @see Library
+     * @see LibraryDto
      */
-    public List<Library> findAllLibraries() {
-        return libraryRepository.findAll();
+    public List<LibraryDto> findAllLibraries() {
+        return libraryMapper.toDto(libraryRepository.findAll());
     }
 
     /**
      * Returns a library with a given id.
      * 
      * @param id of a library.
-     * @return The library with the given id or Optional#empty() if none found.
+     * @return The library with the given id or null if none found.
+     * @see Library
+     * @see LibraryDto
      */
-    public Optional<Library> findLibraryById(Integer id) {
-        return libraryRepository.findById(id);
+    public LibraryDto findLibraryById(Integer id) {
+        return libraryMapper.toDto(libraryRepository.findById(id).orElse(null));
     }
 
     /**
      * Updates a given library.
      * 
-     * @param library to update.
+     * @param libraryDto to update.
      * @return The updated library; will never be null.
      * @see Library
+     * @see LibraryDto
      */
-    public Library updateLibrary(Library library) {
-        return libraryRepository.save(library);
+    public LibraryDto updateLibrary(LibraryDto libraryDto) {
+        Library library = libraryMapper.toModel(libraryDto);
+        return libraryMapper.toDto(libraryRepository.save(library));
     }
 
     /**
      * Deletes a given library.
      * 
-     * @param library to delete.
+     * @param libraryDto to delete.
      * @see Library
+     * @see LibraryDto
      */
-    public void deleteLibrary(Library library) {
-        libraryRepository.delete(library);
+    public void deleteLibrary(LibraryDto libraryDto) {
+        libraryRepository.delete(libraryMapper.toModel(libraryDto));
     }
 
     /**
      * Deletes a library with a given id
      * 
      * @param id of a library.
+     * @see Library
+     * @see LibraryDto
      */
     public void deleteLibraryById(Integer id) {
         libraryRepository.deleteById(id);

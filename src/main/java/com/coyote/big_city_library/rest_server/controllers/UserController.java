@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import com.coyote.big_city_library.rest_server.dao.entities.User;
 import com.coyote.big_city_library.rest_server.dto.UserDto;
 import com.coyote.big_city_library.rest_server.services.UserService;
 
@@ -37,16 +36,16 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public List<User> findAllUsers() {
-        List<User> users = userService.findAllUsers();
+    public List<UserDto> findAllUsers() {
+        List<UserDto> users = userService.findAllUsers();
         log.debug("findAllUsers() => {} user(s) found", users.size());
         return users;
     }
     
     @GetMapping("/{id}")
-    public User findUserById(@PathVariable Integer id) {
-        Optional<User> optionalUser = userService.findUserById(id);
-        User user;
+    public UserDto findUserById(@PathVariable Integer id) {
+        Optional<UserDto> optionalUser = userService.findUserById(id);
+        UserDto user;
         if (optionalUser.isPresent()) {
             user = optionalUser.get();
             log.debug("findUserById() => user with pseudo '{}' found", user.getPseudo());
@@ -58,16 +57,16 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public User updateUser(@Valid @RequestBody User user) {
-        User userUpdated = userService.updateUser(user);
+    public UserDto updateUser(@Valid @RequestBody UserDto userDto) {
+        UserDto userUpdated = userService.updateUser(userDto);
         log.debug("updateUser() => user with pseudo '{}' updated", userUpdated.getPseudo());
         return userUpdated;
     }
 
     @DeleteMapping("/delete")
-    public void deleteUser(@Valid @RequestBody User user) {
-        userService.deleteUser(user);
-        log.debug("deleteUser() => user with pseudo '{}' removed", user.getPseudo());
+    public void deleteUser(@Valid @RequestBody UserDto userDto) {
+        userService.deleteUser(userDto);
+        log.debug("deleteUser() => user with pseudo '{}' removed", userDto.getPseudo());
     }
 
     @DeleteMapping("/delete/{id}")

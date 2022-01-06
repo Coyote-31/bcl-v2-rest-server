@@ -1,5 +1,7 @@
 package com.coyote.big_city_library.rest_server.dto;
 
+import java.time.LocalDate;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,14 +10,14 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter 
 @Setter 
-public class UserDto {
+public class LoanDto {
 
     private Integer id;
 
-    private String pseudo;
+    private LocalDate loanDate;
 
-    private String email;
+    private Boolean extend = false;
 
-    private String password;
+    private LocalDate returnDate;
 
 }

@@ -1,11 +1,10 @@
 package com.coyote.big_city_library.rest_server.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
-import com.coyote.big_city_library.rest_server.dao.entities.Publisher;
+import com.coyote.big_city_library.rest_server.dto.PublisherDto;
 import com.coyote.big_city_library.rest_server.services.PublisherService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,44 +28,41 @@ public class PublisherController {
     PublisherService publisherService;
 
     @PostMapping("/add")
-    public Publisher addPublisher(@Valid @RequestBody Publisher publisher) {
-        Publisher publisherSaved = publisherService.addPublisher(publisher);
+    public PublisherDto addPublisher(@Valid @RequestBody PublisherDto publisherDto) {
+        PublisherDto publisherSaved = publisherService.addPublisher(publisherDto);
         log.debug("addPublisher() => publisher with name '{}' added", publisherSaved.getName());
         return publisherSaved;
     }
 
     @GetMapping("/all")
-    public List<Publisher> findAllPublishers() {
-        List<Publisher> publishers = publisherService.findAllPublishers();
+    public List<PublisherDto> findAllPublishers() {
+        List<PublisherDto> publishers = publisherService.findAllPublishers();
         log.debug("findAllPublishers() => {} publisher(s) found", publishers.size());
         return publishers;
     }
     
     @GetMapping("/{id}")
-    public Publisher findPublisherById(@PathVariable Integer id) {
-        Optional<Publisher> optionalPublisher = publisherService.findPublisherById(id);
-        Publisher publisher;
-        if (optionalPublisher.isPresent()) {
-            publisher = optionalPublisher.get();
-            log.debug("findPublisherById() => publisher with name '{}' found", publisher.getName());
+    public PublisherDto findPublisherById(@PathVariable Integer id) {
+        PublisherDto publisherDto = publisherService.findPublisherById(id);
+        if (publisherDto != null) {
+            log.debug("findPublisherById() => publisher with name '{}' found", publisherDto.getName());
         } else {
-            publisher = null;
             log.debug("findPublisherById() => No publisher found with id '{}'", id);
         }
-        return publisher;
+        return publisherDto;
     }
 
     @PutMapping("/update")
-    public Publisher updatePublisher(@Valid @RequestBody Publisher publisher) {
-        Publisher publisherUpdated = publisherService.updatePublisher(publisher);
+    public PublisherDto updatePublisher(@Valid @RequestBody PublisherDto publisherDto) {
+        PublisherDto publisherUpdated = publisherService.updatePublisher(publisherDto);
         log.debug("updatePublisher() => publisher with name '{}' updated", publisherUpdated.getName());
         return publisherUpdated;
     }
 
     @DeleteMapping("/delete")
-    public void deletePublisher(@Valid @RequestBody Publisher publisher) {
-        publisherService.deletePublisher(publisher);
-        log.debug("deletePublisher() => publisher with name '{}' removed", publisher.getName());
+    public void deletePublisher(@Valid @RequestBody PublisherDto publisherDto) {
+        publisherService.deletePublisher(publisherDto);
+        log.debug("deletePublisher() => publisher with name '{}' removed", publisherDto.getName());
     }
 
     @DeleteMapping("/delete/{id}")

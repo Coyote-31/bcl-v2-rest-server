@@ -1,11 +1,10 @@
 package com.coyote.big_city_library.rest_server.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
-import com.coyote.big_city_library.rest_server.dao.entities.Book;
+import com.coyote.big_city_library.rest_server.dto.BookDto;
 import com.coyote.big_city_library.rest_server.services.BookService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,44 +28,41 @@ public class BookController {
     BookService bookService;
 
     @PostMapping("/add")
-    public Book addBook(@Valid @RequestBody Book book) {
-        Book bookSaved = bookService.addBook(book);
+    public BookDto addBook(@Valid @RequestBody BookDto bookDto) {
+        BookDto bookSaved = bookService.addBook(bookDto);
         log.debug("addBook() => book with title '{}' added", bookSaved.getTitle());
         return bookSaved;
     }
 
     @GetMapping("/all")
-    public List<Book> findAllBooks() {
-        List<Book> books = bookService.findAllBooks();
+    public List<BookDto> findAllBooks() {
+        List<BookDto> books = bookService.findAllBooks();
         log.debug("findAllBooks() => {} book(s) found", books.size());
         return books;
     }
     
     @GetMapping("/{id}")
-    public Book findBookById(@PathVariable Integer id) {
-        Optional<Book> optionalBook = bookService.findBookById(id);
-        Book book;
-        if (optionalBook.isPresent()) {
-            book = optionalBook.get();
-            log.debug("findBookById() => book with title '{}' found", book.getTitle());
+    public BookDto findBookById(@PathVariable Integer id) {
+        BookDto bookDto = bookService.findBookById(id);
+        if (bookDto != null) {
+            log.debug("findBookById() => book with title '{}' found", bookDto.getTitle());
         } else {
-            book = null;
             log.debug("findBookById() => No book found with id '{}'", id);
         }
-        return book;
+        return bookDto;
     }
 
     @PutMapping("/update")
-    public Book updateBook(@Valid @RequestBody Book book) {
-        Book bookUpdated = bookService.updateBook(book);
+    public BookDto updateBook(@Valid @RequestBody BookDto bookDto) {
+        BookDto bookUpdated = bookService.updateBook(bookDto);
         log.debug("updateBook() => book with title '{}' updated", bookUpdated.getTitle());
         return bookUpdated;
     }
 
     @DeleteMapping("/delete")
-    public void deleteBook(@Valid @RequestBody Book book) {
-        bookService.deleteBook(book);
-        log.debug("deleteBook() => book with title '{}' removed", book.getTitle());
+    public void deleteBook(@Valid @RequestBody BookDto bookDto) {
+        bookService.deleteBook(bookDto);
+        log.debug("deleteBook() => book with title '{}' removed", bookDto.getTitle());
     }
 
     @DeleteMapping("/delete/{id}")

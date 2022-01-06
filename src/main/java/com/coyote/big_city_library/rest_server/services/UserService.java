@@ -37,7 +37,24 @@ public class UserService {
 
         User user = userMapper.toModel(userDto);
 
-        return userMapper.toDto(userRepository.save(user));
+
+        if (user.getId() == null) {
+
+            user = userRepository.save(user);
+
+        } else {
+
+            Optional<User> userExist = userRepository.findById(user.getId());
+
+            if (userExist.isPresent()) {
+                user =  userExist.get();
+            } else {
+                user.setId(null);
+                user = userRepository.save(user);
+            }
+        }
+        
+        return userMapper.toDto(user);
     }
 
     /**
@@ -45,9 +62,10 @@ public class UserService {
      * 
      * @return All the users.
      * @see User
+     * @see UserDto
      */
-    public List<User> findAllUsers() {
-        return userRepository.findAll();
+    public List<UserDto> findAllUsers() {
+        return userMapper.toDto(userRepository.findAll());
     }
 
     /**
@@ -55,36 +73,43 @@ public class UserService {
      * 
      * @param id of a user.
      * @return The user with the given id or Optional#empty() if none found.
+     * @see User
+     * @see UserDto
      */
-    public Optional<User> findUserById(Integer id) {
-        return userRepository.findById(id);
+    public Optional<UserDto> findUserById(Integer id) {
+        return userMapper.toDto(userRepository.findById(id));
     }
 
      /**
      * Updates a given user.
      * 
-     * @param user to update.
+     * @param userDto to update.
      * @return The updated user; will never be null.
      * @see User
+     * @see UserDto
      */
-    public User updateUser(User user) {
-        return userRepository.save(user);
+    public UserDto updateUser(UserDto userDto) {
+        User user = userMapper.toModel(userDto);
+        return userMapper.toDto(userRepository.save(user));
     }
 
     /**
      * Deletes a given user.
      * 
-     * @param user to delete.
+     * @param userDto to delete.
      * @see User
+     * @see UserDto
      */
-    public void deleteUser(User user) {
-        userRepository.delete(user);
+    public void deleteUser(UserDto userDto) {
+        userRepository.delete(userMapper.toModel(userDto));
     }
 
     /**
      * Deletes a user with a given id
      * 
      * @param id of a user.
+     * @see User
+     * @see UserDto
      */
     public void deleteUserById(Integer id) {
         userRepository.deleteById(id);
