@@ -5,8 +5,6 @@ import java.util.Set;
 
 import com.coyote.big_city_library.rest_server.dao.entities.Loan;
 
-// import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Getter;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -23,7 +21,6 @@ public class UserDto {
 
     private String email;
 
-    // @JsonIgnore
     private String password;
 
     private Set<Loan> loans = new HashSet<>();
