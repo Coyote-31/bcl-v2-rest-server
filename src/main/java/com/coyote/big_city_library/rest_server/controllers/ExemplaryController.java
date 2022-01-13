@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/exemplary")
+@RequestMapping("/exemplaries")
 public class ExemplaryController {
 
     @Autowired
@@ -34,7 +34,7 @@ public class ExemplaryController {
         return exemplarySaved;
     }
 
-    @GetMapping("/all")
+    @GetMapping("")
     public List<ExemplaryDto> findAllExemplaries() {
         List<ExemplaryDto> exemplaries = exemplaryService.findAllExemplaries();
         log.debug("findAllExemplaries() => {} exemplary(s) found", exemplaries.size());

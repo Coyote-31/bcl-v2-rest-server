@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/loan")
+@RequestMapping("/loans")
 public class LoanController {
 
     @Autowired
@@ -34,7 +34,7 @@ public class LoanController {
         return loanSaved;
     }
 
-    @GetMapping("/all")
+    @GetMapping("")
     public List<LoanDto> findAllLoans() {
         List<LoanDto> loans = loanService.findAllLoans();
         log.debug("findAllLoans() => {} loan(s) found", loans.size());

@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/book")
+@RequestMapping("/books")
 public class BookController {
 
     @Autowired
@@ -34,7 +34,7 @@ public class BookController {
         return bookSaved;
     }
 
-    @GetMapping("/all")
+    @GetMapping("")
     public List<BookDto> findAllBooks() {
         List<BookDto> books = bookService.findAllBooks();
         log.debug("findAllBooks() => {} book(s) found", books.size());

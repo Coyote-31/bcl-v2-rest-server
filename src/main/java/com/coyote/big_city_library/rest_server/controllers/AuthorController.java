@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/author")
+@RequestMapping("/authors")
 public class AuthorController {
 
     @Autowired
@@ -34,7 +34,7 @@ public class AuthorController {
         return authorSaved;
     }
 
-    @GetMapping("/all")
+    @GetMapping("")
     public List<AuthorDto> findAllAuthors() {
         List<AuthorDto> authors = authorService.findAllAuthors();
         log.debug("findAllAuthors() => {} author(s) found", authors.size());

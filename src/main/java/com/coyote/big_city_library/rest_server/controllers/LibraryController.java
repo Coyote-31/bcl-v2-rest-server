@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/library")
+@RequestMapping("/libraries")
 public class LibraryController {
 
     @Autowired
@@ -34,7 +34,7 @@ public class LibraryController {
         return librarySaved;
     }
 
-    @GetMapping("/all")
+    @GetMapping("")
     public List<LibraryDto> findAllLibraries() {
         List<LibraryDto> libraries = libraryService.findAllLibraries();
         log.debug("findAllLibraries() => {} library(s) found", libraries.size());

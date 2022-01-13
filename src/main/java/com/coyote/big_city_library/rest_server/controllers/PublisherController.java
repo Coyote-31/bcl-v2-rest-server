@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/publisher")
+@RequestMapping("/publishers")
 public class PublisherController {
 
     @Autowired
@@ -34,7 +34,7 @@ public class PublisherController {
         return publisherSaved;
     }
 
-    @GetMapping("/all")
+    @GetMapping("")
     public List<PublisherDto> findAllPublishers() {
         List<PublisherDto> publishers = publisherService.findAllPublishers();
         log.debug("findAllPublishers() => {} publisher(s) found", publishers.size());

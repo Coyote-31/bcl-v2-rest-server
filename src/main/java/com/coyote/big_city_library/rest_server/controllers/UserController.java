@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
@@ -35,7 +35,7 @@ public class UserController {
         return userSaved;
     }
 
-    @GetMapping("/all")
+    @GetMapping("")
     public List<UserDto> findAllUsers() {
         List<UserDto> users = userService.findAllUsers();
         log.debug("findAllUsers() => {} user(s) found", users.size());
