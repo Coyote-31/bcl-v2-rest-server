@@ -1,7 +1,6 @@
 package com.coyote.big_city_library.rest_server.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.coyote.big_city_library.rest_server.dao.entities.User;
 import com.coyote.big_city_library.rest_server.dao.repositories.UserRepository;

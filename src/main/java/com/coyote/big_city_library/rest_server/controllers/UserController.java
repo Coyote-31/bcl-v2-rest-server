@@ -1,7 +1,6 @@
 package com.coyote.big_city_library.rest_server.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
