@@ -36,23 +36,7 @@ public class UserService {
     public UserDto addUser(UserDto userDto) {
 
         User user = userMapper.toModel(userDto);
-
-
-        if (user.getId() == null) {
-
-            user = userRepository.save(user);
-
-        } else {
-
-            Optional<User> userExist = userRepository.findById(user.getId());
-
-            if (userExist.isPresent()) {
-                user =  userExist.get();
-            } else {
-                user.setId(null);
-                user = userRepository.save(user);
-            }
-        }
+        user = userRepository.save(user);
         
         return userMapper.toDto(user);
     }
@@ -72,12 +56,12 @@ public class UserService {
      * Returns a user with a given id.
      * 
      * @param id of a user.
-     * @return The user with the given id or Optional#empty() if none found.
+     * @return The user with the given id or null if none found.
      * @see User
      * @see UserDto
      */
-    public Optional<UserDto> findUserById(Integer id) {
-        return userMapper.toDto(userRepository.findById(id));
+    public UserDto findUserById(Integer id) {
+        return userMapper.toDto(userRepository.findById(id).orElse(null));
     }
 
      /**

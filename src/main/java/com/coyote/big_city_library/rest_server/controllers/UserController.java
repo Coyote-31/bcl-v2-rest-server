@@ -44,16 +44,13 @@ public class UserController {
     
     @GetMapping("/{id}")
     public UserDto findUserById(@PathVariable Integer id) {
-        Optional<UserDto> optionalUser = userService.findUserById(id);
-        UserDto user;
-        if (optionalUser.isPresent()) {
-            user = optionalUser.get();
-            log.debug("findUserById() => user with pseudo '{}' found", user.getPseudo());
+        UserDto userDto = userService.findUserById(id);
+        if (userDto != null) {
+            log.debug("findUserById() => user with pseudo '{}' found", userDto.getPseudo());
         } else {
-            user = null;
             log.debug("findUserById() => No user found with id '{}'", id);
         }
-        return user;
+        return userDto;
     }
 
     @PutMapping("/update")
