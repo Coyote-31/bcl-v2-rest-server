@@ -64,26 +64,4 @@ public class Book {
         this.authors = authors;
     }
 
-    // Bi-directional sync
-
-    public void addExemplary(Exemplary exemplary) {
-        exemplaries.add(exemplary);
-        exemplary.setBook(this);
-    }
-
-    public void removeExemplary(Exemplary exemplary) {
-        exemplaries.remove(exemplary);
-        exemplary.setBook(null);
-    }
-
-    public void addAuthor(Author author) {
-        authors.add(author);
-        author.getBooks().add(this);
-    }
- 
-    public void removeAuthor(Author author) {
-        authors.remove(author);
-        author.getBooks().remove(this);
-    }
-
 }

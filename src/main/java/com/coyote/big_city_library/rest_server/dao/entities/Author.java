@@ -40,16 +40,4 @@ public class Author {
         this.name = name;
     }
 
-    // Bi-directional sync
-
-    public void addBook(Book book) {
-        books.add(book);
-        book.getAuthors().add(this);
-    }
- 
-    public void removeBook(Book book) {
-        books.remove(book);
-        book.getAuthors().remove(this);
-    }
-
 }

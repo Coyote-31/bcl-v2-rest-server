@@ -52,16 +52,4 @@ public class Library {
         this.phone = phone;
     }
 
-    // Bi-directional sync
-
-    public void addExemplary(Exemplary exemplary) {
-        examplaries.add(exemplary);
-        exemplary.setLibrary(this);
-    }
-
-    public void removeExemplary(Exemplary exemplary) {
-        examplaries.remove(exemplary);
-        exemplary.setLibrary(null);
-    }
-
 }
