@@ -20,4 +20,8 @@ public class LoanDto {
 
     private LocalDate returnDate;
 
+    private ExemplaryDto exemplary;
+
+    private UserDto user;
+
 }

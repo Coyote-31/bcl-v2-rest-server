@@ -6,7 +6,8 @@ import com.coyote.big_city_library.rest_server.dao.entities.Loan;
 
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", 
+        uses = {ExemplaryMapper.class, UserMapper.class})
 public interface LoanMapper {
 
     LoanDto toDto(Loan loan);

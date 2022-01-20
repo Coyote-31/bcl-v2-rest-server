@@ -16,6 +16,11 @@ public class UserDto {
 
     private String email;
 
+    /**
+     * This password need SHA Encryption
+     * before mapping to entitie User
+     * @see com.coyote.big_city_library.rest_server.dao.entities.User
+     */
     private String password;
 
 }

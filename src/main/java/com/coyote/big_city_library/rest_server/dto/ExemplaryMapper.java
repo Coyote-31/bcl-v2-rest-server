@@ -6,7 +6,8 @@ import com.coyote.big_city_library.rest_server.dao.entities.Exemplary;
 
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",
+        uses = {LibraryMapper.class, BookMapper.class})
 public interface ExemplaryMapper {
 
     ExemplaryDto toDto(Exemplary exemplary);

@@ -1,6 +1,7 @@
 package com.coyote.big_city_library.rest_server.dto;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -17,5 +18,9 @@ public class BookDto {
     private String title;
 
     private LocalDate publicationDate;
+
+    private PublisherDto publisher;
+
+    private Set<AuthorDto> authors;
 
 }

@@ -11,4 +11,8 @@ import lombok.Setter;
 public class ExemplaryDto {
 
     private Integer id;
+
+    private LibraryDto library;
+
+    private BookDto book;
 }
