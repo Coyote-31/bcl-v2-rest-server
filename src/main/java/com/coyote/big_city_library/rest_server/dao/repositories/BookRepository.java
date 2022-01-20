@@ -13,6 +13,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface BookRepository extends JpaRepository<Book, Integer> {
 
-    List<Book> searchByTitleContainingIgnoreCaseAndAuthorsNameContainingIgnoreCaseAndPublisherNameContainingIgnoreCase(String bookTitle, String authorName, String publisherName);
+    List<Book> searchByTitleContainingIgnoreCaseAndAuthorsNameContainingIgnoreCaseAndPublisherNameContainingIgnoreCase(
+        String bookTitle, 
+        String authorName, 
+        String publisherName);
     
 }
