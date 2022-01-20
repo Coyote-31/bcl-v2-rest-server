@@ -1,5 +1,6 @@
 package com.coyote.big_city_library.rest_server.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.coyote.big_city_library.rest_server.dao.entities.Book;
@@ -60,6 +61,20 @@ public class BookService {
      */
     public BookDto findBookById(Integer id) {
         return bookMapper.toDto(bookRepository.findById(id).orElse(null));
+    }
+
+    /**
+     * Returns a list of books with the given title
+     * 
+     * @return List of books
+     * @see Book
+     * @see BookDto
+     */
+    public List<BookDto> findBooksByTitle(String title) {
+        if (title.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return bookMapper.toDto(bookRepository.findByTitleContainingIgnoreCase(title));
     }
 
     /**
