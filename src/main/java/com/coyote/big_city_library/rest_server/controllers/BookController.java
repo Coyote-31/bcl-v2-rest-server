@@ -53,10 +53,14 @@ public class BookController {
         return bookDto;
     }
 
-    @GetMapping("/research")
-    public List<BookDto> researchBooks(@RequestParam("bookTitle") String bookTitle) {
-        List<BookDto> books = bookService.findBooksByTitle(bookTitle);
-        log.debug("findBooksByTitle('{}') => {} book(s) found", bookTitle, books.size());
+    @GetMapping("/search")
+    public List<BookDto> searchBooks(
+        @RequestParam("bookTitle") String bookTitle,
+        @RequestParam("authorName") String authorName,
+        @RequestParam("publisherName") String publisherName) {
+
+        List<BookDto> books = bookService.searchBooks(bookTitle, authorName, publisherName);
+        log.debug("searchBooks('{}' '{}' '{}') => {} book(s) found", bookTitle, authorName, publisherName, books.size());
         return books;
     }
 

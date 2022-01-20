@@ -64,17 +64,21 @@ public class BookService {
     }
 
     /**
-     * Returns a list of books with the given title
+     * Returns a list of books with the given params
      * 
+     * @param bookTitle the title of a book.
+     * @param authorName the author's name of the book.
+     * @param publisherName the publisher's name of the book.
      * @return List of books
      * @see Book
      * @see BookDto
      */
-    public List<BookDto> findBooksByTitle(String title) {
-        if (title.isEmpty()) {
+    public List<BookDto> searchBooks(String bookTitle, String authorName, String publisherName) {
+        if (bookTitle.isEmpty() && authorName.isEmpty() && publisherName.isEmpty()) {
             return new ArrayList<>();
         }
-        return bookMapper.toDto(bookRepository.findByTitleContainingIgnoreCase(title));
+        return bookMapper.toDto(bookRepository
+            .searchByTitleContainingIgnoreCaseAndAuthorsNameContainingIgnoreCaseAndPublisherNameContainingIgnoreCase(bookTitle, authorName, publisherName));
     }
 
     /**
