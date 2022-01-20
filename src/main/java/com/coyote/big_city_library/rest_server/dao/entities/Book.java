@@ -1,7 +1,6 @@
 package com.coyote.big_city_library.rest_server.dao.entities;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -20,11 +19,13 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "book")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@RequiredArgsConstructor
 @Getter 
 @Setter 
 public class Book {
@@ -52,16 +53,9 @@ public class Book {
     @JoinTable(name = "book_author", 
         joinColumns = @JoinColumn(name = "book_id", nullable = false), 
         inverseJoinColumns = @JoinColumn(name = "author_id", nullable = false))
-    private Set<Author> authors = new HashSet<>();
+    private Set<Author> authors;
 
     @OneToMany(mappedBy = "book")
-    private Set<Exemplary> exemplaries = new HashSet<>();
-
-    public Book (String title, LocalDate publicationDate, Publisher publisher, Set<Author> authors) {
-        this.title = title;
-        this.publicationDate = publicationDate;
-        this.publisher = publisher;
-        this.authors = authors;
-    }
+    private Set<Exemplary> exemplaries;
 
 }

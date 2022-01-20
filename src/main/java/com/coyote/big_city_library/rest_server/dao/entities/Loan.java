@@ -15,11 +15,13 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "loan")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@RequiredArgsConstructor
 @Getter 
 @Setter 
 public class Loan {
@@ -49,13 +51,5 @@ public class Loan {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
-    public Loan (LocalDate loanDate, Boolean extend, LocalDate returnDate, Exemplary exemplary, User user) {
-        this.loanDate = loanDate;
-        this.extend = extend;
-        this.returnDate = returnDate;
-        this.exemplary = exemplary;
-        this.user = user;
-    }
 
 }

@@ -1,6 +1,5 @@
 package com.coyote.big_city_library.rest_server.dao.entities;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -17,12 +16,14 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 
 @Entity
 @Table(name = "user")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@RequiredArgsConstructor
 @Getter 
 @Setter 
 public class User {
@@ -49,12 +50,6 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user")
-    private Set<Loan> loans = new HashSet<>();
-
-    public User (String pseudo, String email, String password) {
-        this.pseudo = pseudo;
-        this.email = email;
-        this.password = password;
-    }
+    private Set<Loan> loans;
 
 }
