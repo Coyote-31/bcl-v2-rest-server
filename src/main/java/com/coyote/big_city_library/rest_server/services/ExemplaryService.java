@@ -8,14 +8,14 @@ import com.coyote.big_city_library.rest_server.dto.ExemplaryDto;
 import com.coyote.big_city_library.rest_server.dto.ExemplaryMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  *  Service class handling exemplaries
  * 
  * @see ExemplaryRepository
  */
-@Component
+@Service
 public class ExemplaryService {
     
     @Autowired

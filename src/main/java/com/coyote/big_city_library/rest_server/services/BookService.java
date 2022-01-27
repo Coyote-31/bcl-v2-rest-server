@@ -9,14 +9,14 @@ import com.coyote.big_city_library.rest_server.dto.BookDto;
 import com.coyote.big_city_library.rest_server.dto.BookMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  *  Service class handling books
  * 
  * @see BookRepository
  */
-@Component
+@Service
 public class BookService {
     
     @Autowired

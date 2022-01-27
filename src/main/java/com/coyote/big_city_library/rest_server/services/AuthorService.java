@@ -8,14 +8,14 @@ import com.coyote.big_city_library.rest_server.dto.AuthorDto;
 import com.coyote.big_city_library.rest_server.dto.AuthorMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  *  Service class handling authors
  * 
  * @see AuthorRepository
  */
-@Component
+@Service
 public class AuthorService {
     
     @Autowired

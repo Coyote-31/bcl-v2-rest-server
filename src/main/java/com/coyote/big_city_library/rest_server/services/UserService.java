@@ -8,14 +8,14 @@ import com.coyote.big_city_library.rest_server.dto.UserDto;
 import com.coyote.big_city_library.rest_server.dto.UserMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  *  Service class handling users
  * 
  * @see UserRepository
  */
-@Component
+@Service
 public class UserService {
     
     @Autowired

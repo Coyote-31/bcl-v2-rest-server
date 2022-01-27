@@ -8,14 +8,14 @@ import com.coyote.big_city_library.rest_server.dto.PublisherDto;
 import com.coyote.big_city_library.rest_server.dto.PublisherMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  *  Service class handling publishers
  * 
  * @see PublisherRepository
  */
-@Component
+@Service
 public class PublisherService {
     
     @Autowired

@@ -1,20 +1,21 @@
 package com.coyote.big_city_library.rest_server.services;
 
 import java.util.List;
+
 import com.coyote.big_city_library.rest_server.dao.entities.Library;
 import com.coyote.big_city_library.rest_server.dao.repositories.LibraryRepository;
 import com.coyote.big_city_library.rest_server.dto.LibraryDto;
 import com.coyote.big_city_library.rest_server.dto.LibraryMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  *  Service class handling libraries
  * 
  * @see LibraryRepository
  */
-@Component
+@Service
 public class LibraryService {
     
     @Autowired

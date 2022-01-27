@@ -8,14 +8,14 @@ import com.coyote.big_city_library.rest_server.dto.LoanDto;
 import com.coyote.big_city_library.rest_server.dto.LoanMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  *  Service class handling loans
  * 
  * @see LoanRepository
  */
-@Component
+@Service
 public class LoanService {
     
     @Autowired
