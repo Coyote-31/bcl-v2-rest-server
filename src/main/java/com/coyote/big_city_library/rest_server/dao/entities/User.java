@@ -4,6 +4,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,6 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
+
+import com.coyote.big_city_library.rest_server.security.Role;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -48,6 +52,11 @@ public class User {
     @Column(name = "password", columnDefinition = "CHAR(64) NOT NULL")
     @Size(min = 64, max = 64)
     private String password;
+
+    @NonNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable=false, length = 20)
+    private Role role = Role.ROLE_USER;
 
     @OneToMany(mappedBy = "user")
     private Set<Loan> loans;

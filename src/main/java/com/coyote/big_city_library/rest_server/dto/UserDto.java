@@ -1,5 +1,7 @@
 package com.coyote.big_city_library.rest_server.dto;
 
+import com.coyote.big_city_library.rest_server.security.Role;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,5 +24,7 @@ public class UserDto {
      * @see com.coyote.big_city_library.rest_server.dao.entities.User
      */
     private String password;
+
+    private Role role;
 
 }
