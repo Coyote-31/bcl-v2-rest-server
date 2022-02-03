@@ -28,8 +28,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable()
 			.authorizeRequests()
-            .antMatchers("/books/**").hasAuthority(Role.USER.toString())
-            .antMatchers("/users/**").hasAuthority(Role.ADMIN.toString())
+            .antMatchers("/books/search").hasAnyAuthority("USER", "ADMIN")
+            .anyRequest().hasAuthority("ADMIN")
             .and().formLogin();
 	}
 
