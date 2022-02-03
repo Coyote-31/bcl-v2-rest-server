@@ -49,14 +49,13 @@ public class User {
     private String email;
 
     @NonNull
-    @Column(name = "password", columnDefinition = "CHAR(64) NOT NULL")
-    @Size(min = 64, max = 64)
+    @Column(name = "password", columnDefinition = "CHAR(60) BINARY NOT NULL")
+    @Size(min = 59, max = 60)
     private String password;
 
-    @NonNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable=false, length = 20)
-    private Role role = Role.ROLE_USER;
+    @Column(name = "role", columnDefinition = "VARCHAR(20) NOT NULL DEFAULT 'USER'")
+    private Role role;
 
     @OneToMany(mappedBy = "user")
     private Set<Loan> loans;

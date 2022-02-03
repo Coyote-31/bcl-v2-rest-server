@@ -1,5 +1,7 @@
 package com.coyote.big_city_library.rest_server.dao.repositories;
 
+import java.util.Optional;
+
 import com.coyote.big_city_library.rest_server.dao.entities.User;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,5 +12,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @see User
  */
 public interface UserRepository extends JpaRepository<User, Integer> {
-    
+    Optional<User> findByPseudo(String pseudo);
 }

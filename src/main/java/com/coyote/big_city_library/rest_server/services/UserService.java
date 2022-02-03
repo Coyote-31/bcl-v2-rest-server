@@ -8,6 +8,7 @@ import com.coyote.big_city_library.rest_server.dto.UserDto;
 import com.coyote.big_city_library.rest_server.dto.UserMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -24,6 +25,11 @@ public class UserService {
     @Autowired
     protected UserMapper userMapper;
 
+    @Autowired
+	PasswordEncoder passwordEncoder;
+
+
+
     /**
      * Adds a new given user.
      * 
@@ -33,6 +39,8 @@ public class UserService {
      * @see UserDto
      */
     public UserDto addUser(UserDto userDto) {
+
+        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
         User user = userMapper.toModel(userDto);
         user = userRepository.save(user);
@@ -61,6 +69,29 @@ public class UserService {
      */
     public UserDto findUserById(Integer id) {
         return userMapper.toDto(userRepository.findById(id).orElse(null));
+    }
+    
+    /**
+     * Returns a user with a given pseudo.
+     * 
+     * @param pseudo of a user.
+     * @return The user with the given pseudo or null if none found.
+     * @see User
+     * @see UserDto
+     */
+    public UserDto findUserByPseudo(String pseudo) {
+        return userMapper.toDto(userRepository.findByPseudo(pseudo).orElse(null));
+    }
+
+    /**
+     * Returns a user (entity) with a given pseudo.
+     * 
+     * @param pseudo of a user.
+     * @return The user entity with the given pseudo or null if none found.
+     * @see User
+     */
+    public User findUserEntityByPseudo(String pseudo) {
+        return userRepository.findByPseudo(pseudo).orElse(null);
     }
 
      /**
