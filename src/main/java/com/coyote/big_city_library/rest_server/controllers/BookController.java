@@ -53,7 +53,7 @@ public class BookController {
         return bookDto;
     }
 
-    @GetMapping("/search")
+    @PostMapping("/search")
     public List<BookDto> searchBooks(
         @RequestParam("bookTitle") String bookTitle,
         @RequestParam("authorName") String authorName,
