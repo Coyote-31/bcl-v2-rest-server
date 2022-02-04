@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "security.jwt.expirationMs",
+    "type": "java.lang.String",
+    "description": "Life time of the JWT"
+  },
+  {
+    "name": "security.jwt.secretKey",
+    "type": "java.lang.String",
+    "description": "The secret Key to encrypt the JWT"
+  }
+]}
