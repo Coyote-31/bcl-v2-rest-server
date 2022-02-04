@@ -30,7 +30,7 @@ public class JwtProvider {
 		UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
 
         Claims claims = Jwts.claims().setSubject(userPrincipal.getUsername());
-        claims.put("role", userPrincipal.getAuthorities().iterator().next());
+        claims.put("role", userPrincipal.getAuthorities().iterator().next().getAuthority());
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + jwtExpirationMs);

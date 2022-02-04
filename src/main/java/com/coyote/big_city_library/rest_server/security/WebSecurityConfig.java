@@ -10,16 +10,20 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    CustomUserDetailsService userDetailsService;
+    private CustomUserDetailsService userDetailsService;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtFilter jwtFilter;
     
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -30,11 +34,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable()
+            //.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 			.authorizeRequests()
                 .antMatchers("/auth/login").permitAll()
                 .antMatchers("/books/search").hasAnyAuthority("USER", "ADMIN")
-                .anyRequest().hasAuthority("ADMIN");
+                .anyRequest().hasAuthority("ADMIN")
+                .and()
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 
     @Bean
