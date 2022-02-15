@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import com.coyote.big_city_library.rest_server.dto.BookDto;
+import com.coyote.big_city_library.rest_server.dto.search_books.SearchBookDto;
 import com.coyote.big_city_library.rest_server.services.BookService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,12 +55,12 @@ public class BookController {
     }
 
     @PostMapping("/search")
-    public List<BookDto> searchBooks(
+    public List<SearchBookDto> searchBooks(
         @RequestParam("bookTitle") String bookTitle,
         @RequestParam("authorName") String authorName,
         @RequestParam("publisherName") String publisherName) {
 
-        List<BookDto> books = bookService.searchBooks(bookTitle, authorName, publisherName);
+        List<SearchBookDto> books = bookService.searchBooks(bookTitle, authorName, publisherName);
         log.debug("searchBooks('{}' '{}' '{}') => {} book(s) found", bookTitle, authorName, publisherName, books.size());
         return books;
     }

@@ -7,6 +7,8 @@ import com.coyote.big_city_library.rest_server.dao.entities.Book;
 import com.coyote.big_city_library.rest_server.dao.repositories.BookRepository;
 import com.coyote.big_city_library.rest_server.dto.BookDto;
 import com.coyote.big_city_library.rest_server.dto.BookMapper;
+import com.coyote.big_city_library.rest_server.dto.search_books.SearchBookDto;
+import com.coyote.big_city_library.rest_server.dto.search_books.SearchBookMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,9 @@ public class BookService {
 
     @Autowired
     protected BookMapper bookMapper;
+
+    @Autowired
+    protected SearchBookMapper searchBookMapper;
 
     /**
      * Adds a new given book.
@@ -73,11 +78,11 @@ public class BookService {
      * @see Book
      * @see BookDto
      */
-    public List<BookDto> searchBooks(String bookTitle, String authorName, String publisherName) {
+    public List<SearchBookDto> searchBooks(String bookTitle, String authorName, String publisherName) {
         if (bookTitle.isEmpty() && authorName.isEmpty() && publisherName.isEmpty()) {
             return new ArrayList<>();
         }
-        return bookMapper.toDto(bookRepository
+        return searchBookMapper.toDto(bookRepository
             .searchByTitleContainingIgnoreCaseAndAuthorsNameContainingIgnoreCaseAndPublisherNameContainingIgnoreCase(bookTitle, authorName, publisherName));
     }
 
