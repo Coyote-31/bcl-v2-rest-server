@@ -63,6 +63,16 @@ public class LoanService {
     }
 
     /**
+     * Returns all loans owned by a given user's pseudo
+     * 
+     * @param pseudo of the user
+     * @return The loans list or null if none found.
+     */
+    public List<LoanDto> findLoansByUserPseudo(String pseudo) {
+        return loanMapper.toDto(loanRepository.findByUserPseudo(pseudo));
+    }
+
+    /**
      * Updates a given loan.
      * 
      * @param loanDto to update.

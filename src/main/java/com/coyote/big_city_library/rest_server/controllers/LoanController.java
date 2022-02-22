@@ -40,6 +40,17 @@ public class LoanController {
         log.debug("findAllLoans() => {} loan(s) found", loans.size());
         return loans;
     }
+
+    @GetMapping("/user/{pseudo}")
+    public List<LoanDto> findLoansByUserPseudo(@PathVariable String pseudo) {
+        List<LoanDto> loans = loanService.findLoansByUserPseudo(pseudo);
+        if (loans != null) {
+            log.debug("findLoansByUserPseudo() => {} loan(s) with pseudo '{}' found", loans.size(), pseudo);
+        } else {
+            log.debug("findLoansByUserPseudo() => No loan found with pseudo '{}'", pseudo);
+        }
+        return loans;
+    }
     
     @GetMapping("/{id}")
     public LoanDto findLoanById(@PathVariable Integer id) {
