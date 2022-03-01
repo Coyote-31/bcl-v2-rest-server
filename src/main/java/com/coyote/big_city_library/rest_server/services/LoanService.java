@@ -86,6 +86,17 @@ public class LoanService {
     }
 
     /**
+     * Updates Loan's extend attribut to true
+     * by given Loan's id.
+     * 
+     * @param id
+     * @see Loan
+     */
+    public void extendLoan(Integer id) {
+        loanRepository.extendLoan(id);
+    }
+
+    /**
      * Deletes a given loan.
      * 
      * @param loanDto to delete.

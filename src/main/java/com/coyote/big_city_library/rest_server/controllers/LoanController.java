@@ -70,6 +70,11 @@ public class LoanController {
         return loanUpdated;
     }
 
+    @PutMapping("/extend/{id}")
+    public void extendLoan(@PathVariable Integer id) {
+        loanService.extendLoan(id);
+    }
+
     @DeleteMapping("/delete")
     public void deleteLoan(@Valid @RequestBody LoanDto loanDto) {
         loanService.deleteLoan(loanDto);
