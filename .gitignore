@@ -34,3 +34,4 @@ build/
 
 ### Big City Library ###
 application-prod.properties
+application-dev.properties
