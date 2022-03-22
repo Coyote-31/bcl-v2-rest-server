@@ -89,7 +89,8 @@ public class LoanController {
 
     @GetMapping("/batch/user-reminder")
     public void userLoanReminder() {
-        log.debug("Server Task : userLoanReminder() - " + System.currentTimeMillis() / 1000);
+        log.debug("Batch Server Task : userLoanReminder() - TimeStamp : " + System.currentTimeMillis() / 1000);
+        loanService.userLoanReminder();
     }
 
 }

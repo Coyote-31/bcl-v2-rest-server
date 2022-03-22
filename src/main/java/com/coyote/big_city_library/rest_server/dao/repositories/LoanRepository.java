@@ -1,5 +1,6 @@
 package com.coyote.big_city_library.rest_server.dao.repositories;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.coyote.big_city_library.rest_server.dao.entities.Loan;
@@ -23,4 +24,11 @@ public interface LoanRepository extends JpaRepository<Loan, Integer> {
     @Modifying
     @Query(value = "UPDATE Loan SET Loan.extend = true WHERE Loan.id = :id", nativeQuery=true)
     void extendLoan(@Param("id") Integer id);
+
+    // TODO named query
+    @Transactional
+    @Query(value = "FROM Loan l WHERE l.returnDate IS NULL")
+    List<Loan> findLoansNotReturned();
+
+    List<Loan> findByReturnDateIsNull();
 }
