@@ -1,6 +1,5 @@
 package com.coyote.big_city_library.rest_server.dao.repositories;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import com.coyote.big_city_library.rest_server.dao.entities.Loan;
