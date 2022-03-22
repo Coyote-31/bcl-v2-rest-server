@@ -13,22 +13,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  *  Repository class handling loans.
- * 
+ *
  * @see Loan
  */
 public interface LoanRepository extends JpaRepository<Loan, Integer> {
-    
+
     List<Loan> findByUserPseudo(String pseudo);
 
     @Transactional
     @Modifying
     @Query(value = "UPDATE Loan SET Loan.extend = true WHERE Loan.id = :id", nativeQuery=true)
     void extendLoan(@Param("id") Integer id);
-
-    // TODO named query
-    @Transactional
-    @Query(value = "FROM Loan l WHERE l.returnDate IS NULL")
-    List<Loan> findLoansNotReturned();
 
     List<Loan> findByReturnDateIsNull();
 }
