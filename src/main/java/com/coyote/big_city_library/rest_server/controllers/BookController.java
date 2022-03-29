@@ -42,7 +42,7 @@ public class BookController {
         log.debug("findAllBooks() => {} book(s) found", books.size());
         return books;
     }
-    
+
     @GetMapping("/{id}")
     public BookDto findBookById(@PathVariable Integer id) {
         BookDto bookDto = bookService.findBookById(id);

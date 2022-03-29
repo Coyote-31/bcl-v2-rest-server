@@ -15,12 +15,12 @@ import org.springframework.stereotype.Service;
 
 /**
  *  Service class handling books
- * 
+ *
  * @see BookRepository
  */
 @Service
 public class BookService {
-    
+
     @Autowired
     private BookRepository bookRepository;
 
@@ -32,7 +32,7 @@ public class BookService {
 
     /**
      * Adds a new given book.
-     * 
+     *
      * @param bookDto to add.
      * @return The added book; will never be null.
      * @see Book
@@ -47,7 +47,7 @@ public class BookService {
 
     /**
      * Returns a list of all the books.
-     * 
+     *
      * @return All the books.
      * @see Book
      * @see BookDto
@@ -58,7 +58,7 @@ public class BookService {
 
     /**
      * Returns a book with a given id.
-     * 
+     *
      * @param id of a book.
      * @return The book with the given id or null if none found.
      * @see Book
@@ -69,8 +69,9 @@ public class BookService {
     }
 
     /**
-     * Returns a list of books with the given params
-     * 
+     * Returns a list of books with the given params.
+     * If params are null return an empty list.
+     *
      * @param bookTitle the title of a book.
      * @param authorName the author's name of the book.
      * @param publisherName the publisher's name of the book.
@@ -82,13 +83,12 @@ public class BookService {
         if (bookTitle.isEmpty() && authorName.isEmpty() && publisherName.isEmpty()) {
             return new ArrayList<>();
         }
-        return searchBookMapper.toDto(bookRepository
-            .searchByTitleContainingIgnoreCaseAndAuthorsNameContainingIgnoreCaseAndPublisherNameContainingIgnoreCase(bookTitle, authorName, publisherName));
+        return searchBookMapper.toDto(bookRepository.search(bookTitle, authorName, publisherName));
     }
 
     /**
      * Updates a given book.
-     * 
+     *
      * @param bookDto to update.
      * @return The updated book; will never be null.
      * @see Book
@@ -101,7 +101,7 @@ public class BookService {
 
     /**
      * Deletes a given book.
-     * 
+     *
      * @param bookDto to delete.
      * @see Book
      * @see BookDto
@@ -112,7 +112,7 @@ public class BookService {
 
     /**
      * Deletes a book with a given id
-     * 
+     *
      * @param id of a book.
      * @see Book
      * @see BookDto
