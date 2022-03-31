@@ -24,7 +24,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private JwtFilter jwtFilter;
-    
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
@@ -38,7 +38,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 			.authorizeRequests()
                 .antMatchers("/auth/login").permitAll()
-                .antMatchers("/books/search", "/loans/user/**", "/loans/extend/**").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers("/libraries", "/books/search", "/loans/user/**", "/loans/extend/**").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers("/loans/add/partial", "/loans/update").hasAnyAuthority("EMPLOYEE", "ADMIN")
                 .antMatchers("/loans/batch/**").hasAnyAuthority("BATCH", "ADMIN")
                 .anyRequest().hasAuthority("ADMIN")
                 .and()
@@ -50,5 +51,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-    
+
 }

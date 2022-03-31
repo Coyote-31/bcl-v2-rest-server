@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter 
-@Setter 
+@Getter
+@Setter
 public class UserDto {
 
     private Integer id;
@@ -19,9 +19,8 @@ public class UserDto {
     private String email;
 
     /**
-     * This password need SHA Encryption
-     * before mapping to entitie User
-     * @see com.coyote.big_city_library.rest_server.dao.entities.User
+     * Never sends to user
+     * @see com.coyote.big_city_library.rest_server.dto.UserMapper
      */
     private String password;
 

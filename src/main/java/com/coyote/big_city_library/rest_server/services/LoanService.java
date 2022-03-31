@@ -1,7 +1,5 @@
 package com.coyote.big_city_library.rest_server.services;
 
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -9,6 +7,7 @@ import com.coyote.big_city_library.rest_server.dao.entities.Loan;
 import com.coyote.big_city_library.rest_server.dao.repositories.LoanRepository;
 import com.coyote.big_city_library.rest_server.dto.LoanDto;
 import com.coyote.big_city_library.rest_server.dto.LoanMapper;
+import com.coyote.big_city_library.rest_server.dto.LoanPartialDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,6 +42,21 @@ public class LoanService {
      */
     public LoanDto addLoan(LoanDto loanDto) {
         Loan loan = loanMapper.toModel(loanDto);
+        loan = loanRepository.save(loan);
+
+        return loanMapper.toDto(loan);
+    }
+
+    /**
+     * Adds a new given partial loan.
+     *
+     * @param loanPartialDto to add.
+     * @return The added loan; will never be null.
+     * @see Loan
+     * @see LoanDto
+     */
+    public LoanDto addLoanPartial(LoanPartialDto loanPartialDto) {
+        Loan loan = loanMapper.toModel(loanPartialDto);
         loan = loanRepository.save(loan);
 
         return loanMapper.toDto(loan);

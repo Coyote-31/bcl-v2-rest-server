@@ -10,18 +10,16 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter
-public class LoanDto {
-
-    private Integer id;
+public class LoanPartialDto {
 
     private LocalDate loanDate;
 
     private Boolean extend = false;
 
-    private LocalDate returnDate;
+    private LocalDate returnDate = null;
 
-    private ExemplaryDto exemplary;
+    private ExemplaryOnlyIdDto exemplary;
 
-    private UserDto user;
+    private UserOnlyIdDto user;
 
 }

@@ -5,11 +5,13 @@ import java.util.List;
 import javax.validation.Valid;
 
 import com.coyote.big_city_library.rest_server.dto.LoanDto;
+import com.coyote.big_city_library.rest_server.dto.LoanPartialDto;
 import com.coyote.big_city_library.rest_server.services.LoanService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,6 +36,13 @@ public class LoanController {
         return loanSaved;
     }
 
+    @PatchMapping("/add/partial")
+    public LoanDto addLoanPartial(@Valid @RequestBody LoanPartialDto loanPartialDto) {
+        LoanDto loanSaved = loanService.addLoanPartial(loanPartialDto);
+        log.debug("addLoanPartial() => loan with id '{}' added", loanSaved.getId());
+        return loanSaved;
+    }
+
     @GetMapping("")
     public List<LoanDto> findAllLoans() {
         List<LoanDto> loans = loanService.findAllLoans();
@@ -51,7 +60,7 @@ public class LoanController {
         }
         return loans;
     }
-    
+
     @GetMapping("/{id}")
     public LoanDto findLoanById(@PathVariable Integer id) {
         LoanDto loanDto = loanService.findLoanById(id);

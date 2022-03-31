@@ -12,7 +12,11 @@ public interface ExemplaryMapper {
 
     ExemplaryDto toDto(Exemplary exemplary);
 
+    ExemplaryOnlyIdDto toOnlyIdDto(Exemplary exemplary);
+
     List<ExemplaryDto> toDto (List<Exemplary> exemplaries);
 
     Exemplary toModel(ExemplaryDto exemplaryDto);
+
+    Exemplary toModel(ExemplaryOnlyIdDto exemplaryOnlyIdDto);
 }
