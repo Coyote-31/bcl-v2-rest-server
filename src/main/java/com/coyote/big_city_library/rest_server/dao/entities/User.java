@@ -28,10 +28,10 @@ import lombok.Setter;
 @Table(name = "user")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @RequiredArgsConstructor
-@Getter 
-@Setter 
+@Getter
+@Setter
 public class User {
-    
+
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", updatable = false, nullable = false)

@@ -1,5 +1,6 @@
 package com.coyote.big_city_library.rest_server.dao.repositories;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.coyote.big_city_library.rest_server.dao.entities.Loan;
@@ -24,5 +25,9 @@ public interface LoanRepository extends JpaRepository<Loan, Integer> {
     @Query(value = "UPDATE Loan SET Loan.extend = true WHERE Loan.id = :id", nativeQuery=true)
     void extendLoan(@Param("id") Integer id);
 
-    List<Loan> findByReturnDateIsNull();
+    @Query("FROM Loan L "
+         + "WHERE L.returnDate IS NULL "
+         + "AND ((L.extend = FALSE AND L.loanDate < :oneMonth) "
+         + "OR (L.extend = TRUE AND L.loanDate < :twoMonth))")
+    List<Loan> findOverdue(@Param("oneMonth") LocalDate oneMonth, @Param("twoMonth") LocalDate twoMonth);
 }

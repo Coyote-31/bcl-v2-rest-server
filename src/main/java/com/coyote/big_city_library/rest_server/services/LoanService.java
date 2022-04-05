@@ -151,9 +151,9 @@ public class LoanService {
         LocalDate oneMonthEarlier = today.minusMonths(1);
         LocalDate twoMonthsEarlier = today.minusMonths(2);
 
-        // Find loans still not returned
-        List<Loan> loans = loanRepository.findByReturnDateIsNull();
-        log.debug("Loans still not returned : {}", loans.size());
+        // Find loans overdue
+        List<Loan> loans = loanRepository.findOverdue(oneMonthEarlier, twoMonthsEarlier);
+        log.debug("Loans overdue : {}", loans.size());
 
         // Check date & extend and mail if necessary
         for (Loan loan : loans) {
