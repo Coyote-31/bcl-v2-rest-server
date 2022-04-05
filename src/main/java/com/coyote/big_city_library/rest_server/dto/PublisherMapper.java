@@ -11,7 +11,7 @@ public interface PublisherMapper {
 
     PublisherDto toDto(Publisher publisher);
 
-    List<PublisherDto> toDto (List<Publisher> publishers);
+    List<PublisherDto> toDto(List<Publisher> publishers);
 
     Publisher toModel(PublisherDto publisherDto);
 }

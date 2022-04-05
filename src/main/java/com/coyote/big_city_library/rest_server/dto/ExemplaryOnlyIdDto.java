@@ -1,15 +1,16 @@
 package com.coyote.big_city_library.rest_server.dto;
 
-import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
+@NoArgsConstructor
+@RequiredArgsConstructor
 @Setter
 public class ExemplaryOnlyIdDto {
 
+    @NonNull
     private Integer id;
 
 }

@@ -15,44 +15,34 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "book")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@RequiredArgsConstructor
-@Getter 
-@Setter 
+@NoArgsConstructor
+@Getter
+@Setter
 public class Book {
-    
+
     @Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", updatable = false, nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false, nullable = false)
     private Integer id;
 
-    @NonNull
-    @Column(name = "title", nullable=false)
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @NonNull
-    @Column(name = "publication_date", nullable=false)
+    @Column(name = "publication_date", nullable = false)
     private LocalDate publicationDate;
 
-    @NonNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "publisher_id", nullable = false)
     private Publisher publisher;
 
-    @NonNull
     @ManyToMany
-    @JoinTable(name = "book_author", 
-        joinColumns = @JoinColumn(name = "book_id", nullable = false), 
-        inverseJoinColumns = @JoinColumn(name = "author_id", nullable = false))
+    @JoinTable(name = "book_author", joinColumns = @JoinColumn(name = "book_id", nullable = false), inverseJoinColumns = @JoinColumn(name = "author_id", nullable = false))
     private Set<Author> authors;
 
     @OneToMany(mappedBy = "book")

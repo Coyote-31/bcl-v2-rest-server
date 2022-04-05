@@ -16,39 +16,31 @@ import javax.validation.constraints.Size;
 
 import com.coyote.big_city_library.rest_server.security.Role;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-
 
 @Entity
 @Table(name = "user")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 public class User {
 
     @Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", updatable = false, nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false, nullable = false)
     private Integer id;
 
-    @NonNull
-    @Column(name = "pseudo", unique=true, nullable=false, length = 45)
-    @Size(min= 3, max = 45)
+    @Column(name = "pseudo", unique = true, nullable = false, length = 45)
+    @Size(min = 3, max = 45)
     private String pseudo;
 
-    @NonNull
-    @Column(name = "email", unique=true, nullable=false, length = 90)
+    @Column(name = "email", unique = true, nullable = false, length = 90)
     @Size(max = 90)
     @Email
     private String email;
 
-    @NonNull
     @Column(name = "password", columnDefinition = "CHAR(60) BINARY NOT NULL")
     @Size(min = 59, max = 60)
     private String password;

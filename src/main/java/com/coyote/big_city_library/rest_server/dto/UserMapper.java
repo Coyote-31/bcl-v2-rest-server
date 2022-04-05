@@ -16,7 +16,7 @@ public interface UserMapper {
     UserOnlyIdDto toOnlyIdDto(User user);
 
     @Mapping(target = "password", ignore = true)
-    List<UserDto> toDto (List<User> users);
+    List<UserDto> toDto(List<User> users);
 
     User toModel(UserDto userDto);
 

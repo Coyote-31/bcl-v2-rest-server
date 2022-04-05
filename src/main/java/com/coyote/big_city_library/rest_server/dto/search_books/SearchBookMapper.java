@@ -8,13 +8,12 @@ import com.coyote.big_city_library.rest_server.dto.PublisherMapper;
 
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring", 
-        uses = {PublisherMapper.class, AuthorMapper.class, SearchExemplaryMapper.class})
+@Mapper(componentModel = "spring", uses = { PublisherMapper.class, AuthorMapper.class, SearchExemplaryMapper.class })
 public interface SearchBookMapper {
 
     SearchBookDto toDto(Book book);
 
-    List<SearchBookDto> toDto (List<Book> books);
+    List<SearchBookDto> toDto(List<Book> books);
 
     Book toModel(SearchBookDto bookDto);
 }

@@ -11,7 +11,7 @@ public interface LibraryMapper {
 
     LibraryDto toDto(Library library);
 
-    List<LibraryDto> toDto (List<Library> libraries);
+    List<LibraryDto> toDto(List<Library> libraries);
 
     Library toModel(LibraryDto libraryDto);
 }
