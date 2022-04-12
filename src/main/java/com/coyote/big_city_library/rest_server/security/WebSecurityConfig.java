@@ -32,19 +32,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.cors().and().csrf().disable()
-            //.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-			.authorizeRequests()
+    protected void configure(HttpSecurity http) throws Exception {
+        http.cors().and().csrf().disable()
+                // .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .authorizeRequests()
                 .antMatchers("/auth/login").permitAll()
-                .antMatchers("/libraries", "/books/search", "/loans/user/**", "/loans/extend/**").hasAnyAuthority("USER", "ADMIN")
-                .antMatchers("/loans/add/partial", "/loans/update").hasAnyAuthority("EMPLOYEE", "ADMIN")
+                .antMatchers("/libraries", "/books/search", "/loans/user/**", "/loans/extend/**")
+                .hasAnyAuthority("USER", "ADMIN")
+                .antMatchers("/loans/add", "/loans/add/partial", "/loans/update").hasAnyAuthority("EMPLOYEE", "ADMIN")
                 .antMatchers("/loans/batch/**").hasAnyAuthority("BATCH", "ADMIN")
                 .anyRequest().hasAuthority("ADMIN")
                 .and()
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-	}
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+    }
 
     @Bean
     @Override
