@@ -24,10 +24,9 @@ public class UserDto {
 
     /**
      * Never sends to user
-     * 
+     *
      * @see com.coyote.big_city_library.rest_server.dto.UserMapper
      */
-    @NonNull
     private String password;
 
     @NonNull
