@@ -29,4 +29,6 @@ public class BookDto {
     @NonNull
     private Set<AuthorDto> authors;
 
+    private String imgURL;
+
 }

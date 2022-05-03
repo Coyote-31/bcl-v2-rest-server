@@ -32,6 +32,8 @@ public class SearchBookDto {
 
     private List<SearchExemplaryDto> exemplaries;
 
+    private String imgURL;
+
     /**
      * Custom Map to get exemplaries group by libraries.
      */

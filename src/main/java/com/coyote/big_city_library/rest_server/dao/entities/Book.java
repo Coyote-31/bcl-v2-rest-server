@@ -48,4 +48,7 @@ public class Book {
     @OneToMany(mappedBy = "book")
     private Set<Exemplary> exemplaries;
 
+    @Column(name = "img_url")
+    private String imgURL;
+
 }
