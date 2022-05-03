@@ -13,12 +13,8 @@ public interface UserMapper {
     @Mapping(target = "password", ignore = true)
     UserDto toDto(User user);
 
-    UserOnlyIdDto toOnlyIdDto(User user);
-
     @Mapping(target = "password", ignore = true)
     List<UserDto> toDto(List<User> users);
 
     User toModel(UserDto userDto);
-
-    User toModel(UserOnlyIdDto userOnlyIdDto);
 }

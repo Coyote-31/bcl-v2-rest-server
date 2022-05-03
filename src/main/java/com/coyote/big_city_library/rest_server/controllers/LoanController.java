@@ -5,7 +5,6 @@ import java.util.List;
 import javax.validation.Valid;
 
 import com.coyote.big_city_library.rest_server.dto.LoanDto;
-import com.coyote.big_city_library.rest_server.dto.LoanPartialDto;
 import com.coyote.big_city_library.rest_server.services.LoanService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +31,6 @@ public class LoanController {
     public LoanDto addLoan(@Valid @RequestBody LoanDto loanDto) {
         LoanDto loanSaved = loanService.addLoan(loanDto);
         log.debug("addLoan() => loan with id '{}' added", loanSaved.getId());
-        return loanSaved;
-    }
-
-    @PostMapping("/add/partial")
-    public LoanDto addLoanPartial(@Valid @RequestBody LoanPartialDto loanPartialDto) {
-        LoanDto loanSaved = loanService.addLoanPartial(loanPartialDto);
-        log.debug("addLoanPartial() => loan with id '{}' added", loanSaved.getId());
         return loanSaved;
     }
 

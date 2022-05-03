@@ -11,11 +11,7 @@ public interface LoanMapper {
 
     LoanDto toDto(Loan loan);
 
-    LoanPartialDto toPartialDto(Loan loan);
-
     List<LoanDto> toDto(List<Loan> loans);
 
     Loan toModel(LoanDto loanDto);
-
-    Loan toModel(LoanPartialDto loanPartialDto);
 }
