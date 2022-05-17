@@ -34,6 +34,47 @@ public class SearchBookDto {
 
     private String imgURL;
 
+    private Boolean available;
+
+    /**
+     * Test the availability.
+     */
+    public Boolean isAvailable() {
+
+        // Only do if not already done
+        if (available == null) {
+
+            Boolean availability = false;
+
+            for (SearchExemplaryDto exemplary : exemplaries) {
+
+                Set<SearchLoanDto> loans = exemplary.getLoans();
+                Boolean exemplaryAvailable = true;
+
+                // Find if a loan is not return yet
+                for (SearchLoanDto loan : loans) {
+                    if (loan.getReturnDate() == null) {
+                        exemplaryAvailable = false;
+                    }
+                }
+
+                if (Boolean.TRUE.equals(exemplaryAvailable)) {
+                    availability = true;
+                }
+            }
+
+            // Update book's attribut
+            available = availability;
+
+            return available;
+
+            // If already done return the value
+        } else {
+            return available;
+        }
+
+    }
+
     /**
      * Custom Map to get exemplaries group by libraries.
      */
@@ -41,39 +82,51 @@ public class SearchBookDto {
 
         TreeMap<String, Integer> exemplariesByLibrary = new TreeMap<>();
 
-        Boolean available = true;
+        log.debug("<----- getExemplariesByLibrary ---->");
+        log.debug("For -> Book id:{} title:{}", id, title);
 
         for (SearchExemplaryDto exemplary : exemplaries) {
 
             Set<SearchLoanDto> loans = exemplary.getLoans();
-            available = true;
+            Boolean loanAvailable = true;
 
             log.debug("Exemplary id:{} => Loans size {}", exemplary.getId(), loans.size());
 
             // Find if a loan is not return yet
             for (SearchLoanDto loan : loans) {
                 if (loan.getReturnDate() == null) {
-                    available = false;
+                    loanAvailable = false;
                 }
-                log.debug("Exemplary id:{} => Loan {} returnDate is {}", exemplary.getId(), loan.getId(),
+
+                log.debug("Exemplary id:{} => Loan {} returnDate is {}",
+                        exemplary.getId(),
+                        loan.getId(),
                         loan.getReturnDate());
-                log.debug("Exemplary id:{} => available : {}", exemplary.getId(), available);
             }
+            log.debug("Exemplary id:{} => available : {}", exemplary.getId(), loanAvailable);
 
             // If no loan or available
-            if (exemplary.getLoans().isEmpty() || Boolean.TRUE.equals(available)) {
+            if (exemplary.getLoans().isEmpty() || Boolean.TRUE.equals(loanAvailable)) {
 
                 // If library doesn't exist add it
                 if (!exemplariesByLibrary.containsKey(exemplary.getLibrary().getName())) {
                     exemplariesByLibrary.put(exemplary.getLibrary().getName(), 1);
 
+                    log.debug("Exemplary id:{} => Add the library id:{}", exemplary.getId(),
+                            exemplary.getLibrary().getId());
+
                     // If library already exist increment the value
                 } else {
                     exemplariesByLibrary.replace(exemplary.getLibrary().getName(),
                             exemplariesByLibrary.get(exemplary.getLibrary().getName()) + 1);
+
+                    log.debug("Exemplary id:{} => Increment the library id:{}", exemplary.getId(),
+                            exemplary.getLibrary().getId());
                 }
             }
         }
+
+        log.debug("<---------- End ---------->");
 
         return exemplariesByLibrary;
     }
