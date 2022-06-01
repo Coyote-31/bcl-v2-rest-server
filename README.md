@@ -20,7 +20,7 @@ Elle est packagée via **[Maven](https://maven.apache.org/index.html)** dans un 
 
 #### Aperçu de l'application :
 
-![Aperçu de l'application](https://imgur.com/a/3bvO7dT)
+![Aperçu de l'application](https://i.imgur.com/uodji7N.jpg)
 
 #### Architecture de l'application :
 
@@ -34,7 +34,7 @@ Et l'application présente ou recoit les données via des DTOs.
 
 #### Diagramme de l'architecture de la base de données :
 
-![Diagramme de l'architecture de la base de données](https://imgur.com/vaB2Qn3)
+![Diagramme de l'architecture de la base de données](https://i.imgur.com/jrJgCXJ.png)
 
 ## 🛠 Déploiement :
 
