@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- ========= -->
@@ -9,7 +8,8 @@
 	<groupId>com.coyote.big_city_library</groupId>
 	<artifactId>rest_server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>pom</packaging>
+
 	<name>rest_server</name>
 	<description>Project for OpenClassrooms : RESTful server for libraries in a big city</description>
 
@@ -21,9 +21,19 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.6.2</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	
+
+	<!-- ========= -->
+	<!--  MODULES  -->
+	<!-- ========= -->
+	<modules>
+		<module>rest_server-controller</module>
+		<module>rest_server-model</module>
+		<module>rest_server-repository</module>
+		<module>rest_server-service</module>
+	</modules>
+
 	<!-- ============ -->
 	<!--  PROPERTIES  -->
 	<!-- ============ -->
@@ -101,13 +111,13 @@
 		</dependency>
 
 		<!-- DB driver -->
-		
+
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-			
+
 		<!-- Project Lombok - https://projectlombok.org/ -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -122,10 +132,10 @@
 			<version>${org.mapstruct.version}</version>
 		</dependency>
 		<dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct-processor</artifactId>
-            <version>${org.mapstruct.version}</version>
-        </dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct-processor</artifactId>
+			<version>${org.mapstruct.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok-mapstruct-binding</artifactId>
@@ -168,8 +178,8 @@
 						</path>
 					</annotationProcessorPaths>
 					<compilerArgs>
-                        <arg>-Amapstruct.defaultComponentModel=spring</arg>
-                    </compilerArgs>
+						<arg>-Amapstruct.defaultComponentModel=spring</arg>
+					</compilerArgs>
 				</configuration>
 			</plugin>
 		</plugins>
