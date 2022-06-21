@@ -31,6 +31,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
 
+    // Roles declaration
+    private static final String ROLE_ADMIN = "ADMIN";
+    private static final String ROLE_BATCH = "BATCH";
+    private static final String ROLE_EMPLOYEE = "EMPLOYEE";
+    private static final String ROLE_USER = "USER";
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
@@ -39,10 +45,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/auth/login", "/books/search").permitAll()
                 .antMatchers("/libraries", "/loans/user/**", "/loans/extend/**")
-                .hasAnyAuthority("USER", "ADMIN")
-                .antMatchers("/loans/add", "/loans/add/partial", "/loans/update").hasAnyAuthority("EMPLOYEE", "ADMIN")
-                .antMatchers("/loans/batch/**").hasAnyAuthority("BATCH", "ADMIN")
-                .anyRequest().hasAuthority("ADMIN")
+                .hasAnyAuthority(ROLE_USER, ROLE_ADMIN)
+                .antMatchers("/loans/add", "/loans/add/partial", "/loans/update")
+                .hasAnyAuthority(ROLE_EMPLOYEE, ROLE_ADMIN)
+                .antMatchers("/loans/batch/**").hasAnyAuthority(ROLE_BATCH, ROLE_ADMIN)
+                .anyRequest().hasAuthority(ROLE_ADMIN)
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
