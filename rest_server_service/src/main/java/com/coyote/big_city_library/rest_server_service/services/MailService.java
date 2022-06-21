@@ -49,9 +49,9 @@ public class MailService {
                 "Bonjour " + pseudo + ","
                         + "\n\nLe prêt du livre '" + bookTitle + "' est arrivé à expiration depuis le "
                         + lastReturnedDate + ". "
-                        + "\nVeuillez le ramener à la " + libraryName + " dès que possible !"
                         + bringBack
-                        + "\n\nMerci d'avance");
+                        + "\n\nMerci d'avance,"
+                        + "\n\nL'équipe des bibliothèques de la ville");
 
         emailSender.send(message);
     }
