@@ -76,7 +76,7 @@ public class LoanService {
      * @return The loans list or null if none found.
      */
     public List<LoanDto> findLoansByUserPseudo(String pseudo) {
-        return loanMapper.toDto(loanRepository.findByUserPseudo(pseudo));
+        return loanMapper.toDto(loanRepository.findByUserPseudoOrderByLoanDateAsc(pseudo));
     }
 
     /**

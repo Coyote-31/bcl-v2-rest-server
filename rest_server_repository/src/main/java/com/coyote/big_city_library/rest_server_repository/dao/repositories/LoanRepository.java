@@ -18,7 +18,7 @@ import com.coyote.big_city_library.rest_server_model.dao.entities.Loan;
  */
 public interface LoanRepository extends JpaRepository<Loan, Integer> {
 
-    List<Loan> findByUserPseudo(String pseudo);
+    List<Loan> findByUserPseudoOrderByLoanDateAsc(String pseudo);
 
     @Transactional
     @Modifying
