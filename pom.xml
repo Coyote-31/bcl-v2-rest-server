@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- ========= -->
@@ -13,14 +15,14 @@
 	<name>rest_server</name>
 	<description>Project for OpenClassrooms : RESTful server for libraries in a big city</description>
 
-	<!-- ======== -->
-	<!--  PARENT  -->
-	<!-- ======== -->
+	<!-- ====================== -->
+	<!--  PARENT : Spring Boot  -->
+	<!-- ====================== -->
 	<!-- Doc : https://docs.spring.io/spring-boot/docs/2.6.8/maven-plugin/reference/htmlsingle/ -->
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.6.8</version>
+		<version>2.7.13</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
@@ -38,10 +40,10 @@
 	<!--  PROPERTIES  -->
 	<!-- ============ -->
 	<properties>
-		<!-- Spring version -->
-		<spring-boot.version>2.6.8</spring-boot.version>
 		<!-- The entry point class to start the app -->
-		<start-class>com.coyote.big_city_library.rest_server_controller.RestServerControllerApplication</start-class>
+		<start-class>
+			com.coyote.big_city_library.rest_server_controller.RestServerControllerApplication
+		</start-class>
 		<!-- Encoding -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -93,54 +95,8 @@
 			<!-- ========================================= -->
 
 			<!-- STARTERS -->
-
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-web</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-data-jpa</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-validation</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-security</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
-
-			<!-- Starter : Mail - https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail -->
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-mail</artifactId>
-				<version>${spring-boot.version}</version>
-			</dependency>
-
-			<!-- DEV -->
-
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-devtools</artifactId>
-				<version>${spring-boot.version}</version>
-				<scope>runtime</scope>
-				<optional>true</optional>
-			</dependency>
-
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-configuration-processor</artifactId>
-				<version>${spring-boot.version}</version>
-				<optional>true</optional>
-			</dependency>
+			<!-- Are define directly in modules because managing is -->
+			<!-- already handle by 'spring-boot-starter-parent' -->
 
 			<!-- DB driver -->
 
