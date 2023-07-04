@@ -2,7 +2,6 @@ package com.coyote.big_city_library.rest_server_service.dto;
 
 import java.time.LocalDate;
 import java.util.Set;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -30,5 +29,7 @@ public class BookDto {
     private Set<AuthorDto> authors;
 
     private String imgURL;
+
+    private Set<ExemplaryDto> exemplaries;
 
 }

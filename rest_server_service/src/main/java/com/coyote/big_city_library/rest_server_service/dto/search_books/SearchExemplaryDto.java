@@ -4,6 +4,7 @@ import java.util.Set;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 
 @NoArgsConstructor
@@ -16,4 +17,7 @@ public class SearchExemplaryDto {
     private SearchLibraryDto library;
 
     private Set<SearchLoanDto> loans;
+
+    @NonNull
+    private SearchBookDto book;
 }

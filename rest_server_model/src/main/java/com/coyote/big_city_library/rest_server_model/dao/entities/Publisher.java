@@ -1,5 +1,6 @@
 package com.coyote.big_city_library.rest_server_model.dao.entities;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -31,5 +32,15 @@ public class Publisher {
 
     @OneToMany(mappedBy = "publisher")
     private Set<Book> books;
+
+    // Bi-directional synchronization :
+
+    public void addBook(Book book) {
+        if (books == null) {
+            books = new HashSet<>();
+        }
+        books.add(book);
+        book.setPublisher(this);
+    }
 
 }

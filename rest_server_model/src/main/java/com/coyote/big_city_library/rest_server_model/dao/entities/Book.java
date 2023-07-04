@@ -1,8 +1,8 @@
 package com.coyote.big_city_library.rest_server_model.dao.entities;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,7 +14,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -42,7 +41,10 @@ public class Book {
     private Publisher publisher;
 
     @ManyToMany
-    @JoinTable(name = "book_author", joinColumns = @JoinColumn(name = "book_id", nullable = false), inverseJoinColumns = @JoinColumn(name = "author_id", nullable = false))
+    @JoinTable(
+            name = "book_author",
+            joinColumns = @JoinColumn(name = "book_id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "author_id", nullable = false))
     private Set<Author> authors;
 
     @OneToMany(mappedBy = "book")
@@ -50,5 +52,28 @@ public class Book {
 
     @Column(name = "img_url")
     private String imgURL;
+
+    // Bi-directional synchronization :
+
+    public void setPublisher(Publisher publisher) {
+        this.publisher = publisher;
+        publisher.addBook(this);
+    }
+
+    public void addAuthor(Author author) {
+        if (authors == null) {
+            authors = new HashSet<>();
+        }
+        authors.add(author);
+        author.addBook(this);
+    }
+
+    public void addExemplary(Exemplary exemplary) {
+        if (exemplaries == null) {
+            exemplaries = new HashSet<>();
+        }
+        exemplaries.add(exemplary);
+        exemplary.setBook(this);
+    }
 
 }

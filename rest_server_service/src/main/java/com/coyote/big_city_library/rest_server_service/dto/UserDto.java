@@ -1,7 +1,7 @@
 package com.coyote.big_city_library.rest_server_service.dto;
 
+import java.util.Set;
 import com.coyote.big_city_library.rest_server_model.dao.attributes.Role;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -31,5 +31,7 @@ public class UserDto {
 
     @NonNull
     private Role role = Role.USER;
+
+    private Set<LoanDto> loans;
 
 }

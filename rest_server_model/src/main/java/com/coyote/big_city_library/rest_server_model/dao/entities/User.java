@@ -1,5 +1,6 @@
 package com.coyote.big_city_library.rest_server_model.dao.entities;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -51,5 +52,15 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private Set<Loan> loans;
+
+    // Bi-directional synchronization :
+
+    public void addLoan(Loan loan) {
+        if (loans == null) {
+            loans = new HashSet<>();
+        }
+        loans.add(loan);
+        loan.setUser(this);
+    }
 
 }

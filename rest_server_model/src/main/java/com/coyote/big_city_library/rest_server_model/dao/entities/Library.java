@@ -1,5 +1,6 @@
 package com.coyote.big_city_library.rest_server_model.dao.entities;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -38,6 +39,16 @@ public class Library {
     private String phone;
 
     @OneToMany(mappedBy = "library")
-    private Set<Exemplary> examplaries;
+    private Set<Exemplary> exemplaries;
+
+    // Bi-directional synchronization :
+
+    public void addExemplary(Exemplary exemplary) {
+        if (exemplaries == null) {
+            exemplaries = new HashSet<>();
+        }
+        exemplaries.add(exemplary);
+        exemplary.setLibrary(this);
+    }
 
 }
