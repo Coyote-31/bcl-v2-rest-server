@@ -11,7 +11,7 @@
 	<parent>
 		<groupId>com.coyote.big_city_library</groupId>
 		<artifactId>rest_server</artifactId>
-		<version>${revision}</version>
+		<version>1.0.0</version>
 	</parent>
 
 	<!-- ========= -->
