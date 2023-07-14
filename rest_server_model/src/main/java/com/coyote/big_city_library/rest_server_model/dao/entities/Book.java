@@ -1,5 +1,6 @@
 package com.coyote.big_city_library.rest_server_model.dao.entities;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,16 +15,18 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "book")
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
-public class Book {
+@ToString(includeFieldNames = true)
+@EqualsAndHashCode(exclude = "reservations")
+public class Book implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,6 +56,10 @@ public class Book {
     @Column(name = "img_url")
     private String imgURL;
 
+    @OneToMany(mappedBy = "book")
+    @ToString.Exclude
+    private Set<Reservation> reservations;
+
     // Bi-directional synchronization :
 
     public void setPublisher(Publisher publisher) {
@@ -76,4 +83,11 @@ public class Book {
         exemplary.setBook(this);
     }
 
+    public void addReservation(Reservation reservation) {
+        if (reservations == null) {
+            reservations = new HashSet<>();
+        }
+        reservations.add(reservation);
+        reservation.setBook(this);
+    }
 }

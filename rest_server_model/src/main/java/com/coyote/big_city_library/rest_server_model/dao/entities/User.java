@@ -1,8 +1,8 @@
 package com.coyote.big_city_library.rest_server_model.dao.entities;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,19 +14,19 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
-
 import com.coyote.big_city_library.rest_server_model.dao.attributes.Role;
-
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "user")
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
-public class User {
+@ToString(includeFieldNames = true)
+@EqualsAndHashCode(exclude = "reservations")
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,6 +53,10 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Loan> loans;
 
+    @OneToMany(mappedBy = "user")
+    @ToString.Exclude
+    private Set<Reservation> reservations;
+
     // Bi-directional synchronization :
 
     public void addLoan(Loan loan) {
@@ -63,4 +67,11 @@ public class User {
         loan.setUser(this);
     }
 
+    public void addReservation(Reservation reservation) {
+        if (reservations == null) {
+            reservations = new HashSet<>();
+        }
+        reservations.add(reservation);
+        reservation.setUser(this);
+    }
 }
