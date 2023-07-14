@@ -42,6 +42,8 @@ public class WebSecurityConfig {
             .authorizeHttpRequests(
                     ahr -> ahr.mvcMatchers("/auth/login", "/books/search")
                               .permitAll()
+                              .mvcMatchers("/actuator/**")
+                              .permitAll()
                               .mvcMatchers("/libraries", "/loans/user/**", "/loans/extend/**")
                               .hasAnyAuthority(ROLE_USER, ROLE_ADMIN)
                               .mvcMatchers("/loans/add", "/loans/add/partial", "/loans/update")
