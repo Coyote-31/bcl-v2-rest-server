@@ -34,4 +34,6 @@ public class UserDto {
 
     private Set<LoanDto> loans;
 
+    private Set<ReservationDto> reservations;
+
 }

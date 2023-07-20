@@ -15,6 +15,4 @@ public interface SearchLoanMapper {
     SearchLoanDto toDto(Loan loan);
 
     Set<SearchLoanDto> toDto(Set<Loan> loans);
-
-    Loan toModel(SearchLoanDto loanDto);
 }

@@ -5,10 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-
 import com.coyote.big_city_library.rest_server_service.dto.AuthorDto;
 import com.coyote.big_city_library.rest_server_service.dto.PublisherDto;
-
+import com.coyote.big_city_library.rest_server_service.dto.ReservationDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,6 +34,8 @@ public class SearchBookDto {
     private String imgURL;
 
     private Boolean available;
+
+    private Set<ReservationDto> reservations;
 
     /**
      * Test the availability.

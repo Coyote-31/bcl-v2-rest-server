@@ -32,4 +32,6 @@ public class BookDto {
 
     private Set<ExemplaryDto> exemplaries;
 
+    private Set<ReservationDto> reservations;
+
 }
