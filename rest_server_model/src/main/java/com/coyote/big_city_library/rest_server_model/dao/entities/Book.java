@@ -15,6 +15,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,7 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @ToString(includeFieldNames = true)
-@EqualsAndHashCode(exclude = "reservations")
+@EqualsAndHashCode
 public class Book implements Serializable {
 
     @Id
@@ -43,21 +44,29 @@ public class Book implements Serializable {
     @JoinColumn(name = "publisher_id", nullable = false)
     private Publisher publisher;
 
+    @Column(name = "img_url")
+    private String imgURL;
+
     @ManyToMany
     @JoinTable(
             name = "book_author",
             joinColumns = @JoinColumn(name = "book_id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "author_id", nullable = false))
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonIgnoreProperties("books")
     private Set<Author> authors;
 
     @OneToMany(mappedBy = "book")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonIgnoreProperties("book")
     private Set<Exemplary> exemplaries;
-
-    @Column(name = "img_url")
-    private String imgURL;
 
     @OneToMany(mappedBy = "book")
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonIgnoreProperties("book")
     private Set<Reservation> reservations;
 
     // Bi-directional synchronization :

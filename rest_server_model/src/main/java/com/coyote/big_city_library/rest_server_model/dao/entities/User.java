@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import com.coyote.big_city_library.rest_server_model.dao.attributes.Role;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,7 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @ToString(includeFieldNames = true)
-@EqualsAndHashCode(exclude = "reservations")
+@EqualsAndHashCode
 public class User implements Serializable {
 
     @Id
@@ -51,10 +52,15 @@ public class User implements Serializable {
     private Role role;
 
     @OneToMany(mappedBy = "user")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonIgnoreProperties("user")
     private Set<Loan> loans;
 
     @OneToMany(mappedBy = "user")
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonIgnoreProperties("user")
     private Set<Reservation> reservations;
 
     // Bi-directional synchronization :

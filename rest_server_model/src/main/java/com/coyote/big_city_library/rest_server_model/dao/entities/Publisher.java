@@ -1,8 +1,8 @@
 package com.coyote.big_city_library.rest_server_model.dao.entities;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,17 +10,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "publisher")
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
-public class Publisher {
+@ToString(includeFieldNames = true)
+@EqualsAndHashCode
+public class Publisher implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +33,9 @@ public class Publisher {
     private String name;
 
     @OneToMany(mappedBy = "publisher")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonIgnoreProperties("publisher")
     private Set<Book> books;
 
     // Bi-directional synchronization :
