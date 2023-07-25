@@ -16,6 +16,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import com.coyote.big_city_library.rest_server_model.dao.attributes.Role;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -45,6 +47,8 @@ public class User implements Serializable {
 
     @Column(name = "password", columnDefinition = "CHAR(60) BINARY NOT NULL")
     @Size(min = 59, max = 60)
+    @ToString.Exclude
+    @JsonProperty(access = Access.WRITE_ONLY)
     private String password;
 
     @Enumerated(EnumType.STRING)
