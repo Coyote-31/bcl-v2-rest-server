@@ -71,6 +71,7 @@ public class ReservationService {
      * @see BookDto
      * @see UserDto
      */
+    // TODO remplacer  par Integer IDs
     public ReservationDto findReservationByIdBookAndUser(BookDto bookDto, UserDto userDto) {
         ReservationId reservationId = new ReservationId();
         reservationId.setBook(bookMapper.toModel(bookDto));
@@ -81,7 +82,7 @@ public class ReservationService {
     /**
      * Updates a given reservation.
      *
-     * @param reservation to update.
+     * @param reservationDto to update.
      * @return The updated reservation; will never be null.
      * @see Reservation
      * @see ReservationDto
@@ -94,7 +95,7 @@ public class ReservationService {
     /**
      * Deletes a given reservation.
      *
-     * @param reservation to delete.
+     * @param reservationDto to delete.
      * @see Reservation
      * @see ReservationDto
      */
