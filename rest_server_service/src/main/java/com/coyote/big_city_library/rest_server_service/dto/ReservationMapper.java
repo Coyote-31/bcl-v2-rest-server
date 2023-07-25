@@ -5,7 +5,9 @@ import java.util.Set;
 import org.mapstruct.CollectionMappingStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import com.coyote.big_city_library.rest_server_model.dao.entities.Author;
 import com.coyote.big_city_library.rest_server_model.dao.entities.Book;
+import com.coyote.big_city_library.rest_server_model.dao.entities.Publisher;
 import com.coyote.big_city_library.rest_server_model.dao.entities.Reservation;
 import com.coyote.big_city_library.rest_server_model.dao.entities.User;
 
@@ -25,16 +27,37 @@ public interface ReservationMapper {
     // Book
 
     @Mapping(target = "reservations", ignore = true)
+    @Mapping(target = "exemplaries", ignore = true)
     BookDto toDto(Book book);
 
     @Mapping(target = "reservations", ignore = true)
+    @Mapping(target = "exemplaries", ignore = true)
     Book toModel(BookDto bookDto);
 
     // User
 
     @Mapping(target = "reservations", ignore = true)
+    @Mapping(target = "loans", ignore = true)
     UserDto toDto(User user);
 
     @Mapping(target = "reservations", ignore = true)
+    @Mapping(target = "loans", ignore = true)
     User toModel(UserDto userDto);
+
+    // Author
+
+    @Mapping(target = "books", ignore = true)
+    AuthorDto toDto(Author author);
+
+    @Mapping(target = "books", ignore = true)
+    Author toModel(AuthorDto authorDto);
+
+    // Publisher
+
+    @Mapping(target = "books", ignore = true)
+    PublisherDto toDto(Publisher publisher);
+
+    @Mapping(target = "books", ignore = true)
+    Publisher toModel(PublisherDto publisherDto);
+
 }
