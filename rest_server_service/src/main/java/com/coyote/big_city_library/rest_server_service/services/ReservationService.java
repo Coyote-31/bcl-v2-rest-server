@@ -3,6 +3,8 @@ package com.coyote.big_city_library.rest_server_service.services;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
+import javax.persistence.EntityExistsException;
+import java.text.MessageFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.coyote.big_city_library.rest_server_model.dao.entities.Book;
@@ -76,7 +78,20 @@ public class ReservationService {
         reservation.setCreatedAt(createdAt);
 
         // Persist
-        reservation = reservationRepository.save(reservation);
+        ReservationId reservationId = new ReservationId();
+        reservationId.setBook(createReservationDto.getBookId());
+        reservationId.setUser(createReservationDto.getUserId());
+
+        if (!reservationRepository.existsById(reservationId)) {
+            reservation = reservationRepository.save(reservation);
+        } else {
+            String message = "Reservation entity with bookId:{0} userId:{1} already exists";
+            String messageFormatted = MessageFormat.format(
+                    message,
+                    createReservationDto.getBookId(),
+                    createReservationDto.getUserId());
+            throw new EntityExistsException(messageFormatted);
+        }
 
         return reservationMapper.toDto(reservation);
     }
