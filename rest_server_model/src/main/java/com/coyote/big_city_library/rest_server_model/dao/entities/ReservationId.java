@@ -12,8 +12,8 @@ import lombok.ToString;
 public class ReservationId implements Serializable {
 
     @NonNull
-    private Book book;
+    private Integer book;
 
     @NonNull
-    private User user;
+    private Integer user;
 }

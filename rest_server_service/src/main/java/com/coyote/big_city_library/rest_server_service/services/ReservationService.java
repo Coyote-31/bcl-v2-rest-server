@@ -1,17 +1,24 @@
 package com.coyote.big_city_library.rest_server_service.services;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.coyote.big_city_library.rest_server_model.dao.entities.Book;
 import com.coyote.big_city_library.rest_server_model.dao.entities.Reservation;
 import com.coyote.big_city_library.rest_server_model.dao.entities.ReservationId;
+import com.coyote.big_city_library.rest_server_model.dao.entities.User;
+import com.coyote.big_city_library.rest_server_repository.dao.repositories.BookRepository;
 import com.coyote.big_city_library.rest_server_repository.dao.repositories.ReservationRepository;
+import com.coyote.big_city_library.rest_server_repository.dao.repositories.UserRepository;
 import com.coyote.big_city_library.rest_server_service.dto.BookDto;
 import com.coyote.big_city_library.rest_server_service.dto.BookMapper;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationDto;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationMapper;
 import com.coyote.big_city_library.rest_server_service.dto.UserDto;
 import com.coyote.big_city_library.rest_server_service.dto.UserMapper;
+import com.coyote.big_city_library.rest_server_service.dto.reservation.CreateReservationDto;
 
 /**
  * Service class handling reservations
@@ -23,6 +30,12 @@ public class ReservationService {
 
     @Autowired
     private ReservationRepository reservationRepository;
+
+    @Autowired
+    private BookRepository bookRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     protected ReservationMapper reservationMapper;
@@ -37,13 +50,32 @@ public class ReservationService {
     /**
      * Adds a new reservation.
      *
-     * @param reservationDto : data representation of Reservation class
+     * @param createReservationDto : DTO carring BookId and UserId
      * @return reservationDto
+     * @see CreateReservationDto
      * @see ReservationDto
      * @see Reservation
      */
-    public ReservationDto addReservation(ReservationDto reservationDto) {
-        Reservation reservation = reservationMapper.toModel(reservationDto);
+    public ReservationDto addReservation(CreateReservationDto createReservationDto) {
+
+        // TODO add RG 1, 2 and 3
+
+        // Create Book entity
+        Book book = bookRepository.findById(createReservationDto.getBookId()).orElseThrow();
+
+        // Create User entity
+        User user = userRepository.findById(createReservationDto.getUserId()).orElseThrow();
+
+        // Create ZonedDateTime createdAt
+        ZonedDateTime createdAt = ZonedDateTime.now(ZoneId.of("UTC"));
+
+        // Construct Reservation entity
+        Reservation reservation = new Reservation();
+        reservation.setBook(book);
+        reservation.setUser(user);
+        reservation.setCreatedAt(createdAt);
+
+        // Persist
         reservation = reservationRepository.save(reservation);
 
         return reservationMapper.toDto(reservation);
@@ -74,8 +106,8 @@ public class ReservationService {
     // TODO remplacer  par Integer IDs
     public ReservationDto findReservationByIdBookAndUser(BookDto bookDto, UserDto userDto) {
         ReservationId reservationId = new ReservationId();
-        reservationId.setBook(bookMapper.toModel(bookDto));
-        reservationId.setUser(userMapper.toModel(userDto));
+        reservationId.setBook(bookDto.getId());
+        reservationId.setUser(userDto.getId());
         return reservationMapper.toDto(reservationRepository.findById(reservationId).orElse(null));
     }
 
@@ -113,8 +145,8 @@ public class ReservationService {
      */
     public void deleteReservationByIdBookAndUser(BookDto bookDto, UserDto userDto) {
         ReservationId reservationId = new ReservationId();
-        reservationId.setBook(bookMapper.toModel(bookDto));
-        reservationId.setUser(userMapper.toModel(userDto));
+        reservationId.setBook(bookDto.getId());
+        reservationId.setUser(userDto.getId());
         reservationRepository.deleteById(reservationId);
     }
 
