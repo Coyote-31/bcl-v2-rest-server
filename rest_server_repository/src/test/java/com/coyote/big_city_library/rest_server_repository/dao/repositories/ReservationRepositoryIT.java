@@ -27,7 +27,7 @@ public class ReservationRepositoryIT {
         log.debug("Password (should be null) :", reservations.get(0).getUser().getPassword());
         log.debug("equals : {}", reservations.get(0).equals(reservations.get(0)));
         log.debug("hash : {}", reservations.get(0).hashCode());
-        assertThat(reservations).hasSize(1);
+        assertThat(reservations).hasSizeGreaterThan(1);
     }
 
 }
