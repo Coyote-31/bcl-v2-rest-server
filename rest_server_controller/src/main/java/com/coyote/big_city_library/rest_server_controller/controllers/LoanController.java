@@ -6,14 +6,17 @@ import javax.validation.Valid;
 
 import com.coyote.big_city_library.rest_server_service.dto.LoanDto;
 import com.coyote.big_city_library.rest_server_service.services.LoanService;
-
+import io.jsonwebtoken.JwtException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -71,8 +74,18 @@ public class LoanController {
     }
 
     @PutMapping("/extend/{id}")
-    public void extendLoan(@PathVariable Integer id) {
-        loanService.extendLoan(id);
+    public ResponseEntity<Void> extendLoan(
+            @PathVariable Integer id,
+            @RequestHeader(name = "Authorization") String token) {
+
+        try {
+            loanService.extendLoan(id, token);
+            return ResponseEntity.ok().build();
+
+        } catch (JwtException e) {
+            log.warn("JwtException : {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 
     @DeleteMapping("/delete")

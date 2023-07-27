@@ -7,7 +7,8 @@ import com.coyote.big_city_library.rest_server_model.dao.entities.Loan;
 import com.coyote.big_city_library.rest_server_repository.dao.repositories.LoanRepository;
 import com.coyote.big_city_library.rest_server_service.dto.LoanDto;
 import com.coyote.big_city_library.rest_server_service.dto.LoanMapper;
-
+import com.coyote.big_city_library.rest_server_service.security.JwtProvider;
+import io.jsonwebtoken.JwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,9 @@ public class LoanService {
 
     @Autowired
     private MailService mailService;
+
+    @Autowired
+    protected JwtProvider jwtProvider;
 
     /**
      * Adds a new given loan.
@@ -97,9 +101,23 @@ public class LoanService {
      * by given Loan's id.
      *
      * @param id
+     * @param token
      * @see Loan
      */
-    public void extendLoan(Integer id) {
+    public void extendLoan(Integer id, String token) {
+
+        // Exctract user from JWT
+        String tokenUser = jwtProvider.getUsername(token);
+        log.debug("User name : {}", tokenUser);
+
+        // Get the loan
+        Loan loan = loanRepository.findById(id).orElseThrow();
+
+        // Verify user from JWT is the loan user
+        if (!tokenUser.equals(loan.getUser().getPseudo())) {
+            throw new JwtException("Jwt user is different from loan user");
+        }
+
         loanRepository.extendLoan(id);
     }
 

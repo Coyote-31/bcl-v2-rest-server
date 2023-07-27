@@ -26,6 +26,8 @@ public class JwtProvider {
 	@Value("${security.jwt.expiration-ms}")
 	private Long jwtExpirationMs;
 
+	private static final String BEARER = "Bearer ";
+
 	public String generateJwtToken(Authentication authentication) {
 		UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
 
@@ -35,23 +37,32 @@ public class JwtProvider {
 		Date now = new Date();
 		Date validity = new Date(now.getTime() + jwtExpirationMs);
 
-		return Jwts.builder()
-				.setClaims(claims)
-				.setIssuedAt(now)
-				.setExpiration(validity)
-				.signWith(SignatureAlgorithm.HS512, jwtSecretKey)
-				.compact();
+		return Jwts	.builder()
+					.setClaims(claims)
+					.setIssuedAt(now)
+					.setExpiration(validity)
+					.signWith(SignatureAlgorithm.HS512, jwtSecretKey)
+					.compact();
 	}
 
 	public String getUsername(String token) {
+		if (token != null && token.startsWith(BEARER)) {
+			token = token.substring(7);
+		}
 		return Jwts.parser().setSigningKey(jwtSecretKey).parseClaimsJws(token).getBody().getSubject();
 	}
 
 	public String getRole(String token) {
+		if (token != null && token.startsWith(BEARER)) {
+			token = token.substring(7);
+		}
 		return Jwts.parser().setSigningKey(jwtSecretKey).parseClaimsJws(token).getBody().get("role").toString();
 	}
 
 	public boolean validateToken(String token) {
+		if (token != null && token.startsWith(BEARER)) {
+			token = token.substring(7);
+		}
 		try {
 			Jwts.parser().setSigningKey(jwtSecretKey).parseClaimsJws(token);
 			return true;
