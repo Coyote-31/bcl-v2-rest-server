@@ -143,23 +143,27 @@ public class LoanService {
         for (Loan loan : loans) {
 
             // If loan is not extended & loan date is farthest than 1 months -> mail
-            if (!loan.getExtend() && loan.getLoanDate().isBefore(oneMonthEarlier)) {
+            if (Boolean.FALSE.equals(loan.getExtend()) && loan.getLoanDate().isBefore(oneMonthEarlier)) {
 
                 mailService.sendUserLoanReminder(loan);
 
                 String pseudo = loan.getUser().getPseudo();
                 String bookTitle = loan.getExemplary().getBook().getTitle();
-                log.debug("Mail send for 1 month delay. To '{}' for book '{}'.", pseudo, bookTitle);
+                log.debug("Mail send for more than 1 month delay (Not Extended). To '{}' for book '{}'.",
+                        pseudo,
+                        bookTitle);
             }
 
             // If loan is extend & loan date is farthest than 2 months -> mail
-            if (loan.getExtend() && loan.getLoanDate().isBefore(twoMonthsEarlier)) {
+            if (Boolean.TRUE.equals(loan.getExtend()) && loan.getLoanDate().isBefore(twoMonthsEarlier)) {
 
                 mailService.sendUserLoanReminder(loan);
 
                 String pseudo = loan.getUser().getPseudo();
                 String bookTitle = loan.getExemplary().getBook().getTitle();
-                log.debug("Mail send for 2 months delay. To '{}' for book '{}'.", pseudo, bookTitle);
+                log.debug("Mail send for more than 2 months delay (Extended). To '{}' for book '{}'.",
+                        pseudo,
+                        bookTitle);
 
             }
         }
