@@ -68,31 +68,32 @@ public class ReservationController {
     @PutMapping("/update")
     public ReservationDto updateReservation(@Valid @RequestBody ReservationDto reservationDto) {
         ReservationDto reservationUpdated = reservationService.updateReservation(reservationDto);
-        log.debug("updateReservation() => reservation with with book:{} and user:{} updated",
+        log.debug("updateReservation() => reservation with book:{} and user:{} updated",
                 reservationUpdated.getBook().getTitle(),
                 reservationUpdated.getUser().getPseudo());
         return reservationUpdated;
     }
 
     @DeleteMapping("/delete")
-    public void deleteReservation(@Valid @RequestBody ReservationDto reservationDto) {
-        reservationService.deleteReservation(reservationDto);
-        log.debug("deleteReservation() => reservation with with book:{} and user:{} removed",
-                reservationDto.getBook().getTitle(),
-                reservationDto.getUser().getPseudo());
+    public void deleteReservationById(@Valid @RequestBody ReservationIdDto reservationIdDto) {
+        reservationService.deleteReservationById(reservationIdDto);
+        log.debug("deleteReservation() => reservation with bookId:{} and userId:{} removed",
+                reservationIdDto.getBookId(),
+                reservationIdDto.getUserId());
     }
 
+    // TODO Remove ?
     // TODO : handle composite ID with ReservationId or book.id + user.id
-    @DeleteMapping("/delete/{id}")
-    public void deleteReservationById(
-            @PathVariable Integer id,
-            @Valid @RequestBody BookDto bookDto,
-            @Valid @RequestBody UserDto userDto) {
+    // @DeleteMapping("/delete/{id}")
+    // public void deleteReservationById(
+    //         @PathVariable Integer id,
+    //         @Valid @RequestBody BookDto bookDto,
+    //         @Valid @RequestBody UserDto userDto) {
 
-        reservationService.deleteReservationByIdBookAndUser(bookDto, userDto);
-        log.debug("deleteReservationById() => reservation with with book:{} and user:{} removed",
-                bookDto.getTitle(),
-                userDto.getPseudo());
-    }
+    //     reservationService.deleteReservationByIdBookAndUser(bookDto, userDto);
+    //     log.debug("deleteReservationById() => reservation with with book:{} and user:{} removed",
+    //             bookDto.getTitle(),
+    //             userDto.getPseudo());
+    // }
 
 }

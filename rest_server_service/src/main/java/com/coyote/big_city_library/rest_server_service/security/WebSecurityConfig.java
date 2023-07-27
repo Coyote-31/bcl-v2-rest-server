@@ -44,7 +44,12 @@ public class WebSecurityConfig {
                               .permitAll()
                               .mvcMatchers("/actuator/**")
                               .permitAll()
-                              .mvcMatchers("/libraries", "/loans/user/**", "/loans/extend/**", "/reservations/add")
+                              .mvcMatchers(
+                                      "/libraries",
+                                      "/loans/user/**",
+                                      "/loans/extend/**",
+                                      "/reservations/add",
+                                      "/reservations/delete")
                               .hasAnyAuthority(ROLE_USER, ROLE_ADMIN)
                               .mvcMatchers("/loans/add", "/loans/add/partial", "/loans/update")
                               .hasAnyAuthority(ROLE_EMPLOYEE, ROLE_ADMIN)

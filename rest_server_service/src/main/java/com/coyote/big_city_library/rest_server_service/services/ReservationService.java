@@ -17,6 +17,7 @@ import com.coyote.big_city_library.rest_server_repository.dao.repositories.UserR
 import com.coyote.big_city_library.rest_server_service.dto.BookDto;
 import com.coyote.big_city_library.rest_server_service.dto.BookMapper;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationIdDto;
+import com.coyote.big_city_library.rest_server_service.dto.ReservationIdMapper;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationDto;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationMapper;
 import com.coyote.big_city_library.rest_server_service.dto.UserDto;
@@ -38,6 +39,9 @@ public class ReservationService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    protected ReservationIdMapper reservationIdMapper;
 
     @Autowired
     protected ReservationMapper reservationMapper;
@@ -158,10 +162,8 @@ public class ReservationService {
      * @see Reservation
      * @see ReservationDto
      */
-    public void deleteReservationByIdBookAndUser(BookDto bookDto, UserDto userDto) {
-        ReservationId reservationId = new ReservationId();
-        reservationId.setBook(bookDto.getId());
-        reservationId.setUser(userDto.getId());
+    public void deleteReservationById(ReservationIdDto reservationIdDto) {
+        ReservationId reservationId = reservationIdMapper.toModel(reservationIdDto);
         reservationRepository.deleteById(reservationId);
     }
 
