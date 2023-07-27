@@ -43,6 +43,9 @@ public class ReservationController {
         } catch (JwtException e) {
             log.warn("JwtException : {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } catch (Exception e) {
+            log.warn("RG_Exception : {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 

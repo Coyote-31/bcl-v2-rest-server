@@ -8,6 +8,7 @@ import javax.persistence.EntityExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.coyote.big_city_library.rest_server_model.dao.entities.Book;
+import com.coyote.big_city_library.rest_server_model.dao.entities.Loan;
 import com.coyote.big_city_library.rest_server_model.dao.entities.Reservation;
 import com.coyote.big_city_library.rest_server_model.dao.entities.ReservationId;
 import com.coyote.big_city_library.rest_server_model.dao.entities.User;
@@ -61,20 +62,25 @@ public class ReservationService {
     /**
      * Adds a new reservation.
      *
+     * <ul>
+     * <li><strong>RG_Reservation_1</strong> : Tous les types d’ouvrages peuvent être réservés.</li>
+     * <li><strong>RG_Reservation_2</strong> : La liste de réservation ne peut comporter qu’un maximum de personnes correspondant à 2x le nombre d’exemplaires de l’ouvrage.</li>
+     * <li><strong>RG_Reservation_3</strong> : Il n’est pas possible pour un usager de réserver un ouvrage qu’il a déjà en cours d’emprunt</li>
+     * </ul>
+     *
      * @param reservationIdDto : DTO carring BookId and UserId
      * @param token
      * @return reservationDto
+     * @throws Exception
      * @see ReservationIdDto
      * @see ReservationDto
      * @see Reservation
      */
-    public ReservationDto addReservation(ReservationIdDto reservationIdDto, String token) {
+    public ReservationDto addReservation(ReservationIdDto reservationIdDto, String token) throws Exception {
 
         // Exctract user from JWT
         String tokenUser = jwtProvider.getUsername(token);
         log.debug("User name : {}", tokenUser);
-
-        // TODO add RG 1, 2 and 3
 
         // Create Book entity
         Book book = bookRepository.findById(reservationIdDto.getBookId()).orElseThrow();
@@ -85,6 +91,19 @@ public class ReservationService {
         // Verify user from JWT is the reservation user
         if (!tokenUser.equals(user.getPseudo())) {
             throw new JwtException("Jwt user is different from reservation user");
+        }
+
+        // RG_Reservation_2
+        if (book.getExemplaries().size() * 2 >= book.getReservations().size()) {
+            throw new Exception("RG_Reservation_2 : Reservation list is already full");
+        }
+
+        // RG_Reservation_3
+        for (Loan loan : user.getLoans()) {
+            if (loan.getExemplary().getBook().getId().equals(book.getId())
+                    && loan.getReturnDate() == null) {
+                throw new Exception("RG_Reservation_3 : Reservation of loaned book is forbidden");
+            }
         }
 
         // Create ZonedDateTime createdAt
