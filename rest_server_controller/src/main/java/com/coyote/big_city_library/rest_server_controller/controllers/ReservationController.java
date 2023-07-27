@@ -93,8 +93,13 @@ public class ReservationController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteReservationById(
-            @Valid @RequestBody ReservationIdDto reservationIdDto,
+            @RequestParam Integer bookId,
+            @RequestParam Integer userId,
             @RequestHeader(name = "Authorization") String token) {
+
+        ReservationIdDto reservationIdDto = new ReservationIdDto();
+        reservationIdDto.setBookId(bookId);
+        reservationIdDto.setUserId(userId);
         try {
             reservationService.deleteReservationById(reservationIdDto, token);
             log.debug("deleteReservation() => reservation with bookId:{} and userId:{} removed",
