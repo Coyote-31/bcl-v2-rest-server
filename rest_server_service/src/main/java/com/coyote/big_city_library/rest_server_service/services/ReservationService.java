@@ -14,13 +14,11 @@ import com.coyote.big_city_library.rest_server_model.dao.entities.User;
 import com.coyote.big_city_library.rest_server_repository.dao.repositories.BookRepository;
 import com.coyote.big_city_library.rest_server_repository.dao.repositories.ReservationRepository;
 import com.coyote.big_city_library.rest_server_repository.dao.repositories.UserRepository;
-import com.coyote.big_city_library.rest_server_service.dto.BookDto;
 import com.coyote.big_city_library.rest_server_service.dto.BookMapper;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationDto;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationIdDto;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationIdMapper;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationMapper;
-import com.coyote.big_city_library.rest_server_service.dto.UserDto;
 import com.coyote.big_city_library.rest_server_service.dto.UserMapper;
 import com.coyote.big_city_library.rest_server_service.security.JwtProvider;
 import io.jsonwebtoken.JwtException;
@@ -129,21 +127,17 @@ public class ReservationService {
     }
 
     /**
-     * Returns a reservation with a given composite PK ({@link BookDto} + {@link UserDto}).
+     * Returns a reservation with a given composite PK {@link ReservationId}.
+     * Wich contains bookId and userId as Integer.
      *
-     * @param bookDto
-     * @param userDto
-     * @return The reservation with the given id or null if none found.
+     * @param reservationId
+     * @return The reservationDto with the given id or null if none found.
+     * @see ReservationId
+     * @see ReservationIdDto
      * @see Reservation
      * @see ReservationDto
-     * @see BookDto
-     * @see UserDto
      */
-    // TODO remplacer  par Integer IDs
-    public ReservationDto findReservationByIdBookAndUser(BookDto bookDto, UserDto userDto) {
-        ReservationId reservationId = new ReservationId();
-        reservationId.setBook(bookDto.getId());
-        reservationId.setUser(userDto.getId());
+    public ReservationDto findReservationById(ReservationId reservationId) {
         return reservationMapper.toDto(reservationRepository.findById(reservationId).orElse(null));
     }
 
@@ -172,7 +166,8 @@ public class ReservationService {
     }
 
     /**
-     * Deletes a reservation with a composite PK ({@link BookDto} + {@link UserDto}).
+     * Deletes a reservation with a composite PK {@link ReservationId}.
+     * Wich contains bookId and userId as Integer.
      *
      * @param reservationIdDto
      * @param token

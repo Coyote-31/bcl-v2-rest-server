@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,10 +14,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.coyote.big_city_library.rest_server_service.dto.BookDto;
+import com.coyote.big_city_library.rest_server_model.dao.entities.ReservationId;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationDto;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationIdDto;
-import com.coyote.big_city_library.rest_server_service.dto.UserDto;
 import com.coyote.big_city_library.rest_server_service.services.ReservationService;
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
@@ -55,26 +53,30 @@ public class ReservationController {
         return reservations;
     }
 
-    // TODO : handle composite ID with ReservationId or book.id + user.id
-    @GetMapping("/{bookid}")
-    public ReservationDto findReservationByIdBookAndUser(
-            @RequestParam Integer userId,
-            @PathVariable Integer id,
-            @Valid @RequestBody BookDto bookDto,
-            @Valid @RequestBody UserDto userDto) {
+    @GetMapping("/reservation")
+    public ResponseEntity<ReservationDto> findReservationById(
+            @RequestParam Integer bookId,
+            @RequestParam Integer userId) {
 
-        ReservationDto reservationDto = reservationService.findReservationByIdBookAndUser(bookDto, userDto);
+        // Build the ID entity
+        ReservationId reservationId = new ReservationId();
+        reservationId.setBook(bookId);
+        reservationId.setUser(userId);
+
+        // Get entity from repository
+        ReservationDto reservationDto = reservationService.findReservationById(reservationId);
         if (reservationDto != null) {
-            log.debug("findReservationByIdBookAndUser() => reservation with book:{} and user:{} found",
+            log.debug("findReservationById() => reservation with book:{} and user:{} found",
                     reservationDto.getBook().getTitle(),
                     reservationDto.getUser().getPseudo());
-        } else {
-            log.debug("findReservationByIdBookAndUser() => No Reservation found with book:{} and user:{} found",
-                    bookDto.getTitle(),
-                    userDto.getPseudo());
-        }
+            return ResponseEntity.ok(reservationDto);
 
-        return reservationDto;
+        } else {
+            log.debug("findReservationById() => No Reservation found with bookId:{} and userId:{}",
+                    reservationId.getBook(),
+                    reservationId.getUser());
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/update")
