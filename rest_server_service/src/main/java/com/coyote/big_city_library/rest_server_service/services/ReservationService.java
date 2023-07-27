@@ -94,7 +94,10 @@ public class ReservationService {
         }
 
         // RG_Reservation_2
-        if (book.getExemplaries().size() * 2 >= book.getReservations().size()) {
+        log.debug("RG_Reservation_2 => exemplaries_x2:{} reservations:{}",
+                book.getExemplaries().size() * 2,
+                book.getReservations().size());
+        if (book.getReservations().size() >= book.getExemplaries().size() * 2) {
             throw new Exception("RG_Reservation_2 : Reservation list is already full");
         }
 
