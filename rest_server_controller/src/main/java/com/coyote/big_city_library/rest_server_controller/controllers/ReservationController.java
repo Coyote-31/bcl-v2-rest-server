@@ -14,11 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.coyote.big_city_library.rest_server_service.dto.BookDto;
-import com.coyote.big_city_library.rest_server_service.dto.ReservationIdDto;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationDto;
+import com.coyote.big_city_library.rest_server_service.dto.ReservationIdDto;
 import com.coyote.big_city_library.rest_server_service.dto.UserDto;
 import com.coyote.big_city_library.rest_server_service.services.ReservationService;
 import io.jsonwebtoken.JwtException;
@@ -88,7 +87,6 @@ public class ReservationController {
     }
 
     @DeleteMapping("/delete")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteReservationById(
             @Valid @RequestBody ReservationIdDto reservationIdDto,
             @RequestHeader(name = "Authorization") String token) {
