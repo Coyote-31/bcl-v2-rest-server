@@ -16,11 +16,11 @@ import com.coyote.big_city_library.rest_server_repository.dao.repositories.Reser
 import com.coyote.big_city_library.rest_server_repository.dao.repositories.UserRepository;
 import com.coyote.big_city_library.rest_server_service.dto.BookDto;
 import com.coyote.big_city_library.rest_server_service.dto.BookMapper;
+import com.coyote.big_city_library.rest_server_service.dto.ReservationIdDto;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationDto;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationMapper;
 import com.coyote.big_city_library.rest_server_service.dto.UserDto;
 import com.coyote.big_city_library.rest_server_service.dto.UserMapper;
-import com.coyote.big_city_library.rest_server_service.dto.reservation.CreateReservationDto;
 
 /**
  * Service class handling reservations
@@ -52,21 +52,21 @@ public class ReservationService {
     /**
      * Adds a new reservation.
      *
-     * @param createReservationDto : DTO carring BookId and UserId
+     * @param reservationIdDto : DTO carring BookId and UserId
      * @return reservationDto
-     * @see CreateReservationDto
+     * @see ReservationIdDto
      * @see ReservationDto
      * @see Reservation
      */
-    public ReservationDto addReservation(CreateReservationDto createReservationDto) {
+    public ReservationDto addReservation(ReservationIdDto reservationIdDto) {
 
         // TODO add RG 1, 2 and 3
 
         // Create Book entity
-        Book book = bookRepository.findById(createReservationDto.getBookId()).orElseThrow();
+        Book book = bookRepository.findById(reservationIdDto.getBookId()).orElseThrow();
 
         // Create User entity
-        User user = userRepository.findById(createReservationDto.getUserId()).orElseThrow();
+        User user = userRepository.findById(reservationIdDto.getUserId()).orElseThrow();
 
         // Create ZonedDateTime createdAt
         ZonedDateTime createdAt = ZonedDateTime.now(ZoneId.of("UTC"));
@@ -79,8 +79,8 @@ public class ReservationService {
 
         // Persist
         ReservationId reservationId = new ReservationId();
-        reservationId.setBook(createReservationDto.getBookId());
-        reservationId.setUser(createReservationDto.getUserId());
+        reservationId.setBook(reservationIdDto.getBookId());
+        reservationId.setUser(reservationIdDto.getUserId());
 
         if (!reservationRepository.existsById(reservationId)) {
             reservation = reservationRepository.save(reservation);
@@ -88,8 +88,8 @@ public class ReservationService {
             String message = "Reservation entity with bookId:{0} userId:{1} already exists";
             String messageFormatted = MessageFormat.format(
                     message,
-                    createReservationDto.getBookId(),
-                    createReservationDto.getUserId());
+                    reservationIdDto.getBookId(),
+                    reservationIdDto.getUserId());
             throw new EntityExistsException(messageFormatted);
         }
 

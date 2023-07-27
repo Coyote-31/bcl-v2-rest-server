@@ -22,7 +22,7 @@ public interface ReservationMapper {
 
     Set<ReservationDto> toDto(Set<Reservation> reservations);
 
-    Reservation toModel(ReservationDto publisherDto);
+    Reservation toModel(ReservationDto reservationDto);
 
     // Book
 

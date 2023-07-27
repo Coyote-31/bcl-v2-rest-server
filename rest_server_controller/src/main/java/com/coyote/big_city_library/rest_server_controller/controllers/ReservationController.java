@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.coyote.big_city_library.rest_server_service.dto.BookDto;
+import com.coyote.big_city_library.rest_server_service.dto.ReservationIdDto;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationDto;
 import com.coyote.big_city_library.rest_server_service.dto.UserDto;
-import com.coyote.big_city_library.rest_server_service.dto.reservation.CreateReservationDto;
 import com.coyote.big_city_library.rest_server_service.services.ReservationService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,8 +28,8 @@ public class ReservationController {
     ReservationService reservationService;
 
     @PostMapping("/add")
-    public ReservationDto addReservation(@Valid @RequestBody CreateReservationDto createReservationDto) {
-        ReservationDto reservationSaved = reservationService.addReservation(createReservationDto);
+    public ReservationDto addReservation(@Valid @RequestBody ReservationIdDto reservationIdDto) {
+        ReservationDto reservationSaved = reservationService.addReservation(reservationIdDto);
         log.debug("addReservation() => reservation for book:{} and user:{} added",
                 reservationSaved.getBook().getTitle(),
                 reservationSaved.getUser().getPseudo());
