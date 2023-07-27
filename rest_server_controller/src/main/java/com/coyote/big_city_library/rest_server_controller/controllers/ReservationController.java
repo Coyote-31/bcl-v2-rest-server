@@ -3,20 +3,25 @@ package com.coyote.big_city_library.rest_server_controller.controllers;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.coyote.big_city_library.rest_server_service.dto.BookDto;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationIdDto;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationDto;
 import com.coyote.big_city_library.rest_server_service.dto.UserDto;
 import com.coyote.big_city_library.rest_server_service.services.ReservationService;
+import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -28,12 +33,20 @@ public class ReservationController {
     ReservationService reservationService;
 
     @PostMapping("/add")
-    public ReservationDto addReservation(@Valid @RequestBody ReservationIdDto reservationIdDto) {
-        ReservationDto reservationSaved = reservationService.addReservation(reservationIdDto);
-        log.debug("addReservation() => reservation for book:{} and user:{} added",
-                reservationSaved.getBook().getTitle(),
-                reservationSaved.getUser().getPseudo());
-        return reservationSaved;
+    public ResponseEntity<ReservationDto> addReservation(
+            @Valid @RequestBody ReservationIdDto reservationIdDto,
+            @RequestHeader(name = "Authorization") String token) {
+        try {
+            ReservationDto reservationSaved = reservationService.addReservation(reservationIdDto, token);
+            log.debug("addReservation() => reservation for book:{} and user:{} added",
+                    reservationSaved.getBook().getTitle(),
+                    reservationSaved.getUser().getPseudo());
+            return ResponseEntity.ok(reservationSaved);
+
+        } catch (JwtException e) {
+            log.warn("JwtException : {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 
     @GetMapping("")
@@ -75,25 +88,20 @@ public class ReservationController {
     }
 
     @DeleteMapping("/delete")
-    public void deleteReservationById(@Valid @RequestBody ReservationIdDto reservationIdDto) {
-        reservationService.deleteReservationById(reservationIdDto);
-        log.debug("deleteReservation() => reservation with bookId:{} and userId:{} removed",
-                reservationIdDto.getBookId(),
-                reservationIdDto.getUserId());
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<Void> deleteReservationById(
+            @Valid @RequestBody ReservationIdDto reservationIdDto,
+            @RequestHeader(name = "Authorization") String token) {
+        try {
+            reservationService.deleteReservationById(reservationIdDto, token);
+            log.debug("deleteReservation() => reservation with bookId:{} and userId:{} removed",
+                    reservationIdDto.getBookId(),
+                    reservationIdDto.getUserId());
+            return ResponseEntity.ok().build();
+        } catch (JwtException e) {
+            log.warn("JwtException : {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
-
-    // TODO Remove ?
-    // TODO : handle composite ID with ReservationId or book.id + user.id
-    // @DeleteMapping("/delete/{id}")
-    // public void deleteReservationById(
-    //         @PathVariable Integer id,
-    //         @Valid @RequestBody BookDto bookDto,
-    //         @Valid @RequestBody UserDto userDto) {
-
-    //     reservationService.deleteReservationByIdBookAndUser(bookDto, userDto);
-    //     log.debug("deleteReservationById() => reservation with with book:{} and user:{} removed",
-    //             bookDto.getTitle(),
-    //             userDto.getPseudo());
-    // }
 
 }

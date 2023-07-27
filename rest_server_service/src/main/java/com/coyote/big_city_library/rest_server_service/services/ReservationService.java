@@ -1,10 +1,10 @@
 package com.coyote.big_city_library.rest_server_service.services;
 
+import java.text.MessageFormat;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 import javax.persistence.EntityExistsException;
-import java.text.MessageFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.coyote.big_city_library.rest_server_model.dao.entities.Book;
@@ -16,18 +16,22 @@ import com.coyote.big_city_library.rest_server_repository.dao.repositories.Reser
 import com.coyote.big_city_library.rest_server_repository.dao.repositories.UserRepository;
 import com.coyote.big_city_library.rest_server_service.dto.BookDto;
 import com.coyote.big_city_library.rest_server_service.dto.BookMapper;
+import com.coyote.big_city_library.rest_server_service.dto.ReservationDto;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationIdDto;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationIdMapper;
-import com.coyote.big_city_library.rest_server_service.dto.ReservationDto;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationMapper;
 import com.coyote.big_city_library.rest_server_service.dto.UserDto;
 import com.coyote.big_city_library.rest_server_service.dto.UserMapper;
+import com.coyote.big_city_library.rest_server_service.security.JwtProvider;
+import io.jsonwebtoken.JwtException;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Service class handling reservations
  *
  * @see ReservationRepository
  */
+@Slf4j
 @Service
 public class ReservationService {
 
@@ -52,17 +56,25 @@ public class ReservationService {
     @Autowired
     protected UserMapper userMapper;
 
+    @Autowired
+    protected JwtProvider jwtProvider;
+
 
     /**
      * Adds a new reservation.
      *
      * @param reservationIdDto : DTO carring BookId and UserId
+     * @param token
      * @return reservationDto
      * @see ReservationIdDto
      * @see ReservationDto
      * @see Reservation
      */
-    public ReservationDto addReservation(ReservationIdDto reservationIdDto) {
+    public ReservationDto addReservation(ReservationIdDto reservationIdDto, String token) {
+
+        // Exctract user from JWT
+        String tokenUser = jwtProvider.getUsername(token);
+        log.debug("User name : {}", tokenUser);
 
         // TODO add RG 1, 2 and 3
 
@@ -71,6 +83,11 @@ public class ReservationService {
 
         // Create User entity
         User user = userRepository.findById(reservationIdDto.getUserId()).orElseThrow();
+
+        // Verify user from JWT is the reservation user
+        if (!tokenUser.equals(user.getPseudo())) {
+            throw new JwtException("Jwt user is different from reservation user");
+        }
 
         // Create ZonedDateTime createdAt
         ZonedDateTime createdAt = ZonedDateTime.now(ZoneId.of("UTC"));
@@ -157,12 +174,25 @@ public class ReservationService {
     /**
      * Deletes a reservation with a composite PK ({@link BookDto} + {@link UserDto}).
      *
-     * @param bookDto
-     * @param userDto
+     * @param reservationIdDto
+     * @param token
      * @see Reservation
      * @see ReservationDto
      */
-    public void deleteReservationById(ReservationIdDto reservationIdDto) {
+    public void deleteReservationById(ReservationIdDto reservationIdDto, String token) {
+
+        // Exctract user from JWT
+        String tokenUser = jwtProvider.getUsername(token);
+        log.debug("User name : {}", tokenUser);
+
+        // get the User entity
+        User user = userRepository.findById(reservationIdDto.getUserId()).orElseThrow();
+
+        // Verify user from JWT is the reservation user
+        if (!tokenUser.equals(user.getPseudo())) {
+            throw new JwtException("Jwt user is different from reservation user");
+        }
+
         ReservationId reservationId = reservationIdMapper.toModel(reservationIdDto);
         reservationRepository.deleteById(reservationId);
     }
