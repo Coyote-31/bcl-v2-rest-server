@@ -1,5 +1,6 @@
 package com.coyote.big_city_library.rest_server_service.services;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -117,6 +118,16 @@ public class LoanService {
         if (!tokenUser.equals(loan.getUser().getPseudo())) {
             throw new JwtException("Jwt user is different from loan user");
         }
+
+        // === Verify the return date is not overdue ===
+        LocalDate today = LocalDate.now();
+        LocalDate fourWeeksEarlier = today.minusWeeks(4);
+
+        if (loan.getLoanDate().isBefore(fourWeeksEarlier)) {
+            throw new DateTimeException("Loan can't be extended after 4 weeks from loanDate");
+        }
+
+
 
         loanRepository.extendLoan(id);
     }

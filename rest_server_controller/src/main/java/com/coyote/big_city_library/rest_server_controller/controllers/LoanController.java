@@ -1,5 +1,6 @@
 package com.coyote.big_city_library.rest_server_controller.controllers;
 
+import java.time.DateTimeException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -84,6 +85,9 @@ public class LoanController {
 
         } catch (JwtException e) {
             log.warn("JwtException : {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } catch (DateTimeException e) {
+            log.warn("DateTimeException : {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
