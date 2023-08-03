@@ -1,4 +1,4 @@
-# Big City Library : REST Server
+# Big City Library v2 : REST Server
 
 ## ✨ Présentation :
 
@@ -9,7 +9,7 @@ Ce projet a pour but la création d’un ensemble d’outils numériques pour le
 
 > **IMPORTANT:**
 > Ce projet fait partie du cursus de formation "Développeur J2EE" de [OpenClassroom](https://openclassrooms.com/).
-> Les informations qu'il comporte ne doivent pas être utilisées dans le cadre d'une pratique réelle. 
+> Les informations qu'il comporte ne doivent pas être utilisées dans le cadre d'une pratique réelle.
 > Les informations présentées ici ne servent qu'à illustrer le projet pour le rendre le plus proche possible de la réalité.
 
 ## 📱 Application :

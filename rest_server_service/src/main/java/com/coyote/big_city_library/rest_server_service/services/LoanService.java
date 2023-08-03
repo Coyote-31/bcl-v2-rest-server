@@ -2,15 +2,15 @@ package com.coyote.big_city_library.rest_server_service.services;
 
 import java.time.LocalDate;
 import java.util.List;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import com.coyote.big_city_library.rest_server_model.dao.entities.Loan;
 import com.coyote.big_city_library.rest_server_repository.dao.repositories.LoanRepository;
 import com.coyote.big_city_library.rest_server_service.dto.LoanDto;
 import com.coyote.big_city_library.rest_server_service.dto.LoanMapper;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import com.coyote.big_city_library.rest_server_service.exceptions.LoanOverdueException;
+import com.coyote.big_city_library.rest_server_service.exceptions.UserAccessDeniedException;
+import com.coyote.big_city_library.rest_server_service.security.JwtProvider;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -30,6 +30,9 @@ public class LoanService {
 
     @Autowired
     private MailService mailService;
+
+    @Autowired
+    protected JwtProvider jwtProvider;
 
     /**
      * Adds a new given loan.
@@ -97,9 +100,35 @@ public class LoanService {
      * by given Loan's id.
      *
      * @param id
+     * @param token
+     * @throws LoanOverdueException
+     * @throws UserAccessDeniedException
      * @see Loan
      */
-    public void extendLoan(Integer id) {
+    public void extendLoan(Integer id, String token) throws UserAccessDeniedException, LoanOverdueException {
+
+        // Exctract user from JWT
+        String tokenUser = jwtProvider.getUsername(token);
+        log.debug("User name : {}", tokenUser);
+
+        // Get the loan
+        Loan loan = loanRepository.findById(id).orElseThrow();
+
+        // Verify user from JWT is the loan user
+        if (!tokenUser.equals(loan.getUser().getPseudo())) {
+            throw new UserAccessDeniedException("Users can only extends their own loans");
+        }
+
+        // === Verify the return date is not overdue ===
+        LocalDate today = LocalDate.now();
+        LocalDate fourWeeksEarlier = today.minusWeeks(4);
+
+        if (loan.getLoanDate().isBefore(fourWeeksEarlier)) {
+            throw new LoanOverdueException("Loans can't be extended after 4 weeks");
+        }
+
+
+
         loanRepository.extendLoan(id);
     }
 
@@ -143,23 +172,27 @@ public class LoanService {
         for (Loan loan : loans) {
 
             // If loan is not extended & loan date is farthest than 1 months -> mail
-            if (!loan.getExtend() && loan.getLoanDate().isBefore(oneMonthEarlier)) {
+            if (Boolean.FALSE.equals(loan.getExtend()) && loan.getLoanDate().isBefore(oneMonthEarlier)) {
 
                 mailService.sendUserLoanReminder(loan);
 
                 String pseudo = loan.getUser().getPseudo();
                 String bookTitle = loan.getExemplary().getBook().getTitle();
-                log.debug("Mail send for 1 month delay. To '{}' for book '{}'.", pseudo, bookTitle);
+                log.debug("Mail send for more than 1 month delay (Not Extended). To '{}' for book '{}'.",
+                        pseudo,
+                        bookTitle);
             }
 
             // If loan is extend & loan date is farthest than 2 months -> mail
-            if (loan.getExtend() && loan.getLoanDate().isBefore(twoMonthsEarlier)) {
+            if (Boolean.TRUE.equals(loan.getExtend()) && loan.getLoanDate().isBefore(twoMonthsEarlier)) {
 
                 mailService.sendUserLoanReminder(loan);
 
                 String pseudo = loan.getUser().getPseudo();
                 String bookTitle = loan.getExemplary().getBook().getTitle();
-                log.debug("Mail send for 2 months delay. To '{}' for book '{}'.", pseudo, bookTitle);
+                log.debug("Mail send for more than 2 months delay (Extended). To '{}' for book '{}'.",
+                        pseudo,
+                        bookTitle);
 
             }
         }
