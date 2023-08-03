@@ -1,18 +1,16 @@
 package com.coyote.big_city_library.rest_server_service.services;
 
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.List;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import com.coyote.big_city_library.rest_server_model.dao.entities.Loan;
 import com.coyote.big_city_library.rest_server_repository.dao.repositories.LoanRepository;
 import com.coyote.big_city_library.rest_server_service.dto.LoanDto;
 import com.coyote.big_city_library.rest_server_service.dto.LoanMapper;
+import com.coyote.big_city_library.rest_server_service.exceptions.LoanOverdueException;
+import com.coyote.big_city_library.rest_server_service.exceptions.UserAccessDeniedException;
 import com.coyote.big_city_library.rest_server_service.security.JwtProvider;
-import io.jsonwebtoken.JwtException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -103,9 +101,11 @@ public class LoanService {
      *
      * @param id
      * @param token
+     * @throws LoanOverdueException
+     * @throws UserAccessDeniedException
      * @see Loan
      */
-    public void extendLoan(Integer id, String token) {
+    public void extendLoan(Integer id, String token) throws UserAccessDeniedException, LoanOverdueException {
 
         // Exctract user from JWT
         String tokenUser = jwtProvider.getUsername(token);
@@ -116,7 +116,7 @@ public class LoanService {
 
         // Verify user from JWT is the loan user
         if (!tokenUser.equals(loan.getUser().getPseudo())) {
-            throw new JwtException("Jwt user is different from loan user");
+            throw new UserAccessDeniedException("Users can only extends their own loans");
         }
 
         // === Verify the return date is not overdue ===
@@ -124,7 +124,7 @@ public class LoanService {
         LocalDate fourWeeksEarlier = today.minusWeeks(4);
 
         if (loan.getLoanDate().isBefore(fourWeeksEarlier)) {
-            throw new DateTimeException("Loan can't be extended after 4 weeks from loanDate");
+            throw new LoanOverdueException("Loans can't be extended after 4 weeks");
         }
 
 
