@@ -1,22 +1,22 @@
 package com.coyote.big_city_library.rest_server_controller.controllers;
 
 import java.util.List;
-
 import javax.validation.Valid;
-
-import com.coyote.big_city_library.rest_server_service.dto.LoanDto;
-import com.coyote.big_city_library.rest_server_service.services.LoanService;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.coyote.big_city_library.rest_server_service.dto.LoanDto;
+import com.coyote.big_city_library.rest_server_service.exceptions.LoanOverdueException;
+import com.coyote.big_city_library.rest_server_service.exceptions.UserAccessDeniedException;
+import com.coyote.big_city_library.rest_server_service.services.LoanService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -71,8 +71,13 @@ public class LoanController {
     }
 
     @PutMapping("/extend/{id}")
-    public void extendLoan(@PathVariable Integer id) {
-        loanService.extendLoan(id);
+    public ResponseEntity<Void> extendLoan(
+            @PathVariable Integer id,
+            @RequestHeader(name = "Authorization") String token)
+            throws UserAccessDeniedException, LoanOverdueException {
+
+        loanService.extendLoan(id, token);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/delete")
