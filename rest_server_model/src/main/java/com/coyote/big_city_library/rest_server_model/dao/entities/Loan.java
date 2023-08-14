@@ -48,16 +48,4 @@ public class Loan implements Serializable {
     @JsonIgnoreProperties("loans")
     private User user;
 
-    // Bi-directional synchronization :
-
-    public void setExemplary(Exemplary exemplary) {
-        this.exemplary = exemplary;
-        exemplary.addLoan(this);
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-        user.addLoan(this);
-    }
-
 }

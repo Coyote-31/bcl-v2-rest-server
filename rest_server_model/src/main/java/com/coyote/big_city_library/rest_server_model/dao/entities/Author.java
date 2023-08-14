@@ -36,16 +36,13 @@ public class Author implements Serializable {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @JsonIgnoreProperties("authors")
-    private Set<Book> books;
+    private Set<Book> books = new HashSet<>();
 
     // Bi-directional synchronization :
 
     public void addBook(Book book) {
-        if (books == null) {
-            books = new HashSet<>();
-        }
         books.add(book);
-        book.addAuthor(this);
+        book.getAuthors().add(this);
     }
 
 }

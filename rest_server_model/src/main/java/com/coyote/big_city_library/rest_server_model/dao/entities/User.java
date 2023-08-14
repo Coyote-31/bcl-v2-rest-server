@@ -59,28 +59,22 @@ public class User implements Serializable {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @JsonIgnoreProperties("user")
-    private Set<Loan> loans;
+    private Set<Loan> loans = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @JsonIgnoreProperties("user")
-    private Set<Reservation> reservations;
+    private Set<Reservation> reservations = new HashSet<>();
 
     // Bi-directional synchronization :
 
     public void addLoan(Loan loan) {
-        if (loans == null) {
-            loans = new HashSet<>();
-        }
         loans.add(loan);
         loan.setUser(this);
     }
 
     public void addReservation(Reservation reservation) {
-        if (reservations == null) {
-            reservations = new HashSet<>();
-        }
         reservations.add(reservation);
         reservation.setUser(this);
     }

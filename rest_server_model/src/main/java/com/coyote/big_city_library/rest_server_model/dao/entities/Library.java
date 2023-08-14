@@ -44,14 +44,11 @@ public class Library implements Serializable {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @JsonIgnoreProperties("library")
-    private Set<Exemplary> exemplaries;
+    private Set<Exemplary> exemplaries = new HashSet<>();
 
     // Bi-directional synchronization :
 
     public void addExemplary(Exemplary exemplary) {
-        if (exemplaries == null) {
-            exemplaries = new HashSet<>();
-        }
         exemplaries.add(exemplary);
         exemplary.setLibrary(this);
     }

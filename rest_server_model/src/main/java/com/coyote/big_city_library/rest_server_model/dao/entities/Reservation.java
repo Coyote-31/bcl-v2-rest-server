@@ -40,15 +40,4 @@ public class Reservation implements Serializable {
     @Column(name = "notified_at")
     private ZonedDateTime notifiedAt;
 
-    // // Bi-directional synchronization :
-
-    // public void setBook(Book book) {
-    //     this.book = book;
-    //     book.addReservation(this);
-    // }
-
-    // public void setUser(User user) {
-    //     this.user = user;
-    //     user.addReservation(this);
-    // }
 }

@@ -55,47 +55,33 @@ public class Book implements Serializable {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @JsonIgnoreProperties("books")
-    private Set<Author> authors;
+    private Set<Author> authors = new HashSet<>();
 
     @OneToMany(mappedBy = "book")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @JsonIgnoreProperties("book")
-    private Set<Exemplary> exemplaries;
+    private Set<Exemplary> exemplaries = new HashSet<>();
 
     @OneToMany(mappedBy = "book")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @JsonIgnoreProperties("book")
-    private Set<Reservation> reservations;
+    private Set<Reservation> reservations = new HashSet<>();
 
     // Bi-directional synchronization :
 
-    public void setPublisher(Publisher publisher) {
-        this.publisher = publisher;
-        publisher.addBook(this);
-    }
-
     public void addAuthor(Author author) {
-        if (authors == null) {
-            authors = new HashSet<>();
-        }
         authors.add(author);
-        author.addBook(this);
+        author.getBooks().add(this);
     }
 
     public void addExemplary(Exemplary exemplary) {
-        if (exemplaries == null) {
-            exemplaries = new HashSet<>();
-        }
         exemplaries.add(exemplary);
         exemplary.setBook(this);
     }
 
     public void addReservation(Reservation reservation) {
-        if (reservations == null) {
-            reservations = new HashSet<>();
-        }
         reservations.add(reservation);
         reservation.setBook(this);
     }

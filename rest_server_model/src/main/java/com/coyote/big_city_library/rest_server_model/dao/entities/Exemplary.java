@@ -45,24 +45,11 @@ public class Exemplary implements Serializable {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @JsonIgnoreProperties("exemplary")
-    private Set<Loan> loans;
+    private Set<Loan> loans = new HashSet<>();
 
     // Bi-directional synchronization :
 
-    public void setLibrary(Library library) {
-        this.library = library;
-        library.addExemplary(this);
-    }
-
-    public void setBook(Book book) {
-        this.book = book;
-        book.addExemplary(this);
-    }
-
     public void addLoan(Loan loan) {
-        if (loans == null) {
-            loans = new HashSet<>();
-        }
         loans.add(loan);
         loan.setExemplary(this);
     }
