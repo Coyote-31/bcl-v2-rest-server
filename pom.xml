@@ -146,6 +146,13 @@
 		</dependencies>
 	</dependencyManagement>
 
+	<!-- ============== -->
+	<!--  Dependencies  -->
+	<!-- ============== -->
+
+	<dependencies>
+	</dependencies>
+
 	<!-- ======= -->
 	<!--  BUILD  -->
 	<!-- ======= -->

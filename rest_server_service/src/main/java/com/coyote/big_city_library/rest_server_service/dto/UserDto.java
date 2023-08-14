@@ -1,6 +1,7 @@
 package com.coyote.big_city_library.rest_server_service.dto;
 
 import java.util.Set;
+import javax.validation.constraints.NotNull;
 import com.coyote.big_city_library.rest_server_model.dao.attributes.Role;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
@@ -19,9 +20,11 @@ public class UserDto {
     private Integer id;
 
     @NonNull
+    @NotNull
     private String pseudo;
 
     @NonNull
+    @NotNull
     private String email;
 
     /**
@@ -33,6 +36,7 @@ public class UserDto {
     private String password;
 
     @NonNull
+    @NotNull
     private Role role = Role.USER;
 
     private Set<LoanDto> loans;
