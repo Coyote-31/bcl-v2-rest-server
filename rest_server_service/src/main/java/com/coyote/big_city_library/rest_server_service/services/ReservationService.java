@@ -160,7 +160,8 @@ public class ReservationService {
      * @see Reservation
      * @see ReservationDto
      */
-    public ReservationDto findReservationById(ReservationId reservationId) {
+    public ReservationDto findReservationById(ReservationIdDto reservationIdDto) {
+        ReservationId reservationId = reservationIdMapper.toModel(reservationIdDto);
         return reservationMapper.toDto(reservationRepository.findById(reservationId).orElse(null));
     }
 

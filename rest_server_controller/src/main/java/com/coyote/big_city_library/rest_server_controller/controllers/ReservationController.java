@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.coyote.big_city_library.rest_server_model.dao.entities.ReservationId;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationDto;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationIdDto;
 import com.coyote.big_city_library.rest_server_service.exceptions.UserAccessDeniedException;
@@ -59,12 +58,12 @@ public class ReservationController {
             @RequestParam Integer userId) {
 
         // Build the ID entity
-        ReservationId reservationId = new ReservationId();
-        reservationId.setBook(bookId);
-        reservationId.setUser(userId);
+        ReservationIdDto reservationIdDto = new ReservationIdDto();
+        reservationIdDto.setBookId(bookId);
+        reservationIdDto.setUserId(userId);
 
         // Get entity from repository
-        ReservationDto reservationDto = reservationService.findReservationById(reservationId);
+        ReservationDto reservationDto = reservationService.findReservationById(reservationIdDto);
         if (reservationDto != null) {
             log.debug("findReservationById() => reservation with book:{} and user:{} found",
                     reservationDto.getBook().getTitle(),
@@ -73,8 +72,8 @@ public class ReservationController {
 
         } else {
             log.debug("findReservationById() => No Reservation found with bookId:{} and userId:{}",
-                    reservationId.getBook(),
-                    reservationId.getUser());
+                    reservationIdDto.getBookId(),
+                    reservationIdDto.getUserId());
             return ResponseEntity.notFound().build();
         }
     }
