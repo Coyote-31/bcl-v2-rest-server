@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.coyote.big_city_library.rest_server_model.dao.entities.ReservationId;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationDto;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationIdDto;
+import com.coyote.big_city_library.rest_server_service.exceptions.UserAccessDeniedException;
 import com.coyote.big_city_library.rest_server_service.services.ReservationService;
-import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -40,11 +40,8 @@ public class ReservationController {
                     reservationSaved.getUser().getPseudo());
             return ResponseEntity.ok(reservationSaved);
 
-        } catch (JwtException e) {
-            log.warn("JwtException : {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        } catch (Exception e) {
-            log.warn("RG_Exception : {}", e.getMessage());
+        } catch (UserAccessDeniedException e) {
+            log.warn("UserAccessDeniedException : {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
@@ -100,15 +97,17 @@ public class ReservationController {
         ReservationIdDto reservationIdDto = new ReservationIdDto();
         reservationIdDto.setBookId(bookId);
         reservationIdDto.setUserId(userId);
+
         try {
             reservationService.deleteReservationById(reservationIdDto, token);
             log.debug("deleteReservation() => reservation with bookId:{} and userId:{} removed",
                     reservationIdDto.getBookId(),
                     reservationIdDto.getUserId());
             return ResponseEntity.ok().build();
-        } catch (JwtException e) {
-            log.warn("JwtException : {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        } catch (UserAccessDeniedException e) {
+            log.warn("UserAccessDeniedException : {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 

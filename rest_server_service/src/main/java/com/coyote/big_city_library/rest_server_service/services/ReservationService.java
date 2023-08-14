@@ -21,8 +21,8 @@ import com.coyote.big_city_library.rest_server_service.dto.ReservationIdDto;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationIdMapper;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationMapper;
 import com.coyote.big_city_library.rest_server_service.dto.UserMapper;
+import com.coyote.big_city_library.rest_server_service.exceptions.UserAccessDeniedException;
 import com.coyote.big_city_library.rest_server_service.security.JwtProvider;
-import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -71,12 +71,13 @@ public class ReservationService {
      * @param reservationIdDto : DTO carring BookId and UserId
      * @param token
      * @return reservationDto
-     * @throws Exception
+     * @throws UserAccessDeniedException
      * @see ReservationIdDto
      * @see ReservationDto
      * @see Reservation
      */
-    public ReservationDto addReservation(ReservationIdDto reservationIdDto, String token) throws Exception {
+    public ReservationDto addReservation(ReservationIdDto reservationIdDto, String token)
+            throws UserAccessDeniedException {
 
         // Exctract user from JWT
         String tokenUser = jwtProvider.getUsername(token);
@@ -90,7 +91,7 @@ public class ReservationService {
 
         // Verify user from JWT is the reservation user
         if (!tokenUser.equals(user.getPseudo())) {
-            throw new JwtException("Jwt user is different from reservation user");
+            throw new UserAccessDeniedException("Jwt user is different from reservation user");
         }
 
         // RG_Reservation_2
@@ -98,14 +99,14 @@ public class ReservationService {
                 book.getExemplaries().size() * 2,
                 book.getReservations().size());
         if (book.getReservations().size() >= book.getExemplaries().size() * 2) {
-            throw new Exception("RG_Reservation_2 : Reservation list is already full");
+            throw new UserAccessDeniedException("RG_Reservation_2 : Reservation list is already full");
         }
 
         // RG_Reservation_3
         for (Loan loan : user.getLoans()) {
             if (loan.getExemplary().getBook().getId().equals(book.getId())
                     && loan.getReturnDate() == null) {
-                throw new Exception("RG_Reservation_3 : Reservation of loaned book is forbidden");
+                throw new UserAccessDeniedException("RG_Reservation_3 : Reservation of loaned book is forbidden");
             }
         }
 
@@ -193,10 +194,12 @@ public class ReservationService {
      *
      * @param reservationIdDto
      * @param token
+     * @throws UserAccessDeniedException
      * @see Reservation
      * @see ReservationDto
      */
-    public void deleteReservationById(ReservationIdDto reservationIdDto, String token) {
+    public void deleteReservationById(ReservationIdDto reservationIdDto, String token)
+            throws UserAccessDeniedException {
 
         // Exctract user from JWT
         String tokenUser = jwtProvider.getUsername(token);
@@ -207,7 +210,7 @@ public class ReservationService {
 
         // Verify user from JWT is the reservation user
         if (!tokenUser.equals(user.getPseudo())) {
-            throw new JwtException("Jwt user is different from reservation user");
+            throw new UserAccessDeniedException("Jwt user is different from reservation user");
         }
 
         ReservationId reservationId = reservationIdMapper.toModel(reservationIdDto);
