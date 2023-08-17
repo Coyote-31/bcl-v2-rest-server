@@ -1,6 +1,7 @@
 package com.coyote.big_city_library.rest_server_service.dto.search_books;
 
 import java.util.List;
+import java.util.Set;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import com.coyote.big_city_library.rest_server_model.dao.entities.Author;
@@ -42,14 +43,16 @@ public interface SearchBookMapper {
     AuthorDto toDto(Author author);
 
     @Mapping(target = "books", ignore = true)
+    Set<AuthorDto> toAuthorDtoSet(Set<Author> authors);
+
+    @Mapping(target = "books", ignore = true)
     Author toModel(AuthorDto authorDto);
 
     // Exemplary
 
-    @Mapping(target = "book.exemplaries", ignore = true)
-    @Mapping(target = "book.available", ignore = true)
-    @Mapping(target = "book.exemplariesByLibrary", ignore = true)
     SearchExemplaryDto toDto(Exemplary exemplary);
+
+    Set<SearchExemplaryDto> toSearchExemplaryDtoSet(Set<Exemplary> exemplaries);
 
     // Library
 
@@ -100,9 +103,9 @@ public interface SearchBookMapper {
     // Reservation
 
     @Mapping(target = "book.reservations", ignore = true)
+    @Mapping(target = "book.authors.books", ignore = true)
+    @Mapping(target = "book.exemplaries", ignore = true)
+    @Mapping(target = "exemplary", ignore = true)
     ReservationDto toDto(Reservation reservation);
-
-    @Mapping(target = "book.reservations", ignore = true)
-    Reservation toModel(ReservationDto reservationDto);
 
 }

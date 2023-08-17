@@ -1,11 +1,14 @@
 package com.coyote.big_city_library.rest_server_service.dto.search_books;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import javax.swing.text.DateFormatter;
 import com.coyote.big_city_library.rest_server_service.dto.AuthorDto;
+import com.coyote.big_city_library.rest_server_service.dto.ExemplaryDto;
+import com.coyote.big_city_library.rest_server_service.dto.LoanDto;
 import com.coyote.big_city_library.rest_server_service.dto.PublisherDto;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationDto;
 import lombok.Getter;
@@ -27,9 +30,9 @@ public class SearchBookDto {
 
     private PublisherDto publisher;
 
-    private List<AuthorDto> authors;
+    private Set<AuthorDto> authors;
 
-    private List<SearchExemplaryDto> exemplaries;
+    private Set<SearchExemplaryDto> exemplaries;
 
     private String imgURL;
 
@@ -106,8 +109,9 @@ public class SearchBookDto {
             }
             log.debug("Exemplary id:{} => available : {}", exemplary.getId(), loanAvailable);
 
-            // If no loan or available
-            if (exemplary.getLoans().isEmpty() || Boolean.TRUE.equals(loanAvailable)) {
+            // If (no loan or available) and no reservation
+            if ((exemplary.getLoans().isEmpty() || Boolean.TRUE.equals(loanAvailable))
+                    && exemplary.getReservation() == null) {
 
                 // If library doesn't exist add it
                 if (!exemplariesByLibrary.containsKey(exemplary.getLibrary().getName())) {
@@ -130,6 +134,143 @@ public class SearchBookDto {
         log.debug("<---------- End ---------->");
 
         return exemplariesByLibrary;
+    }
+
+    /**
+     * Find the closest date for the next exemplary return
+     *
+     * @return The formatted date
+     */
+    public String getClosestDateReturnLoan() {
+
+        // If their is no exemplaries
+        if (exemplaries == null || exemplaries.isEmpty()) {
+            return "Il n'existe aucun exemplaire";
+        }
+
+        // if their is no loan
+        boolean isLoanEmpty = true;
+        for (SearchExemplaryDto exemplary : exemplaries) {
+            if (exemplary.getLoans() != null && !exemplary.getLoans().isEmpty()) {
+                isLoanEmpty = false;
+                break;
+            }
+        }
+
+        if (isLoanEmpty) {
+            return "Pas encore de prêt en cours";
+        }
+
+        // if their is loans but all are returned
+        boolean isAllLoansReturned = true;
+
+        for (SearchExemplaryDto exemplary : exemplaries) {
+
+            for (SearchLoanDto searchLoanDto : exemplary.getLoans()) {
+                if (searchLoanDto.getReturnDate() == null) {
+                    isAllLoansReturned = false;
+                    break;
+                }
+            }
+
+            if (!isAllLoansReturned) {
+                break;
+            }
+        }
+
+        if (isAllLoansReturned) {
+            return "Aucun prêt en cours";
+        }
+
+        // Find the next closest loan to be returned :
+
+        SearchLoanDto closestReturnLoan = null;
+
+        for (SearchExemplaryDto exemplary : exemplaries) {
+            for (SearchLoanDto searchLoanDto : exemplary.getLoans()) {
+
+                // Find a loan not yet returned or continue
+                if (searchLoanDto.getReturnDate() != null) {
+                    continue;
+                }
+
+                // Initial assigment
+                if (closestReturnLoan == null) {
+                    closestReturnLoan = searchLoanDto;
+                }
+
+                // If the loan is extended
+                if (Boolean.TRUE.equals(searchLoanDto.getExtend())) {
+
+                    // if the closestReturnLoan is extended
+                    if (Boolean.TRUE.equals(closestReturnLoan.getExtend())) {
+
+                        // Compare both expected return dates
+                        if (closestReturnLoan.getLoanDate()
+                                             .plusWeeks(8)
+                                             .isAfter(searchLoanDto.getLoanDate().plusWeeks(8))) {
+                            closestReturnLoan = searchLoanDto;
+                        }
+
+                        // if the closestReturnLoan is not extended
+                    } else {
+
+                        // Compare both expected return dates
+                        if (closestReturnLoan.getLoanDate()
+                                             .plusWeeks(4)
+                                             .isAfter(searchLoanDto.getLoanDate().plusWeeks(8))) {
+                            closestReturnLoan = searchLoanDto;
+                        }
+                    }
+
+                    // If the loan is not extended
+                } else {
+
+                    // if the closestReturnLoan is extended
+                    if (Boolean.TRUE.equals(closestReturnLoan.getExtend())) {
+
+                        // Compare both expected return dates
+                        if (closestReturnLoan.getLoanDate()
+                                             .plusWeeks(8)
+                                             .isAfter(searchLoanDto.getLoanDate().plusWeeks(4))) {
+                            closestReturnLoan = searchLoanDto;
+                        }
+
+                        // if the closestReturnLoan is not extended
+                    } else {
+
+                        // Compare both expected return dates
+                        if (closestReturnLoan.getLoanDate()
+                                             .plusWeeks(4)
+                                             .isAfter(searchLoanDto.getLoanDate().plusWeeks(4))) {
+                            closestReturnLoan = searchLoanDto;
+                        }
+                    }
+
+                }
+            }
+        }
+
+        // Exception if closestReturnLoan is null
+        if (closestReturnLoan == null) {
+            throw new NullPointerException("closestReturnLoan is null");
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String closestDateFormatted;
+
+        // Add 4 weeks if not extended
+        if (Boolean.FALSE.equals(closestReturnLoan.getExtend())) {
+
+            closestDateFormatted = closestReturnLoan.getLoanDate().plusWeeks(4).format(formatter);
+
+            // Add 8 weeks if extended
+        } else {
+
+            closestDateFormatted = closestReturnLoan.getLoanDate().plusWeeks(8).format(formatter);
+        }
+
+        return closestDateFormatted;
     }
 
 }
