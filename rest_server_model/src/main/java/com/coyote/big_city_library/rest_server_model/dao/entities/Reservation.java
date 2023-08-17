@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
@@ -39,5 +40,10 @@ public class Reservation implements Serializable {
 
     @Column(name = "notified_at")
     private ZonedDateTime notifiedAt;
+
+    @OneToOne
+    @JoinColumn(name = "exemplary_id")
+    @JsonIgnoreProperties("reservation")
+    private Exemplary exemplary;
 
 }

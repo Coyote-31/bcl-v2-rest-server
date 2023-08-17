@@ -26,4 +26,6 @@ public class ExemplaryDto {
 
     private Set<LoanDto> loans;
 
+    private ReservationDto reservation;
+
 }

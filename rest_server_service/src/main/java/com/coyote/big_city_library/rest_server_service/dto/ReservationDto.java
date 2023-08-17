@@ -28,4 +28,6 @@ public class ReservationDto {
 
     private ZonedDateTime notifiedAt;
 
+    private ExemplaryDto exemplary;
+
 }

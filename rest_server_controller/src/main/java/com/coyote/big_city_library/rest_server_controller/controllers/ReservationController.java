@@ -110,4 +110,10 @@ public class ReservationController {
         }
     }
 
+    @GetMapping("/batch/reservation-notification")
+    public void reservationNotification() {
+        log.debug("Batch Server Task : reservationNotification() - TimeStamp : " + System.currentTimeMillis() / 1000);
+        reservationService.reservationNotification();
+    }
+
 }

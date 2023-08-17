@@ -3,11 +3,13 @@ package com.coyote.big_city_library.rest_server_service.services;
 import java.text.MessageFormat;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.coyote.big_city_library.rest_server_model.dao.entities.Book;
+import com.coyote.big_city_library.rest_server_model.dao.entities.Exemplary;
 import com.coyote.big_city_library.rest_server_model.dao.entities.Loan;
 import com.coyote.big_city_library.rest_server_model.dao.entities.Reservation;
 import com.coyote.big_city_library.rest_server_model.dao.entities.ReservationId;
@@ -54,6 +56,9 @@ public class ReservationService {
 
     @Autowired
     protected UserMapper userMapper;
+
+    @Autowired
+    protected MailService mailService;
 
     @Autowired
     protected JwtProvider jwtProvider;
@@ -216,6 +221,130 @@ public class ReservationService {
 
         ReservationId reservationId = reservationIdMapper.toModel(reservationIdDto);
         reservationRepository.deleteById(reservationId);
+    }
+
+    /**
+     * Delete reservation notified more than 48h ago,
+     * Send mail to reservations with exemplary available
+     */
+    public void reservationNotification() {
+
+        // Delete reservations with notification older than 48h
+        List<Reservation> notifiedReservations = reservationRepository.findByNotifiedAtNotNull();
+
+        for (Reservation reservation : notifiedReservations) {
+            if (reservation.getNotifiedAt().plusHours(47).isBefore(ZonedDateTime.now(ZoneId.of("UTC")))) {
+                reservationRepository.delete(reservation);
+                log.debug("Reservation notification older than 48h deleted => bookId:{} userId:{}",
+                        reservation.getBook().getId(),
+                        reservation.getUser().getId());
+            }
+        }
+
+        // Send mail to users with reservation available :
+
+        // Find books with reservations
+        List<Book> reservationBooks = bookRepository.findDistinctByReservationsNotNull();
+        log.debug("Find {} book(s) with reservation", reservationBooks.size());
+
+        for (Book book : reservationBooks) {
+            log.debug("Find book with reservation => BookId:{}", book.getId());
+
+            // Check if their is un-notified reservation
+            boolean isUnNotified = false;
+
+            for (Reservation reservation : book.getReservations()) {
+                if (reservation.getNotifiedAt() == null) {
+                    isUnNotified = true;
+                }
+            }
+
+            // Go to the next book if their is no unNotified reservation
+            if (Boolean.FALSE.equals(isUnNotified)) {
+                log.debug("No unNotified reservation find for this book => BookId:{}", book.getId());
+                continue;
+            }
+
+            // Find available exemplaries of the book
+            List<Exemplary> availableExemplaries = new ArrayList<>();
+
+            for (Exemplary exemplary : book.getExemplaries()) {
+
+                // Not currently under reservation
+                if (exemplary.getReservation() == null) {
+
+                    // Check if returned by searching returnDate in loans
+                    if (exemplary.getLoans() != null && !exemplary.getLoans().isEmpty()) {
+
+                        boolean returned = true;
+
+                        for (Loan loan : exemplary.getLoans()) {
+                            if (loan.getReturnDate() == null) {
+                                returned = false;
+                            }
+                        }
+
+                        if (returned) {
+                            availableExemplaries.add(exemplary);
+                        }
+
+                        // Without loans
+                    } else {
+                        availableExemplaries.add(exemplary);
+                    }
+
+                }
+            }
+
+            // If any available exemplary
+            if (!availableExemplaries.isEmpty()) {
+
+                // Get reservations of the book without notifications ordered by createdAt
+                List<Reservation> sortedAvailableReservations =
+                        reservationRepository.findByBookAndNotifiedAtIsNullOrderByCreatedAt(book);
+
+                // debug verify sorting result
+                int count = 0;
+                for (Reservation reservation : sortedAvailableReservations) {
+                    count++;
+                    log.debug("Reservation #{} => bookId:{} userId:{}",
+                            count,
+                            reservation.getBook().getId(),
+                            reservation.getUser().getId());
+                }
+
+                // Assign availableExemplary to the next availableReservation
+                for (int i = 0; i < availableExemplaries.size(); i++) {
+
+                    Integer reservationMaxIndex = sortedAvailableReservations.size() - 1;
+
+                    if (i <= reservationMaxIndex) {
+
+                        // Update the reservation
+                        Reservation reservation = sortedAvailableReservations.get(i);
+                        reservation.setNotifiedAt(ZonedDateTime.now(ZoneId.of("UTC")));
+                        reservation.setExemplary(availableExemplaries.get(i));
+
+                        // Persist the reservation
+                        reservationRepository.save(reservation);
+
+                        // Mail the user
+                        mailService.sendUserReservationNotification(reservation);
+                        log.debug("Mail to userId:{} for bookId:{} exemplaryId:{}",
+                                reservation.getUser().getId(),
+                                book.getId(),
+                                availableExemplaries.get(i).getId());
+
+                    } else {
+                        break;
+                    }
+                }
+
+            } else {
+                log.debug("No available exemplary for bookId:{}", book.getId());
+            }
+        }
+
     }
 
 }

@@ -5,6 +5,7 @@ import com.coyote.big_city_library.rest_server_model.dao.entities.Book;
 import com.coyote.big_city_library.rest_server_model.dao.entities.Exemplary;
 import com.coyote.big_city_library.rest_server_model.dao.entities.Library;
 import com.coyote.big_city_library.rest_server_model.dao.entities.Loan;
+import com.coyote.big_city_library.rest_server_model.dao.entities.Reservation;
 import org.mapstruct.CollectionMappingStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -43,4 +44,13 @@ public interface ExemplaryMapper {
 
     @Mapping(target = "exemplary", ignore = true)
     Loan toModel(LoanDto loanDto);
+
+    // Reservation
+
+    @Mapping(target = "exemplary", ignore = true)
+    ReservationDto toDto(Reservation reservation);
+
+    @Mapping(target = "exemplary", ignore = true)
+    Reservation toModel(ReservationDto reservationDto);
+
 }

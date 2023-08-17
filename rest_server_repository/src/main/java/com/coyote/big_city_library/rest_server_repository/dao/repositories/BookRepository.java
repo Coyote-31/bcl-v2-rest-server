@@ -1,13 +1,12 @@
 package com.coyote.big_city_library.rest_server_repository.dao.repositories;
 
 import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.coyote.big_city_library.rest_server_model.dao.entities.Book;
+
 
 /**
  * Repository class handling books.
@@ -28,4 +27,5 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
                         @Param("authorName") String authorName,
                         @Param("publisherName") String publisherName);
 
+        List<Book> findDistinctByReservationsNotNull();
 }

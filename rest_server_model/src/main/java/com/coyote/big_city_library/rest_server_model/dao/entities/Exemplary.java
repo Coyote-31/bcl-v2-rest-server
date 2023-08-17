@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
@@ -46,6 +47,11 @@ public class Exemplary implements Serializable {
     @EqualsAndHashCode.Exclude
     @JsonIgnoreProperties("exemplary")
     private Set<Loan> loans = new HashSet<>();
+
+    @OneToOne(mappedBy = "exemplary")
+    @JsonIgnoreProperties("exemplary")
+    @EqualsAndHashCode.Exclude
+    private Reservation reservation;
 
     // Bi-directional synchronization :
 

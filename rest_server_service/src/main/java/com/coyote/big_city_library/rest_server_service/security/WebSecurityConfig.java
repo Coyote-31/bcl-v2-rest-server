@@ -53,7 +53,7 @@ public class WebSecurityConfig {
                               .hasAnyAuthority(ROLE_USER, ROLE_ADMIN)
                               .mvcMatchers("/loans/add", "/loans/add/partial", "/loans/update")
                               .hasAnyAuthority(ROLE_EMPLOYEE, ROLE_ADMIN)
-                              .mvcMatchers("/loans/batch/**")
+                              .mvcMatchers("/loans/batch/**", "/reservations/batch/**")
                               .hasAnyAuthority(ROLE_BATCH, ROLE_ADMIN)
                               .anyRequest()
                               .hasAuthority(ROLE_ADMIN))

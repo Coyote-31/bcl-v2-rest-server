@@ -7,6 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import com.coyote.big_city_library.rest_server_model.dao.entities.Author;
 import com.coyote.big_city_library.rest_server_model.dao.entities.Book;
+import com.coyote.big_city_library.rest_server_model.dao.entities.Exemplary;
 import com.coyote.big_city_library.rest_server_model.dao.entities.Publisher;
 import com.coyote.big_city_library.rest_server_model.dao.entities.Reservation;
 import com.coyote.big_city_library.rest_server_model.dao.entities.User;
@@ -59,5 +60,13 @@ public interface ReservationMapper {
 
     @Mapping(target = "books", ignore = true)
     Publisher toModel(PublisherDto publisherDto);
+
+    // Exemplary
+
+    @Mapping(target = "reservation", ignore = true)
+    ExemplaryDto toDto(Exemplary exemplary);
+
+    @Mapping(target = "reservation", ignore = true)
+    Exemplary toModel(ExemplaryDto exemplaryDto);
 
 }
