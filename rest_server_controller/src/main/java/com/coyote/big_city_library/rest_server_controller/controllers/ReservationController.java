@@ -3,10 +3,10 @@ package com.coyote.big_city_library.rest_server_controller.controllers;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationDto;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationIdDto;
+import com.coyote.big_city_library.rest_server_service.dto.reservation.my.MyReservationDto;
 import com.coyote.big_city_library.rest_server_service.exceptions.UserAccessDeniedException;
 import com.coyote.big_city_library.rest_server_service.services.ReservationService;
 import lombok.extern.slf4j.Slf4j;
@@ -30,19 +31,15 @@ public class ReservationController {
 
     @PostMapping("/add")
     public ResponseEntity<ReservationDto> addReservation(
-            @Valid @RequestBody ReservationIdDto reservationIdDto,
-            @RequestHeader(name = "Authorization") String token) {
-        try {
-            ReservationDto reservationSaved = reservationService.addReservation(reservationIdDto, token);
-            log.debug("addReservation() => reservation for book:{} and user:{} added",
-                    reservationSaved.getBook().getTitle(),
-                    reservationSaved.getUser().getPseudo());
-            return ResponseEntity.ok(reservationSaved);
+            @RequestParam Integer bookId,
+            @RequestHeader(name = "Authorization") String token)
+            throws UserAccessDeniedException {
 
-        } catch (UserAccessDeniedException e) {
-            log.warn("UserAccessDeniedException : {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+        ReservationDto reservationSaved = reservationService.addReservation(bookId, token);
+        log.debug("addReservation() => reservation for book:{} and user:{} added",
+                reservationSaved.getBook().getTitle(),
+                reservationSaved.getUser().getPseudo());
+        return ResponseEntity.ok(reservationSaved);
     }
 
     @GetMapping("")
@@ -78,6 +75,19 @@ public class ReservationController {
         }
     }
 
+    @GetMapping("/user/{pseudo}")
+    public List<MyReservationDto> findReservationsByUserPseudo(@PathVariable String pseudo) {
+        List<MyReservationDto> reservations = reservationService.findReservationsByUserPseudo(pseudo);
+        if (reservations != null) {
+            log.debug("findReservationsByUserPseudo() => {} Reservation(s) with pseudo '{}' found",
+                    reservations.size(),
+                    pseudo);
+        } else {
+            log.debug("findReservationsByUserPseudo() => No reservation found with pseudo '{}'", pseudo);
+        }
+        return reservations;
+    }
+
     @PutMapping("/update")
     public ReservationDto updateReservation(@Valid @RequestBody ReservationDto reservationDto) {
         ReservationDto reservationUpdated = reservationService.updateReservation(reservationDto);
@@ -91,23 +101,18 @@ public class ReservationController {
     public ResponseEntity<Void> deleteReservationById(
             @RequestParam Integer bookId,
             @RequestParam Integer userId,
-            @RequestHeader(name = "Authorization") String token) {
+            @RequestHeader(name = "Authorization") String token)
+            throws UserAccessDeniedException {
 
         ReservationIdDto reservationIdDto = new ReservationIdDto();
         reservationIdDto.setBookId(bookId);
         reservationIdDto.setUserId(userId);
 
-        try {
-            reservationService.deleteReservationById(reservationIdDto, token);
-            log.debug("deleteReservation() => reservation with bookId:{} and userId:{} removed",
-                    reservationIdDto.getBookId(),
-                    reservationIdDto.getUserId());
-            return ResponseEntity.ok().build();
-
-        } catch (UserAccessDeniedException e) {
-            log.warn("UserAccessDeniedException : {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+        reservationService.deleteReservationById(reservationIdDto, token);
+        log.debug("deleteReservation() => reservation with bookId:{} and userId:{} removed",
+                reservationIdDto.getBookId(),
+                reservationIdDto.getUserId());
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/batch/reservation-notification")

@@ -5,10 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import javax.swing.text.DateFormatter;
 import com.coyote.big_city_library.rest_server_service.dto.AuthorDto;
-import com.coyote.big_city_library.rest_server_service.dto.ExemplaryDto;
-import com.coyote.big_city_library.rest_server_service.dto.LoanDto;
 import com.coyote.big_city_library.rest_server_service.dto.PublisherDto;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationDto;
 import lombok.Getter;
@@ -271,6 +268,34 @@ public class SearchBookDto {
         }
 
         return closestDateFormatted;
+    }
+
+    public boolean isAlreadyReservedByPseudo(String pseudo) {
+        boolean isAlreadyReserved = false;
+
+        for (ReservationDto reservationDto : reservations) {
+
+            if (reservationDto.getUser().getPseudo().equals(pseudo)) {
+                isAlreadyReserved = true;
+            }
+        }
+
+        return isAlreadyReserved;
+    }
+
+    public boolean isAlreadyLoanedByPseudo(String pseudo) {
+
+        for (SearchExemplaryDto exemplary : exemplaries) {
+            for (SearchLoanDto loan : exemplary.getLoans()) {
+
+                if (loan.getUser().getPseudo().equals(pseudo)
+                        && loan.getReturnDate() == null) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
 }

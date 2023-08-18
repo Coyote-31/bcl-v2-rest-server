@@ -23,6 +23,8 @@ import com.coyote.big_city_library.rest_server_service.dto.ReservationIdDto;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationIdMapper;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationMapper;
 import com.coyote.big_city_library.rest_server_service.dto.UserMapper;
+import com.coyote.big_city_library.rest_server_service.dto.reservation.my.MyReservationDto;
+import com.coyote.big_city_library.rest_server_service.dto.reservation.my.MyReservationMapper;
 import com.coyote.big_city_library.rest_server_service.exceptions.UserAccessDeniedException;
 import com.coyote.big_city_library.rest_server_service.security.JwtProvider;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +52,9 @@ public class ReservationService {
 
     @Autowired
     protected ReservationMapper reservationMapper;
+
+    @Autowired
+    protected MyReservationMapper myReservationMapper;
 
     @Autowired
     protected BookMapper bookMapper;
@@ -81,7 +86,7 @@ public class ReservationService {
      * @see ReservationDto
      * @see Reservation
      */
-    public ReservationDto addReservation(ReservationIdDto reservationIdDto, String token)
+    public ReservationDto addReservation(Integer bookId, String token)
             throws UserAccessDeniedException {
 
         // Exctract user from JWT
@@ -89,14 +94,15 @@ public class ReservationService {
         log.debug("User name : {}", tokenUser);
 
         // Create Book entity
-        Book book = bookRepository.findById(reservationIdDto.getBookId()).orElseThrow();
+        Book book = bookRepository.findById(bookId).orElseThrow();
 
         // Create User entity
-        User user = userRepository.findById(reservationIdDto.getUserId()).orElseThrow();
+        User user = userRepository.findByPseudo(tokenUser).orElseThrow();
 
         // Verify user from JWT is the reservation user
         if (!tokenUser.equals(user.getPseudo())) {
-            throw new UserAccessDeniedException("Jwt user is different from reservation user");
+            log.warn("UserAccessDeniedException : User can only add their own reservation");
+            throw new UserAccessDeniedException("User can only add their own reservation");
         }
 
         // RG_Reservation_2
@@ -104,6 +110,7 @@ public class ReservationService {
                 book.getExemplaries().size() * 2,
                 book.getReservations().size());
         if (book.getReservations().size() >= book.getExemplaries().size() * 2) {
+            log.warn("UserAccessDeniedException : RG_Reservation_2 => Reservation list is already full");
             throw new UserAccessDeniedException("RG_Reservation_2 : Reservation list is already full");
         }
 
@@ -111,6 +118,7 @@ public class ReservationService {
         for (Loan loan : user.getLoans()) {
             if (loan.getExemplary().getBook().getId().equals(book.getId())
                     && loan.getReturnDate() == null) {
+                log.warn("UserAccessDeniedException : RG_Reservation_3 : Reservation of loaned book is forbidden");
                 throw new UserAccessDeniedException("RG_Reservation_3 : Reservation of loaned book is forbidden");
             }
         }
@@ -126,8 +134,8 @@ public class ReservationService {
 
         // Persist
         ReservationId reservationId = new ReservationId();
-        reservationId.setBook(reservationIdDto.getBookId());
-        reservationId.setUser(reservationIdDto.getUserId());
+        reservationId.setBook(book.getId());
+        reservationId.setUser(user.getId());
 
         if (!reservationRepository.existsById(reservationId)) {
             reservation = reservationRepository.save(reservation);
@@ -135,8 +143,8 @@ public class ReservationService {
             String message = "Reservation entity with bookId:{0} userId:{1} already exists";
             String messageFormatted = MessageFormat.format(
                     message,
-                    reservationIdDto.getBookId(),
-                    reservationIdDto.getUserId());
+                    book.getId(),
+                    user.getId());
             throw new EntityExistsException(messageFormatted);
         }
 
@@ -168,6 +176,16 @@ public class ReservationService {
     public ReservationDto findReservationById(ReservationIdDto reservationIdDto) {
         ReservationId reservationId = reservationIdMapper.toModel(reservationIdDto);
         return reservationMapper.toDto(reservationRepository.findById(reservationId).orElse(null));
+    }
+
+    /**
+     * Returns all reservations owned by a given user's pseudo
+     *
+     * @param pseudo of the user
+     * @return The reservations list or null if none found.
+     */
+    public List<MyReservationDto> findReservationsByUserPseudo(String pseudo) {
+        return myReservationMapper.toDto(reservationRepository.findByUserPseudoOrderByCreatedAtAsc(pseudo));
     }
 
     /**
@@ -216,7 +234,8 @@ public class ReservationService {
 
         // Verify user from JWT is the reservation user
         if (!tokenUser.equals(user.getPseudo())) {
-            throw new UserAccessDeniedException("Jwt user is different from reservation user");
+            log.warn("UserAccessDeniedException : User can only delete their own reservation");
+            throw new UserAccessDeniedException("User can only delete their own reservation");
         }
 
         ReservationId reservationId = reservationIdMapper.toModel(reservationIdDto);

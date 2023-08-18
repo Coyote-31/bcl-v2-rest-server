@@ -18,4 +18,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Reserv
 
     List<Reservation> findByBookAndNotifiedAtIsNullOrderByCreatedAt(Book book);
 
+    List<Reservation> findByUserPseudoOrderByCreatedAtAsc(String pseudo);
+
 }

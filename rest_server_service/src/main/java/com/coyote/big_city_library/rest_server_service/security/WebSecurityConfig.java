@@ -48,6 +48,7 @@ public class WebSecurityConfig {
                                       "/libraries",
                                       "/loans/user/**",
                                       "/loans/extend/**",
+                                      "/reservations/user/**",
                                       "/reservations/add",
                                       "/reservations/delete")
                               .hasAnyAuthority(ROLE_USER, ROLE_ADMIN)

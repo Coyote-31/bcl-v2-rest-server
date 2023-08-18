@@ -3,50 +3,58 @@
 -- Host: localhost    Database: big_city_library
 -- ------------------------------------------------------
 -- Server version	8.0.15
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */
-;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */
-;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */
-;
-/*!50503 SET NAMES utf8 */
-;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */
-;
-/*!40103 SET TIME_ZONE='+00:00' */
-;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */
-;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */
-;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */
-;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */
-;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+
+/*!50503 SET NAMES utf8 */;
+
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+
+/*!40103 SET TIME_ZONE='+00:00' */;
+
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
 --
 -- Dumping data for table `author`
 --
 LOCK TABLES `author` WRITE;
-/*!40000 ALTER TABLE `author` DISABLE KEYS */
-;
-INSERT INTO `author`
-VALUES (1, 'Vil Coyote'),
+
+/*!40000 ALTER TABLE `author` DISABLE KEYS */;
+
+INSERT INTO
+    `author`
+VALUES
+    (1, 'Vil Coyote'),
     (2, 'Sun Tzu'),
     (3, 'Nicolas Machiavel'),
     (4, 'Stephen King'),
     (5, 'Émile Erckmann'),
     (6, 'Alexandre Chatrian');
-/*!40000 ALTER TABLE `author` ENABLE KEYS */
-;
+
+/*!40000 ALTER TABLE `author` ENABLE KEYS */;
+
 UNLOCK TABLES;
+
 --
 -- Dumping data for table `book`
 --
 LOCK TABLES `book` WRITE;
-/*!40000 ALTER TABLE `book` DISABLE KEYS */
-;
-INSERT INTO `book`
-VALUES (
+
+/*!40000 ALTER TABLE `book` DISABLE KEYS */;
+
+INSERT INTO
+    `book`
+VALUES
+    (
         1,
         '2022-01-06',
         'Coyote céleste',
@@ -81,33 +89,43 @@ VALUES (
         4,
         'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Malassis_illustration_de_L_Ami_Fritz_couverture.jpeg/800px-Malassis_illustration_de_L_Ami_Fritz_couverture.jpeg'
     );
-/*!40000 ALTER TABLE `book` ENABLE KEYS */
-;
+
+/*!40000 ALTER TABLE `book` ENABLE KEYS */;
+
 UNLOCK TABLES;
+
 --
 -- Dumping data for table `book_author`
 --
 LOCK TABLES `book_author` WRITE;
-/*!40000 ALTER TABLE `book_author` DISABLE KEYS */
-;
-INSERT INTO `book_author`
-VALUES (1, 1),
+
+/*!40000 ALTER TABLE `book_author` DISABLE KEYS */;
+
+INSERT INTO
+    `book_author`
+VALUES
+    (1, 1),
     (2, 2),
     (3, 3),
     (4, 4),
     (5, 5),
     (5, 6);
-/*!40000 ALTER TABLE `book_author` ENABLE KEYS */
-;
+
+/*!40000 ALTER TABLE `book_author` ENABLE KEYS */;
+
 UNLOCK TABLES;
+
 --
 -- Dumping data for table `exemplary`
 --
 LOCK TABLES `exemplary` WRITE;
-/*!40000 ALTER TABLE `exemplary` DISABLE KEYS */
-;
-INSERT INTO `exemplary`
-VALUES (1, 1, 1),
+
+/*!40000 ALTER TABLE `exemplary` DISABLE KEYS */;
+
+INSERT INTO
+    `exemplary`
+VALUES
+    (1, 1, 1),
     (2, 2, 2),
     (3, 3, 2),
     (4, 4, 1),
@@ -115,17 +133,22 @@ VALUES (1, 1, 1),
     (6, 3, 3),
     (7, 3, 1),
     (8, 5, 1);
-/*!40000 ALTER TABLE `exemplary` ENABLE KEYS */
-;
+
+/*!40000 ALTER TABLE `exemplary` ENABLE KEYS */;
+
 UNLOCK TABLES;
+
 --
 -- Dumping data for table `library`
 --
 LOCK TABLES `library` WRITE;
-/*!40000 ALTER TABLE `library` DISABLE KEYS */
-;
-INSERT INTO `library`
-VALUES (
+
+/*!40000 ALTER TABLE `library` DISABLE KEYS */;
+
+INSERT INTO
+    `library`
+VALUES
+    (
         1,
         '42 rue de la Réponse',
         'Bibliothèque du centre-ville',
@@ -143,50 +166,64 @@ VALUES (
         'Bibliothèque du musée',
         '0633003300'
     );
-/*!40000 ALTER TABLE `library` ENABLE KEYS */
-;
+
+/*!40000 ALTER TABLE `library` ENABLE KEYS */;
+
 UNLOCK TABLES;
+
 --
 -- Dumping data for table `loan`
 --
 LOCK TABLES `loan` WRITE;
-/*!40000 ALTER TABLE `loan` DISABLE KEYS */
-;
-INSERT INTO `loan`
-VALUES (1, 1, '2022-01-15', '2022-03-14', 1, 3),
-    (2, 1, '2022-05-15', NULL, 2, 3),
+
+/*!40000 ALTER TABLE `loan` DISABLE KEYS */;
+
+INSERT INTO
+    `loan`
+VALUES
+    (1, 1, '2022-01-15', '2022-03-14', 1, 3),
+    (2, 0, '2022-05-15', NULL, 2, 3),
     (3, 0, '2022-03-15', '2022-03-28', 4, 3),
     (4, 0, '2022-05-15', NULL, 1, 4),
     (8, 0, '2022-03-15', '2022-03-28', 5, 4),
     (9, 0, '2022-03-28', '2022-03-28', 4, 4),
-    (11, 1, '2022-06-01', NULL, 8, 3),
-    (13, 0, '2022-07-01', '2022-07-15', 4, 3);
-/*!40000 ALTER TABLE `loan` ENABLE KEYS */
-;
+    (11, 1, '2022-06-01', NULL, 8, 3);
+
+/*!40000 ALTER TABLE `loan` ENABLE KEYS */;
+
 UNLOCK TABLES;
+
 --
 -- Dumping data for table `publisher`
 --
 LOCK TABLES `publisher` WRITE;
-/*!40000 ALTER TABLE `publisher` DISABLE KEYS */
-;
-INSERT INTO `publisher`
-VALUES (1, 'Coyote Corp.'),
+
+/*!40000 ALTER TABLE `publisher` DISABLE KEYS */;
+
+INSERT INTO
+    `publisher`
+VALUES
+    (1, 'Coyote Corp.'),
     (2, 'Hachette'),
     (3, 'Gallimard'),
     (4, 'J''ai Lu'),
     (5, 'Albin Michel');
-/*!40000 ALTER TABLE `publisher` ENABLE KEYS */
-;
+
+/*!40000 ALTER TABLE `publisher` ENABLE KEYS */;
+
 UNLOCK TABLES;
+
 --
 -- Dumping data for table `user`
 --
 LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */
-;
-INSERT INTO `user`
-VALUES (
+
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+
+INSERT INTO
+    `user`
+VALUES
+    (
         1,
         'Coyote-BCL@yopmail.com',
         '$2y$10$1FDqiU6gba1fSUbAkLnnh.bIizVcUWuNU3bBNV4WDGCyaRZuAn.ky',
@@ -228,23 +265,25 @@ VALUES (
         'Anich',
         'EMPLOYEE'
     );
-/*!40000 ALTER TABLE `user` ENABLE KEYS */
-;
+
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+
 UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */
-;
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */
-;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */
-;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */
-;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */
-;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */
-;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */
-;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */
-;
--- Dump completed on 2023-07-12 19:41:04
+
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2023-08-18 10:45:11

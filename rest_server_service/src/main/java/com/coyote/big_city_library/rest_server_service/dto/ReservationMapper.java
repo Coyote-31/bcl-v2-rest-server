@@ -28,10 +28,14 @@ public interface ReservationMapper {
     // Book
 
     @Mapping(target = "reservations", ignore = true)
+    //@Mapping(target = "reservations.book", ignore = true)
+    //@Mapping(target = "reservations", qualifiedByName = "nestedReservationMapper")
     @Mapping(target = "exemplaries", ignore = true)
     BookDto toDto(Book book);
 
     @Mapping(target = "reservations", ignore = true)
+    //@Mapping(target = "reservations.book", ignore = true)
+    //@Mapping(target = "reservations", qualifiedByName = "nestedReservationMapper")
     @Mapping(target = "exemplaries", ignore = true)
     Book toModel(BookDto bookDto);
 
@@ -64,9 +68,17 @@ public interface ReservationMapper {
     // Exemplary
 
     @Mapping(target = "reservation", ignore = true)
+    @Mapping(target = "library.exemplaries", ignore = true)
     ExemplaryDto toDto(Exemplary exemplary);
 
     @Mapping(target = "reservation", ignore = true)
+    @Mapping(target = "library.exemplaries", ignore = true)
     Exemplary toModel(ExemplaryDto exemplaryDto);
 
+    // Nested reservation
+
+    // @Named("nestedReservationMapper")
+    // @Mapping(target = "book", ignore = true)
+    // @Mapping(target = "exemplary", ignore = true)
+    // ReservationDto nestedToDto(Reservation reservation);
 }
