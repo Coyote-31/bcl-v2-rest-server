@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Getter
@@ -32,28 +30,4 @@ public class ReservationDto {
 
     private ExemplaryDto exemplary;
 
-    // /**
-    //  * Utilities getters
-    //  */
-
-    // public Integer getReservationsSize() {
-    //     return book.getReservations().size();
-    // }
-
-    // public Integer getUserReservationPosition() {
-
-    //     // Convert reservations Set to List
-    //     List<ReservationDto> reservations = new ArrayList<>(book.getReservations());
-
-    //     // Sort by CreatedAt Ascending
-    //     reservations.sort((a, b) -> a.getCreatedAt().compareTo(b.createdAt));
-
-    //     int count = 1;
-    //     for (ReservationDto reservation : reservations) {
-    //         log.debug("Reservation #{} -> createdAt:{}", count, reservation.getCreatedAt());
-    //         count++;
-    //     }
-
-    //     return count;
-    // }
 }
