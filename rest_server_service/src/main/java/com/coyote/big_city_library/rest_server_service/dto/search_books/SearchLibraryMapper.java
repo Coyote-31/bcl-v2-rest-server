@@ -14,6 +14,4 @@ public interface SearchLibraryMapper {
     SearchLibraryDto toDto(Library library);
 
     List<SearchLibraryDto> toDto(List<Library> libraries);
-
-    Library toModel(SearchLibraryDto libraryDto);
 }

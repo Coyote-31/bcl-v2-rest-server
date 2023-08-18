@@ -116,6 +116,7 @@ public class LoanService {
 
         // Verify user from JWT is the loan user
         if (!tokenUser.equals(loan.getUser().getPseudo())) {
+            log.warn("UserAccessDeniedException : Users can only extends their own loans");
             throw new UserAccessDeniedException("Users can only extends their own loans");
         }
 
@@ -124,6 +125,7 @@ public class LoanService {
         LocalDate fourWeeksEarlier = today.minusWeeks(4);
 
         if (loan.getLoanDate().isBefore(fourWeeksEarlier)) {
+            log.warn("LoanOverdueException : Loans can't be extended after 4 weeks");
             throw new LoanOverdueException("Loans can't be extended after 4 weeks");
         }
 

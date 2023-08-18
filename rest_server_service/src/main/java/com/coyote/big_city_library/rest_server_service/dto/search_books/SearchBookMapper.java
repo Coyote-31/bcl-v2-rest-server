@@ -1,6 +1,7 @@
 package com.coyote.big_city_library.rest_server_service.dto.search_books;
 
 import java.util.List;
+import java.util.Set;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import com.coyote.big_city_library.rest_server_model.dao.entities.Author;
@@ -9,12 +10,14 @@ import com.coyote.big_city_library.rest_server_model.dao.entities.Exemplary;
 import com.coyote.big_city_library.rest_server_model.dao.entities.Library;
 import com.coyote.big_city_library.rest_server_model.dao.entities.Loan;
 import com.coyote.big_city_library.rest_server_model.dao.entities.Publisher;
+import com.coyote.big_city_library.rest_server_model.dao.entities.Reservation;
 import com.coyote.big_city_library.rest_server_model.dao.entities.User;
 import com.coyote.big_city_library.rest_server_service.dto.AuthorDto;
-import com.coyote.big_city_library.rest_server_service.dto.ExemplaryDto;
+import com.coyote.big_city_library.rest_server_service.dto.BookDto;
 import com.coyote.big_city_library.rest_server_service.dto.LibraryDto;
 import com.coyote.big_city_library.rest_server_service.dto.LoanDto;
 import com.coyote.big_city_library.rest_server_service.dto.PublisherDto;
+import com.coyote.big_city_library.rest_server_service.dto.ReservationDto;
 import com.coyote.big_city_library.rest_server_service.dto.UserDto;
 
 @Mapper(componentModel = "spring")
@@ -26,7 +29,13 @@ public interface SearchBookMapper {
 
     List<SearchBookDto> toDto(List<Book> books);
 
-    Book toModel(SearchBookDto bookDto);
+    // Book
+
+    @Mapping(target = "publisher.books", ignore = true)
+    @Mapping(target = "authors.books", ignore = true)
+    @Mapping(target = "exemplaries", ignore = true)
+    @Mapping(target = "reservations", ignore = true)
+    BookDto bookToBookDto(Book book);
 
     // Author
 
@@ -34,21 +43,16 @@ public interface SearchBookMapper {
     AuthorDto toDto(Author author);
 
     @Mapping(target = "books", ignore = true)
+    Set<AuthorDto> toAuthorDtoSet(Set<Author> authors);
+
+    @Mapping(target = "books", ignore = true)
     Author toModel(AuthorDto authorDto);
 
     // Exemplary
 
-    @Mapping(target = "book", ignore = true)
     SearchExemplaryDto toDto(Exemplary exemplary);
 
-    @Mapping(target = "book", ignore = true)
-    Exemplary toModel(SearchExemplaryDto searchExemplaryDto);
-
-    @Mapping(target = "book", ignore = true)
-    ExemplaryDto toExemplaryDto(Exemplary exemplary);
-
-    @Mapping(target = "book", ignore = true)
-    Exemplary toExemplaryModel(ExemplaryDto exemplaryDto);
+    Set<SearchExemplaryDto> toSearchExemplaryDtoSet(Set<Exemplary> exemplaries);
 
     // Library
 
@@ -81,9 +85,11 @@ public interface SearchBookMapper {
     // User
 
     @Mapping(target = "loans", ignore = true)
+    @Mapping(target = "reservations", ignore = true)
     UserDto toUserDto(User user);
 
     @Mapping(target = "loans", ignore = true)
+    @Mapping(target = "reservations", ignore = true)
     User toUserModel(UserDto userDto);
 
     // Publisher
@@ -93,5 +99,13 @@ public interface SearchBookMapper {
 
     @Mapping(target = "books", ignore = true)
     Publisher toModel(PublisherDto publisherDto);
+
+    // Reservation
+
+    @Mapping(target = "book.reservations", ignore = true)
+    @Mapping(target = "book.authors.books", ignore = true)
+    @Mapping(target = "book.exemplaries", ignore = true)
+    @Mapping(target = "exemplary", ignore = true)
+    ReservationDto toDto(Reservation reservation);
 
 }

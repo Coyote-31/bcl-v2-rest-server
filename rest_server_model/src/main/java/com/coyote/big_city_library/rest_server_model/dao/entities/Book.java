@@ -1,5 +1,6 @@
 package com.coyote.big_city_library.rest_server_model.dao.entities;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,16 +15,19 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "book")
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
-public class Book {
+@ToString(includeFieldNames = true)
+@EqualsAndHashCode
+public class Book implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,40 +44,45 @@ public class Book {
     @JoinColumn(name = "publisher_id", nullable = false)
     private Publisher publisher;
 
+    @Column(name = "img_url")
+    private String imgURL;
+
     @ManyToMany
     @JoinTable(
             name = "book_author",
             joinColumns = @JoinColumn(name = "book_id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "author_id", nullable = false))
-    private Set<Author> authors;
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonIgnoreProperties("books")
+    private Set<Author> authors = new HashSet<>();
 
     @OneToMany(mappedBy = "book")
-    private Set<Exemplary> exemplaries;
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonIgnoreProperties("book")
+    private Set<Exemplary> exemplaries = new HashSet<>();
 
-    @Column(name = "img_url")
-    private String imgURL;
+    @OneToMany(mappedBy = "book")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonIgnoreProperties("book")
+    private Set<Reservation> reservations = new HashSet<>();
 
     // Bi-directional synchronization :
 
-    public void setPublisher(Publisher publisher) {
-        this.publisher = publisher;
-        publisher.addBook(this);
-    }
-
     public void addAuthor(Author author) {
-        if (authors == null) {
-            authors = new HashSet<>();
-        }
         authors.add(author);
-        author.addBook(this);
+        author.getBooks().add(this);
     }
 
     public void addExemplary(Exemplary exemplary) {
-        if (exemplaries == null) {
-            exemplaries = new HashSet<>();
-        }
         exemplaries.add(exemplary);
         exemplary.setBook(this);
     }
 
+    public void addReservation(Reservation reservation) {
+        reservations.add(reservation);
+        reservation.setBook(this);
+    }
 }

@@ -1,8 +1,8 @@
 package com.coyote.big_city_library.rest_server_model.dao.entities;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,19 +14,22 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
-
 import com.coyote.big_city_library.rest_server_model.dao.attributes.Role;
-
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "user")
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
-public class User {
+@ToString(includeFieldNames = true)
+@EqualsAndHashCode
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,6 +47,8 @@ public class User {
 
     @Column(name = "password", columnDefinition = "CHAR(60) BINARY NOT NULL")
     @Size(min = 59, max = 60)
+    @ToString.Exclude
+    @JsonProperty(access = Access.WRITE_ONLY)
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -51,16 +56,26 @@ public class User {
     private Role role;
 
     @OneToMany(mappedBy = "user")
-    private Set<Loan> loans;
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonIgnoreProperties("user")
+    private Set<Loan> loans = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonIgnoreProperties("user")
+    private Set<Reservation> reservations = new HashSet<>();
 
     // Bi-directional synchronization :
 
     public void addLoan(Loan loan) {
-        if (loans == null) {
-            loans = new HashSet<>();
-        }
         loans.add(loan);
         loan.setUser(this);
     }
 
+    public void addReservation(Reservation reservation) {
+        reservations.add(reservation);
+        reservation.setUser(this);
+    }
 }

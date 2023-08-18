@@ -34,9 +34,11 @@ public interface LoanMapper {
     // User
 
     @Mapping(target = "loans", ignore = true)
+    @Mapping(target = "reservations", ignore = true)
     UserDto toDto(User user);
 
     @Mapping(target = "loans", ignore = true)
+    @Mapping(target = "reservations", ignore = true)
     User toModel(UserDto userDto);
 
     // Author
@@ -50,9 +52,11 @@ public interface LoanMapper {
     // Book
 
     @Mapping(target = "exemplaries", ignore = true)
+    @Mapping(target = "reservations", ignore = true)
     BookDto toDto(Book book);
 
     @Mapping(target = "exemplaries", ignore = true)
+    @Mapping(target = "reservations", ignore = true)
     Book toModel(BookDto bookDto);
 
     // Publisher

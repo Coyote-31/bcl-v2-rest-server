@@ -1,10 +1,9 @@
 package com.coyote.big_city_library.rest_server_service.dto.search_books;
 
 import java.util.Set;
-
+import com.coyote.big_city_library.rest_server_service.dto.ReservationDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.Setter;
 
 @NoArgsConstructor
@@ -18,6 +17,6 @@ public class SearchExemplaryDto {
 
     private Set<SearchLoanDto> loans;
 
-    @NonNull
-    private SearchBookDto book;
+    private ReservationDto reservation;
+
 }

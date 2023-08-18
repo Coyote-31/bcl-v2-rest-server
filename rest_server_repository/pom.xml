@@ -11,7 +11,7 @@
 	<parent>
 		<groupId>com.coyote.big_city_library</groupId>
 		<artifactId>rest_server</artifactId>
-		<version>${revision}</version>
+		<version>1.0.1</version>
 	</parent>
 
 	<!-- ========= -->
@@ -33,8 +33,38 @@
 			<artifactId>rest_server_model</artifactId>
 		</dependency>
 
-		<!-- ===== Dependencies ===== -->
+		<!-- ===== Tests ===== -->
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- ===== Logger ===== -->
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
 	</dependencies>
+
+	<!-- ======= -->
+	<!--  BUILD  -->
+	<!-- ======= -->
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<configuration>
+					<argLine>-Duser.timezone=UTC</argLine>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>

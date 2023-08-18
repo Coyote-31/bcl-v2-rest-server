@@ -1,7 +1,7 @@
 package com.coyote.big_city_library.rest_server_model.dao.entities;
 
+import java.io.Serializable;
 import java.time.LocalDate;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,17 +10,19 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "loan")
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
-public class Loan {
+@ToString(includeFieldNames = true)
+@EqualsAndHashCode
+public class Loan implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,22 +40,12 @@ public class Loan {
 
     @ManyToOne
     @JoinColumn(name = "exemplary_id", nullable = false)
+    @JsonIgnoreProperties("loans")
     private Exemplary exemplary;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnoreProperties("loans")
     private User user;
-
-    // Bi-directional synchronization :
-
-    public void setExemplary(Exemplary exemplary) {
-        this.exemplary = exemplary;
-        exemplary.addLoan(this);
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-        user.addLoan(this);
-    }
 
 }

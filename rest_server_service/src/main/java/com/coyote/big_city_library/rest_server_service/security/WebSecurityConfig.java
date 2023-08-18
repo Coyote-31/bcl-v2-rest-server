@@ -42,11 +42,19 @@ public class WebSecurityConfig {
             .authorizeHttpRequests(
                     ahr -> ahr.mvcMatchers("/auth/login", "/books/search")
                               .permitAll()
-                              .mvcMatchers("/libraries", "/loans/user/**", "/loans/extend/**")
+                              .mvcMatchers("/actuator/**")
+                              .permitAll()
+                              .mvcMatchers(
+                                      "/libraries",
+                                      "/loans/user/**",
+                                      "/loans/extend/**",
+                                      "/reservations/user/**",
+                                      "/reservations/add",
+                                      "/reservations/delete")
                               .hasAnyAuthority(ROLE_USER, ROLE_ADMIN)
                               .mvcMatchers("/loans/add", "/loans/add/partial", "/loans/update")
                               .hasAnyAuthority(ROLE_EMPLOYEE, ROLE_ADMIN)
-                              .mvcMatchers("/loans/batch/**")
+                              .mvcMatchers("/loans/batch/**", "/reservations/batch/**")
                               .hasAnyAuthority(ROLE_BATCH, ROLE_ADMIN)
                               .anyRequest()
                               .hasAuthority(ROLE_ADMIN))

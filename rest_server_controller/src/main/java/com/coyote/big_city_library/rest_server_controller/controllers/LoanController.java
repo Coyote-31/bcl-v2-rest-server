@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.coyote.big_city_library.rest_server_service.dto.LoanDto;
+import com.coyote.big_city_library.rest_server_service.dto.ReservationDto;
+import com.coyote.big_city_library.rest_server_service.dto.ReservationIdDto;
 import com.coyote.big_city_library.rest_server_service.exceptions.LoanOverdueException;
 import com.coyote.big_city_library.rest_server_service.exceptions.UserAccessDeniedException;
 import com.coyote.big_city_library.rest_server_service.services.LoanService;
+import com.coyote.big_city_library.rest_server_service.services.ReservationService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -27,11 +30,29 @@ public class LoanController {
     @Autowired
     LoanService loanService;
 
+    @Autowired
+    ReservationService reservationService;
+
     @PostMapping("/add")
-    public LoanDto addLoan(@Valid @RequestBody LoanDto loanDto) {
+    public ResponseEntity<LoanDto> addLoan(@Valid @RequestBody LoanDto loanDto) {
+
+        // Add new loan
         LoanDto loanSaved = loanService.addLoan(loanDto);
         log.debug("addLoan() => loan with id '{}' added", loanSaved.getId());
-        return loanSaved;
+
+        // RG_Reservation_4 : Delete reservation if exists
+        ReservationIdDto reservationIdDto = new ReservationIdDto();
+        reservationIdDto.setBookId(loanSaved.getExemplary().getBook().getId());
+        reservationIdDto.setUserId(loanSaved.getUser().getId());
+        ReservationDto reservationDto = reservationService.findReservationById(reservationIdDto);
+        if (reservationDto != null) {
+            reservationService.deleteReservation(reservationDto);
+            log.debug("deleteReservation() => bookId:{} userId:{}",
+                    reservationIdDto.getBookId(),
+                    reservationIdDto.getUserId());
+        }
+
+        return ResponseEntity.ok(loanSaved);
     }
 
     @GetMapping("")
@@ -64,10 +85,10 @@ public class LoanController {
     }
 
     @PutMapping("/update")
-    public LoanDto updateLoan(@Valid @RequestBody LoanDto loanDto) {
+    public ResponseEntity<LoanDto> updateLoan(@Valid @RequestBody LoanDto loanDto) {
         LoanDto loanUpdated = loanService.updateLoan(loanDto);
         log.debug("updateLoan() => loan with id '{}' updated", loanUpdated.getId());
-        return loanUpdated;
+        return ResponseEntity.ok(loanUpdated);
     }
 
     @PutMapping("/extend/{id}")

@@ -32,9 +32,6 @@ build/
 ### VS Code ###
 .vscode/
 
-### Big City Library ###
-/OLD_src
-
 ### Properties ###
 **/resources/**/*-dev.properties
 **/resources/**/*-prod.properties

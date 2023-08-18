@@ -16,7 +16,7 @@ public class ExceptionHandlerAdvice {
     @ExceptionHandler(LoanOverdueException.class)
     public ResponseEntity<String> handleLoanOverdueException(LoanOverdueException e) {
 
-        log.warn("LoanOverdueException : {}", e.getMessage());
+        log.warn("handleLoanOverdueException => reponseStatus=FORBIDDEN, message='{}'", e.getMessage());
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                              .body(e.getMessage());
@@ -25,7 +25,7 @@ public class ExceptionHandlerAdvice {
     @ExceptionHandler(UserAccessDeniedException.class)
     public ResponseEntity<String> handleUserAccessDeniedException(UserAccessDeniedException e) {
 
-        log.warn("UserAccessDeniedException : {}", e.getMessage());
+        log.warn("handleUserAccessDeniedException => reponseStatus=FORBIDDEN, message='{}'", e.getMessage());
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                              .body(e.getMessage());
@@ -34,7 +34,7 @@ public class ExceptionHandlerAdvice {
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException e) {
 
-        log.warn("NoSuchElementException : {}", e.getMessage());
+        log.warn("handleNoSuchElementException => reponseStatus=NOT_FOUND, message='{}'", e.getMessage());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                              .body(e.getMessage());
