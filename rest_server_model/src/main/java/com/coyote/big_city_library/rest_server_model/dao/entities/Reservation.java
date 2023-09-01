@@ -2,6 +2,7 @@ package com.coyote.big_city_library.rest_server_model.dao.entities;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -41,7 +42,7 @@ public class Reservation implements Serializable {
     @Column(name = "notified_at")
     private ZonedDateTime notifiedAt;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "exemplary_id")
     @JsonIgnoreProperties("reservation")
     private Exemplary exemplary;
