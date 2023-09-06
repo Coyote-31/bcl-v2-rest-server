@@ -15,9 +15,7 @@ import com.coyote.big_city_library.rest_server_service.dto.ReservationDto;
 import com.coyote.big_city_library.rest_server_service.dto.ReservationIdDto;
 import com.coyote.big_city_library.rest_server_service.dto.reservation.my.MyReservationDto;
 import com.coyote.big_city_library.rest_server_service.exceptions.UserAccessDeniedException;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @SpringBootTest
 @Transactional
 public class ReservationServiceIT {
