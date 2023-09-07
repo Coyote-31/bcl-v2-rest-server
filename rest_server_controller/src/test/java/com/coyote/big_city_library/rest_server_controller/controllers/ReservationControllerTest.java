@@ -1,5 +1,7 @@
 package com.coyote.big_city_library.rest_server_controller.controllers;
 
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -64,6 +66,8 @@ public class ReservationControllerTest {
         mvc.perform(MockMvcRequestBuilders.get("/reservations"))
            .andDo(print())
            .andExpect(status().isOk());
+
+        verify(reservationService, times(1)).findAllReservations();
     }
 
 }
