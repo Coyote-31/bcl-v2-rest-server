@@ -334,7 +334,9 @@ public class ReservationService {
 
         for (Reservation reservation : notifiedReservations) {
             if (reservation.getNotifiedAt().plusHours(47).isBefore(ZonedDateTime.now(ZoneId.of("UTC")))) {
-                reservation.getExemplary().setReservation(null);
+                if (reservation.getExemplary() != null) {
+                    reservation.getExemplary().setReservation(null);
+                }
                 reservationRepository.delete(reservation);
                 log.debug("Reservation notification older than 48h deleted => bookId:{} userId:{}",
                         reservation.getBook().getId(),

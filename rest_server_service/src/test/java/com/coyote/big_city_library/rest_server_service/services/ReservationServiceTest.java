@@ -575,6 +575,7 @@ public class ReservationServiceTest {
         User reservationUserToDelete = new User();
         reservationUserToDelete.setId(1);
         reservationToDelete.setUser(reservationUserToDelete);
+        reservationToDelete.setExemplary(new Exemplary());
         notifiedReservations.add(reservationToDelete);
 
         when(reservationRepository.findByNotifiedAtNotNull()).thenReturn(notifiedReservations);
