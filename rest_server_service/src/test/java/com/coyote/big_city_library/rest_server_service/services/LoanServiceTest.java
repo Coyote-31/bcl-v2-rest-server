@@ -2,6 +2,7 @@ package com.coyote.big_city_library.rest_server_service.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -44,6 +45,9 @@ public class LoanServiceTest {
 
     @Mock
     JwtProvider jwtProvider;
+
+    @Mock
+    MailService mailService;
 
     @Spy
     LoanMapper loanMapper = new LoanMapperImpl();
@@ -325,4 +329,271 @@ public class LoanServiceTest {
         verify(loanRepository, times(0)).extendLoan(loanId);
     }
 
+    @Test
+    void userLoanReminder_givenLoanNotExtendOlderThan1Month_shouldSend1Mail() {
+
+        // --- ARRANGE ---
+
+        // exemplary
+        Exemplary exemplary = new Exemplary();
+
+        // exemplary-library
+        String libraryName = "LibraryName";
+        String libraryAddress = "LibraryAddress";
+        String libraryPhone = "0505050505";
+        Library library = new Library();
+        library.setName(libraryName);
+        library.setAddress(libraryAddress);
+        library.setPhone(libraryPhone);
+        exemplary.setLibrary(library);
+
+        // exemplary-book
+        Book book = new Book();
+        String bookTitle = "BookTitle";
+        LocalDate bookPublicationDate = LocalDate.now();
+        Publisher bookPublisher = new Publisher();
+        bookPublisher.setName("BookPublisher");
+        Set<Author> bookAuthors = new HashSet<>();
+        Author bookAuthor = new Author();
+        bookAuthor.setName("BookAuthor");
+        bookAuthors.add(bookAuthor);
+        book.setTitle(bookTitle);
+        book.setPublicationDate(bookPublicationDate);
+        book.setPublisher(bookPublisher);
+        book.setAuthors(bookAuthors);
+        exemplary.setBook(book);
+
+        // user
+        User user = new User();
+        String pseudo = "Pseudo";
+        user.setPseudo(pseudo);
+        String userEmail = "User@Email.com";
+        user.setEmail(userEmail);
+        Role userRole = Role.USER;
+        user.setRole(userRole);
+
+        // loan
+        Loan loan = new Loan();
+        Integer loanId = 1;
+        loan.setId(loanId);
+        LocalDate loanDate = LocalDate.now().minusMonths(1).minusDays(1);
+        loan.setLoanDate(loanDate);
+        loan.setExtend(false);
+
+        loan.setExemplary(exemplary);
+        loan.setUser(user);
+
+        List<Loan> loans = new ArrayList<>();
+        loans.add(loan);
+
+        when(loanRepository.findOverdue(any(), any())).thenReturn(loans);
+
+        // --- ACT ---
+        loanService.userLoanReminder();
+
+        // --- ASSERT ---
+        verify(loanRepository, times(1)).findOverdue(any(), any());
+        verify(mailService, times(1)).sendUserLoanReminder(loan);
+    }
+
+    @Test
+    void userLoanReminder_givenLoanNotExtendNotOlderThan1Month_shouldNotSendMail() {
+
+        // --- ARRANGE ---
+
+        // exemplary
+        Exemplary exemplary = new Exemplary();
+
+        // exemplary-library
+        String libraryName = "LibraryName";
+        String libraryAddress = "LibraryAddress";
+        String libraryPhone = "0505050505";
+        Library library = new Library();
+        library.setName(libraryName);
+        library.setAddress(libraryAddress);
+        library.setPhone(libraryPhone);
+        exemplary.setLibrary(library);
+
+        // exemplary-book
+        Book book = new Book();
+        String bookTitle = "BookTitle";
+        LocalDate bookPublicationDate = LocalDate.now();
+        Publisher bookPublisher = new Publisher();
+        bookPublisher.setName("BookPublisher");
+        Set<Author> bookAuthors = new HashSet<>();
+        Author bookAuthor = new Author();
+        bookAuthor.setName("BookAuthor");
+        bookAuthors.add(bookAuthor);
+        book.setTitle(bookTitle);
+        book.setPublicationDate(bookPublicationDate);
+        book.setPublisher(bookPublisher);
+        book.setAuthors(bookAuthors);
+        exemplary.setBook(book);
+
+        // user
+        User user = new User();
+        String pseudo = "Pseudo";
+        user.setPseudo(pseudo);
+        String userEmail = "User@Email.com";
+        user.setEmail(userEmail);
+        Role userRole = Role.USER;
+        user.setRole(userRole);
+
+        // loan
+        Loan loan = new Loan();
+        Integer loanId = 1;
+        loan.setId(loanId);
+        LocalDate loanDate = LocalDate.now().minusWeeks(2);
+        loan.setLoanDate(loanDate);
+        loan.setExtend(false);
+
+        loan.setExemplary(exemplary);
+        loan.setUser(user);
+
+        List<Loan> loans = new ArrayList<>();
+        loans.add(loan);
+
+        when(loanRepository.findOverdue(any(), any())).thenReturn(loans);
+
+        // --- ACT ---
+        loanService.userLoanReminder();
+
+        // --- ASSERT ---
+        verify(loanRepository, times(1)).findOverdue(any(), any());
+        verify(mailService, times(0)).sendUserLoanReminder(loan);
+    }
+
+    @Test
+    void userLoanReminder_givenLoanExtendOlderThan2Month_shouldSend1Mail() {
+
+        // --- ARRANGE ---
+
+        // exemplary
+        Exemplary exemplary = new Exemplary();
+
+        // exemplary-library
+        String libraryName = "LibraryName";
+        String libraryAddress = "LibraryAddress";
+        String libraryPhone = "0505050505";
+        Library library = new Library();
+        library.setName(libraryName);
+        library.setAddress(libraryAddress);
+        library.setPhone(libraryPhone);
+        exemplary.setLibrary(library);
+
+        // exemplary-book
+        Book book = new Book();
+        String bookTitle = "BookTitle";
+        LocalDate bookPublicationDate = LocalDate.now();
+        Publisher bookPublisher = new Publisher();
+        bookPublisher.setName("BookPublisher");
+        Set<Author> bookAuthors = new HashSet<>();
+        Author bookAuthor = new Author();
+        bookAuthor.setName("BookAuthor");
+        bookAuthors.add(bookAuthor);
+        book.setTitle(bookTitle);
+        book.setPublicationDate(bookPublicationDate);
+        book.setPublisher(bookPublisher);
+        book.setAuthors(bookAuthors);
+        exemplary.setBook(book);
+
+        // user
+        User user = new User();
+        String pseudo = "Pseudo";
+        user.setPseudo(pseudo);
+        String userEmail = "User@Email.com";
+        user.setEmail(userEmail);
+        Role userRole = Role.USER;
+        user.setRole(userRole);
+
+        // loan
+        Loan loan = new Loan();
+        Integer loanId = 1;
+        loan.setId(loanId);
+        LocalDate loanDate = LocalDate.now().minusMonths(2).minusDays(1);
+        loan.setLoanDate(loanDate);
+        loan.setExtend(true);
+
+        loan.setExemplary(exemplary);
+        loan.setUser(user);
+
+        List<Loan> loans = new ArrayList<>();
+        loans.add(loan);
+
+        when(loanRepository.findOverdue(any(), any())).thenReturn(loans);
+
+        // --- ACT ---
+        loanService.userLoanReminder();
+
+        // --- ASSERT ---
+        verify(loanRepository, times(1)).findOverdue(any(), any());
+        verify(mailService, times(1)).sendUserLoanReminder(loan);
+    }
+
+    @Test
+    void userLoanReminder_givenLoanExtendNotOlderThan2Month_shouldNotSendMail() {
+
+        // --- ARRANGE ---
+
+        // exemplary
+        Exemplary exemplary = new Exemplary();
+
+        // exemplary-library
+        String libraryName = "LibraryName";
+        String libraryAddress = "LibraryAddress";
+        String libraryPhone = "0505050505";
+        Library library = new Library();
+        library.setName(libraryName);
+        library.setAddress(libraryAddress);
+        library.setPhone(libraryPhone);
+        exemplary.setLibrary(library);
+
+        // exemplary-book
+        Book book = new Book();
+        String bookTitle = "BookTitle";
+        LocalDate bookPublicationDate = LocalDate.now();
+        Publisher bookPublisher = new Publisher();
+        bookPublisher.setName("BookPublisher");
+        Set<Author> bookAuthors = new HashSet<>();
+        Author bookAuthor = new Author();
+        bookAuthor.setName("BookAuthor");
+        bookAuthors.add(bookAuthor);
+        book.setTitle(bookTitle);
+        book.setPublicationDate(bookPublicationDate);
+        book.setPublisher(bookPublisher);
+        book.setAuthors(bookAuthors);
+        exemplary.setBook(book);
+
+        // user
+        User user = new User();
+        String pseudo = "Pseudo";
+        user.setPseudo(pseudo);
+        String userEmail = "User@Email.com";
+        user.setEmail(userEmail);
+        Role userRole = Role.USER;
+        user.setRole(userRole);
+
+        // loan
+        Loan loan = new Loan();
+        Integer loanId = 1;
+        loan.setId(loanId);
+        LocalDate loanDate = LocalDate.now().minusMonths(1);
+        loan.setLoanDate(loanDate);
+        loan.setExtend(true);
+
+        loan.setExemplary(exemplary);
+        loan.setUser(user);
+
+        List<Loan> loans = new ArrayList<>();
+        loans.add(loan);
+
+        when(loanRepository.findOverdue(any(), any())).thenReturn(loans);
+
+        // --- ACT ---
+        loanService.userLoanReminder();
+
+        // --- ASSERT ---
+        verify(loanRepository, times(1)).findOverdue(any(), any());
+        verify(mailService, times(0)).sendUserLoanReminder(loan);
+    }
 }

@@ -1,6 +1,7 @@
 package com.coyote.big_city_library.rest_server_service.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.time.LocalDate;
 import java.util.List;
@@ -128,6 +129,12 @@ public class LoanServiceIT {
             loanService.extendLoan(loanId, tokenAnne);
         }).isInstanceOf(LoanOverdueException.class)
           .hasMessage("Loans can't be extended after 4 weeks");
+    }
+
+    @Test
+    void userLoanReminder() {
+
+        assertThatNoException().isThrownBy(() -> loanService.userLoanReminder());
     }
 
 }
