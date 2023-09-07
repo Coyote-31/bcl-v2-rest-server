@@ -23,8 +23,6 @@ import com.coyote.big_city_library.rest_server_service.dto.UserDto;
 @Mapper(componentModel = "spring")
 public interface SearchBookMapper {
 
-    @Mapping(target = "available", ignore = true)
-    @Mapping(target = "exemplariesByLibrary", ignore = true)
     SearchBookDto toDto(Book book);
 
     List<SearchBookDto> toDto(List<Book> books);
