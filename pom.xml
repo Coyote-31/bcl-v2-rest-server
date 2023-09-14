@@ -9,7 +9,7 @@
 	<!-- ========= -->
 	<groupId>com.coyote.big_city_library</groupId>
 	<artifactId>rest_server</artifactId>
-	<version>1.1.0</version>
+	<version>1.2.0</version>
 	<packaging>pom</packaging>
 
 	<name>rest_server</name>
@@ -45,7 +45,7 @@
 			com.coyote.big_city_library.rest_server_controller.RestServerControllerApplication
 		</start-class>
 		<!-- Project Version -->
-		<revision>1.1.0</revision>
+		<revision>1.2.0</revision>
 		<!-- Encoding -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
