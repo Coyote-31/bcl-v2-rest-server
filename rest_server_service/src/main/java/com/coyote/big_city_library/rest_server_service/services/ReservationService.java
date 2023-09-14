@@ -249,16 +249,7 @@ public class ReservationService {
     public void reservationNotification() {
 
         // Delete reservations with notification older than 48h
-        List<Reservation> notifiedReservations = reservationRepository.findByNotifiedAtNotNull();
-
-        for (Reservation reservation : notifiedReservations) {
-            if (reservation.getNotifiedAt().plusHours(47).isBefore(ZonedDateTime.now(ZoneId.of("UTC")))) {
-                reservationRepository.delete(reservation);
-                log.debug("Reservation notification older than 48h deleted => bookId:{} userId:{}",
-                        reservation.getBook().getId(),
-                        reservation.getUser().getId());
-            }
-        }
+        deleteOldNotifiedReservations();
 
         // Send mail to users with reservation available :
 
@@ -269,51 +260,14 @@ public class ReservationService {
         for (Book book : reservationBooks) {
             log.debug("Find book with reservation => BookId:{}", book.getId());
 
-            // Check if their is un-notified reservation
-            boolean isUnNotified = false;
-
-            for (Reservation reservation : book.getReservations()) {
-                if (reservation.getNotifiedAt() == null) {
-                    isUnNotified = true;
-                }
-            }
-
             // Go to the next book if their is no unNotified reservation
-            if (Boolean.FALSE.equals(isUnNotified)) {
+            if (Boolean.FALSE.equals(isUnNotifiedReservationFromBook(book))) {
                 log.debug("No unNotified reservation find for this book => BookId:{}", book.getId());
                 continue;
             }
 
             // Find available exemplaries of the book
-            List<Exemplary> availableExemplaries = new ArrayList<>();
-
-            for (Exemplary exemplary : book.getExemplaries()) {
-
-                // Not currently under reservation
-                if (exemplary.getReservation() == null) {
-
-                    // Check if returned by searching returnDate in loans
-                    if (exemplary.getLoans() != null && !exemplary.getLoans().isEmpty()) {
-
-                        boolean returned = true;
-
-                        for (Loan loan : exemplary.getLoans()) {
-                            if (loan.getReturnDate() == null) {
-                                returned = false;
-                            }
-                        }
-
-                        if (returned) {
-                            availableExemplaries.add(exemplary);
-                        }
-
-                        // Without loans
-                    } else {
-                        availableExemplaries.add(exemplary);
-                    }
-
-                }
-            }
+            List<Exemplary> availableExemplaries = findAvailableExemplaries(book);
 
             // If any available exemplary
             if (!availableExemplaries.isEmpty()) {
@@ -364,6 +318,108 @@ public class ReservationService {
             }
         }
 
+    }
+
+
+    /**
+     * Delete reservations with notification older than 48h
+     */
+    public void deleteOldNotifiedReservations() {
+
+        List<Reservation> notifiedReservations = reservationRepository.findByNotifiedAtNotNull();
+
+        if (notifiedReservations == null) {
+            return;
+        }
+
+        for (Reservation reservation : notifiedReservations) {
+            if (reservation.getNotifiedAt().plusHours(47).isBefore(ZonedDateTime.now(ZoneId.of("UTC")))) {
+                if (reservation.getExemplary() != null) {
+                    reservation.getExemplary().setReservation(null);
+                }
+                reservationRepository.delete(reservation);
+                log.debug("Reservation notification older than 48h deleted => bookId:{} userId:{}",
+                        reservation.getBook().getId(),
+                        reservation.getUser().getId());
+            }
+        }
+    }
+
+    /**
+     * Check if their is un-notified reservation of this book
+     *
+     * @param book
+     * @return True if their is un-notified reservation of this book
+     *
+     * @see {@link Book}
+     */
+    public boolean isUnNotifiedReservationFromBook(Book book) {
+
+        boolean isUnNotified = false;
+
+        for (Reservation reservation : book.getReservations()) {
+            if (reservation.getNotifiedAt() == null) {
+                isUnNotified = true;
+            }
+        }
+        return isUnNotified;
+    }
+
+
+    /**
+     * Find available exemplaries of this book
+     *
+     * @param book
+     * @return List of available exemplaries
+     *
+     * @see {@link Book}
+     */
+    public List<Exemplary> findAvailableExemplaries(Book book) {
+        // Find available exemplaries of the book
+        List<Exemplary> availableExemplaries = new ArrayList<>();
+
+        for (Exemplary exemplary : book.getExemplaries()) {
+
+            // if currently under reservation
+            if (exemplary.getReservation() != null)
+                continue;
+
+            // If their is loans check if returned
+            if (exemplary.getLoans() != null && !exemplary.getLoans().isEmpty()) {
+
+                if (isReturnedExemplary(exemplary)) {
+                    availableExemplaries.add(exemplary);
+                }
+
+                // Without loans
+            } else {
+                availableExemplaries.add(exemplary);
+            }
+
+        }
+
+        return availableExemplaries;
+    }
+
+    /**
+     * Check if this exemplary is returned by searching returnDate in loans
+     *
+     * @param exemplary
+     * @return true if the exemplary is already returned
+     *
+     * @see {@link Exemplary}
+     */
+    public boolean isReturnedExemplary(Exemplary exemplary) {
+
+        boolean returned = true;
+
+        for (Loan loan : exemplary.getLoans()) {
+            if (loan.getReturnDate() == null) {
+                returned = false;
+            }
+        }
+
+        return returned;
     }
 
 }

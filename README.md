@@ -3,9 +3,14 @@
 ## ✨ Présentation :
 
 Ce projet a pour but la création d’un ensemble d’outils numériques pour les différents acteurs des bibliothèques d'une ville.
-1. Un Back-end : RESTFull Serveur (Projet développé ici [GitHub](https://github.com/Coyote-31/big_city_library.rest_server))
-2. Un Front-end : RESTFull Client Public ([GitHub](https://github.com/Coyote-31/big_city_library.rest_client_public))
-3. Un envoi automatique de mails : BATCH ([GitHub](https://github.com/Coyote-31/batch))
+1. Un Back-end : RESTFull Serveur (Projet développé ici [GitHub](https://github.com/Coyote-31/bcl-v2-rest-server))
+2. Un Front-end : RESTFull Client Public ([GitHub](https://github.com/Coyote-31/bcl-v2-rest-client-public))
+3. Un envoi automatique de mails : BATCH ([GitHub](https://github.com/Coyote-31/bcl-v2-batch))
+
+L'objectif de ce projet est de continuer le développement en suivant les différents tickets :
+- Ticket #1 : [Ajoutez un système de réservation d’ouvrages](https://github.com/Coyote-31/bcl-v2-rest-server/issues/1)
+- Ticket #2 : [Corrigez un bug dans la gestion des prolongations de prêt (par le client)](https://github.com/Coyote-31/bcl-v2-rest-server/issues/2)
+- Ticket #3 : [Mettez en place une stratégie de tests](https://github.com/Coyote-31/bcl-v2-rest-server/issues/5)
 
 > **IMPORTANT:**
 > Ce projet fait partie du cursus de formation "Développeur J2EE" de [OpenClassroom](https://openclassrooms.com/).
@@ -34,7 +39,7 @@ Et l'application présente ou recoit les données via des DTOs.
 
 #### Diagramme de l'architecture de la base de données :
 
-![Diagramme de l'architecture de la base de données](https://i.imgur.com/jrJgCXJ.png)
+![Diagramme de l'architecture de la base de données](https://i.imgur.com/Pm7bNz5.png)
 
 ## 🛠 Déploiement :
 
@@ -42,18 +47,21 @@ Pour déployer correctement l'application veuillez suivre ces étapes :
 
 #### 1. Base de données :
 
-La création de la base de données se fait grâce à l'utilisation d'un des script SQL qui se trouve dans le dossier [`db_dumps`](https://github.com/Coyote-31/big_city_library.rest_server/tree/master/db_dumps) :
+La création de la base de données se fait grâce à l'utilisation d'un des script SQL qui se trouve dans le dossier [`db`](https://github.com/Coyote-31/bcl-v2-rest-server/tree/master/db) :
 
-- `CreateWithData` :
+- `(Struct&Data)` :
 Création de la **base de données** avec toutes les **tables** et un jeu de **données de démonstration**.
 
-- `Create` :
+- `(Struct)` :
 Création de la **base de données** avec toutes les **tables** vierges de données.
+
+- `(Data)` :
+Uniquement le jeu de **données de démonstration**.
 
 #### 2. Données de connexion à la BDD :
 
 Lorsque la base de données est prête.
-Pour faire la connexion entre la BDD et l'application il faut changer le fichier [`application-dev_EXEMPLE.properties`](https://github.com/Coyote-31/big_city_library.rest_server/blob/master/rest_server_controller/src/main/resources/application-dev_EXEMPLE.properties) du module *rest_server_controller* en le renommant `application-dev.properties` et changer les données suivante en fonction des attributs de votre serveur de BDD:
+Pour faire la connexion entre la BDD et l'application il faut changer les fichiers `application-dev_EXEMPLE.properties` en les renommants `application-dev.properties` et changer les données suivante en fonction des attributs de votre serveur de BDD:
 - `spring.datasource.url` : Mettre l'URL du serveur de BDD.
 - `spring.datasource.username` : Mettre le nom d'utilisateur du serveur de BDD.
 - `spring.datasource.password` : Mettre le mot de passe du serveur de BDD.
@@ -62,9 +70,9 @@ Pour faire la connexion entre la BDD et l'application il faut changer le fichier
 
 Pour que l'application puisse envoyer les mails de relance aux utilisateurs qui sont en retards pour le retour d'un prêt , il faut changer les données de connexion à la boite mail.
 
-Pour cela il faut modifier le fichier [`application-dev_EXEMPLE.properties`](https://github.com/Coyote-31/big_city_library.rest_server/blob/master/rest_server_controller/src/main/resources/application-dev_EXEMPLE.properties) du module *rest_server_controller* :
+Pour cela il faut modifier le fichier `application-dev_EXEMPLE.properties` :
 
-- Renommer le fichier `application-dev_EXEMPLE.properties` en `application-dev.properties` ou créer une copie avec ce nom.
+- Renommer les fichiers `application-dev_EXEMPLE.properties` en `application-dev.properties` ou créer une copie avec ce nom.
 
 - Modifier les données de `spring.mail.username`, `spring.mail.password` avec les bonnes valeurs pour une adresse Gmail. Sinon regarder la documentation de votre serveur mail et adapter le fichier de configuration.
 
